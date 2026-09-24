@@ -4,7 +4,15 @@ This folder contains the manuscript, experiment implementation, raw homelab evid
 
 **Artifact version 1.1.0, prepared 24 September 2026.** The contribution is an auditable, computationally reproducible comparison of specific recovery policies, concurrency behavior, and acknowledgment costs under documented conditions in one homelab deployment. It is a descriptive case study. The original paper and research material use CC-BY-4.0; original code and formalization use MIT. See [LICENSE.md](LICENSE.md), [CITATION.cff](CITATION.cff), and [release/README.md](release/README.md).
 
-The versioned release archive has a detached SHA-256 checksum and an internal file manifest. `release/manifest.json` identifies its exact manuscript, evidence lock, and primary statistics. The release builder refuses to overwrite an existing version. Public archival, DOI assignment, and journal submission have not occurred.
+The versioned release archive has a detached SHA-256 checksum and an internal file manifest. `release/manifest.json` identifies its exact manuscript, evidence lock, and primary statistics. The release builder refuses to overwrite an existing version. Zenodo deposit, DOI assignment, and journal submission have not occurred.
+
+## GitHub repository and frozen release
+
+[Repository](https://github.com/vicotrbb/redis-jetstream-reliability) · [Version 1.1.0 and downloadable paper/artifact](https://github.com/vicotrbb/redis-jetstream-reliability/releases/tag/v1.1.0)
+
+Tag `v1.1.0` imports the exact validated artifact snapshot. The `main` branch adds repository setup, this publication guide, and a refreshed manifest for the current checkout. The sealed version 1.1.0 archive, paper, and evidence remain unchanged. The archive and its detached checksum are GitHub Release assets; local copies under `releases/` are excluded from Git. The repository itself retains the source, raw data, figures, PDFs, compiler evidence, and validation records.
+
+See [docs/GITHUB_PUBLICATION.md](docs/GITHUB_PUBLICATION.md) for tag provenance, exact release downloads, and verification. Statements in the frozen release about publication state describe its preparation checkpoint. GitHub hosting supplies public access; it does not constitute a Zenodo deposit, DOI assignment, independent replication, or journal peer review.
 
 ## Read the paper
 
@@ -94,7 +102,7 @@ Future recovery records distinguish the nominal budget origin/deadline, observat
 
 The delivered analyzer requires `data/environment/outcome-manifest.json` and the failure ledger, so a missing ledger cannot silently promote the diagnostic replay into a planned success. The original raw and environment file set is additionally bound to a frozen hash inventory, checked before analysis. New campaign records and their content seals remain under `campaigns/` and cannot be classified with the old failure ledger.
 
-The dataset is synthetic and local. The manuscript and software were developed with AI assistance. The artifact is not claimed to be publicly archived, externally artifact-evaluated, peer reviewed, or accepted by a journal. No external publication was performed.
+The dataset is synthetic and was collected locally in the homelab. The manuscript and software were developed with AI assistance. The repository and versioned release provide public GitHub access. No DOI-bearing archival deposit, external artifact evaluation, scientific peer review, or journal acceptance is claimed.
 
 ## Revision validation
 

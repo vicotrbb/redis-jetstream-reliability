@@ -1,11 +1,40 @@
+# Local Python environments and caches
 .venv/
+venv/
 __pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Scratch work, local editor state, and credentials
 tmp/
-paper/*.aux
-paper/*.bbl
-paper/*.blg
-paper/*.fdb_latexmk
-paper/*.fls
-paper/*.log
-paper/*.out
-paper/*.toc
+.DS_Store
+._*
+.idea/
+.vscode/
+*.swp
+*.swo
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Sealed distributions are published as GitHub Release assets.
+/releases/
+
+# LaTeX intermediates. Keep the two receipts required for offline PDF checks.
+/paper/*.aux
+/paper/*.bbl
+/paper/*.blg
+/paper/*.fdb_latexmk
+/paper/*.fls
+/paper/*.log
+/paper/*.out
+/paper/*.toc
+/paper/*.synctex.gz
+!/paper/main.bbl
+!/paper/main.log
+
+# The paper PDFs, figures, raw data, execution logs, and validation receipts
+# are intentional research artifacts and remain tracked.

@@ -1,6 +1,6 @@
 # Artifact versions and reproduction scope
 
-The project has no Git history. Its retained source snapshots, archives, input seals, and manifests identify the versions below. A content hash establishes byte identity within this package, not independent certification of collection time or completeness before sealing.
+The study was collected and validated before Git initialization. Tag `v1.1.0` imports the exact validated snapshot at commit `69b9295b379adaa63bdb1151e6db36ae807fe31a`; later commits add repository publication metadata. The retained source snapshots, archives, input seals, and manifests identify the earlier versions below. Git history does not retrospectively certify collection time or completeness before sealing. See [GITHUB_PUBLICATION.md](GITHUB_PUBLICATION.md) for the public release and the distinction between the frozen artifact and the current checkout.
 
 | Artifact | Role and identity |
 |---|---|
