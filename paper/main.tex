@@ -1,0 +1,393 @@
+\documentclass[11pt]{article}
+
+% Typography and page geometry match bfs-avoidance-frontier/paper/main.tex.
+\usepackage[margin=1.1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs,longtable,array}
+\usepackage{graphicx}
+\usepackage{flafter}
+\usepackage{placeins}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\usepackage{enumitem}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+ pdftitle={An Empirical Evaluation of Message Delivery Reliability and Recovery Characteristics in Redis Streams and NATS JetStream},
+ pdfauthor={Victor Bona},
+ pdfsubject={Reproducible evaluation of message recovery, concurrency, and persistence},
+ pdfkeywords={Redis Streams, NATS JetStream, recovery, durability, consumer failure, empirical evaluation}
+}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\artifact}[1]{\texttt{\path{#1}}}
+\input{../data/derived/values.tex}
+\input{../data/derived/robustness-values.tex}
+
+\title{An Empirical Evaluation of Message Delivery Reliability and Recovery Characteristics in Redis Streams and NATS JetStream}
+\author{Victor Bona\\[2pt]
+\small Independent Researcher, Blumenau, Brazil\\
+\small \texttt{victor.bona@hotmail.com}}
+\date{September 2026}
+
+\begin{document}
+\maketitle
+\input{abstract.tex}
+
+\noindent\textbf{Keywords:} message delivery; Redis Streams; NATS JetStream; consumer failure; redelivery latency; persistence; reproducible benchmarking.
+
+\section{Introduction}\label{sec:intro}
+
+A consumer can disappear after receiving a message but before acknowledging it. Recovering that message requires more than retaining its payload: the system must preserve the pending-delivery state, make the message eligible again, and supply it to an available consumer. The resulting delay depends on both broker policy and client behavior. Conversely, a fast acknowledgment can indicate acceptance without establishing that either a message or a consumer's progress has reached stable storage. These distinctions make a single throughput number an incomplete basis for selecting a messaging system.
+
+Redis Streams and NATS JetStream offer persistent streams and explicitly acknowledged consumption, but expose different recovery mechanisms. In the Redis release evaluated here, a consumer group records outstanding work in a pending-entry list, and clients can transfer eligible entries through \code{XAUTOCLAIM}. JetStream tracks acknowledgment deadlines in a durable consumer and can redeliver expired work when pull demand exists~\cite{redis742stream,nats21024consumer}. Neither mechanism is an atomic transaction with an application's external effects. This is an instance of a longstanding end-to-end problem: a transport's delivery acknowledgment cannot alone establish completion of an application operation~\cite{saltzer1984,birrell1984}.
+
+This study asks three questions:
+\begin{enumerate}[label=\textbf{RQ\arabic*:},leftmargin=3.5em]
+\item How does consumer failure affect message redelivery latency?
+\item How do both systems behave under increasing consumer concurrency?
+\item What are the throughput/latency trade-offs under different durability configurations?
+\end{enumerate}
+
+We answer them with a descriptive, single-replica homelab study of Redis 7.4.2 and NATS Server 2.10.24. The contribution is an auditable, computationally reproducible comparison of specific recovery policies, concurrency behavior, and acknowledgment costs under documented conditions. We combine source-level contract analysis, conditional mathematical proofs, process-kill experiments, randomized repeated performance trials, and retained per-message timing records. Three separate workloads evaluate recovery, backlog consumption, and confirmed publication. The artifact connects each reported estimate to its observations and each formal claim to its premises. The resulting comparison concerns these client paths, workloads, and deployment; it establishes neither a universal broker ranking nor equivalent durability guarantees.
+
+The main concurrency experiment contains 300 trials and \MainMessages{} measured messages. The separate durability experiment has 60 planned trials, with failures retained as outcomes; the serial-publisher sensitivity has 60 trials. Recovery uses 120 consumer-kill trials and ten negative controls. Each experiment is executed in a dedicated namespace on the same authorized Kubernetes homelab; the workstation is used for authoring, analysis, and document compilation. No external broker service or production messaging instance participates.
+
+The distinction between proof and observation is essential. A mathematical theorem can establish a conditional timing relation or expose a delivery/acknowledgment failure window. A finite benchmark can estimate performance under its measured conditions; it cannot prove an implementation correct for every execution or establish a hardware-independent performance ordering. We give proofs where those claims are provable, and report repeated measurements, uncertainty, and limitations for the empirical claims. Section~\ref{sec:conclusion} answers each research question at that level of evidence.
+
+\section{Background and related work}\label{sec:background}
+
+Delivery guarantees combine distinct safety and liveness claims. Retaining an unacknowledged message is a safety property; eventually assigning it to a live consumer additionally requires a recovery policy and progress assumptions. At-least-once delivery permits duplicates and does not establish exactly-once application effects. We distinguish publication confirmation, client receipt, broker processing of a consumer acknowledgment, and completion of an external effect~\cite{birrell1984,saltzer1984}. Persistence describes which state is intended to survive a stated failure class. A consumer-process failure, broker-process failure, pod deletion, and host power loss therefore cannot be treated as interchangeable tests of ``durability.''
+
+\subsection{Redis Streams}
+
+\code{XADD} appends an entry to a stream. With acknowledgment tracking enabled, \code{XREADGROUP} assigns an entry to a consumer and records it in the group's pending-entry list (PEL). \code{XACK} removes the corresponding pending record; it does not delete the stream entry~\cite{redisxreadgroup,redisxack}. A new-message read with the identifier \code{>} does not itself transfer another consumer's pending entries. Consequently, consumer death and message reassignment are separate events.
+
+In Redis 7.4.2, \code{XAUTOCLAIM} scans pending entries and transfers those whose idle age reaches the configured minimum. It exposes a continuation cursor; a general reclaimer must advance that cursor and revisit the list. A call scans at most ten times its \code{COUNT} bound, so an arbitrary-size PEL cannot be treated as a single timer event~\cite{redisxautoclaim,redis742stream}. Our recovery experiment deliberately has one pending message and \code{COUNT}=1. This isolates timeout and polling behavior, but does not evaluate a large pending-list scan. Newer Redis mechanisms such as \code{XREADGROUP CLAIM} are outside the selected release and are not used.
+
+Redis persistence is configured separately from stream consumption. We disable snapshots and compare no append-only file (AOF), AOF with \code{appendfsync everysec}, and AOF with \code{appendfsync always}. The last setting can group commands into a shared synchronization operation; it is not necessarily one physical synchronization per message. The nominal every-second mode does not prove a hard one-second power-loss window: the pinned implementation can postpone writes while a previous background synchronization is in progress, and I/O or scheduling delay remains possible~\cite{redispersistence,redis742aof,redis742config}.
+
+\subsection{NATS JetStream}
+
+JetStream stores messages in streams and records delivery progress in consumers. We use one durable pull consumer shared by all workers, explicit per-message acknowledgment, no acknowledgment backoff, and one stream replica. Workers bind to this same consumer instead of creating independent durable consumers, which would represent separate subscriptions rather than competing workers~\cite{natsconsumers}.
+
+\code{AckWait} measures time from delivery, not from notification of consumer death. In the pinned server, an expired pending entry is queued for redelivery; an available pull request is still necessary to obtain it. The timeout helper introduces a nominal 1~ms timer delay, and scheduling can add more~\cite{nats21024consumer}. Our Go client uses \code{AckSync}, which waits for a server response to the acknowledgment. This establishes acknowledgment processing, not an atomic business transaction and not, by itself, a synchronous stable-storage barrier for consumer state~\cite{natsgo1391}.
+
+This last qualification matters for the durability comparison. The selected server accepts \code{sync\_interval: always} for file storage, whereas its default interval is two minutes; our periodic configuration explicitly changes that interval to one second~\cite{nats21024opts,nats21024filestore}. Stream append synchronization and consumer-state persistence follow different paths. For a single-replica consumer, acknowledgment updates can be handed to an asynchronous state flusher before the acknowledgment response; even always mode does not turn every such response into a synchronous consumer-state write~\cite{nats21024consumer,nats21024filestore}. Accordingly, the two systems' ``always'' profiles belong to a comparable append-policy class, but do not provide interchangeable consumer-progress persistence contracts.
+
+\subsection{Prior empirical and methodological work}
+
+Lim, Gu, and Yoon compare RabbitMQ, Kafka, Redis Streams, and NATS JetStream in a Kubernetes autoscaling study~\cite{lim2026}. The study evaluates KEDA-driven consumer autoscaling, scaling response, resource use, throughput, and latency. Our study instead holds consumer concurrency fixed within each trial and separately varies consumer-failure timing and persistence policy. The reported experiments in that study do not include the consumer-kill or persistence-policy interventions examined here. The workloads and scaling policies differ, so the present measurements are neither a replication nor a contradiction of its results. We make no first-comparison claim. Paul et al.'s broker benchmark is also relevant, but its Redis and NATS paths use Pub/Sub and Core NATS; those measurements do not establish Streams or JetStream recovery semantics~\cite{paul2026}. Coenen et al.'s financial-feed benchmark motivates reproducible workload definition, while addressing a different application setting~\cite{coenen2019}.
+
+Jepsen's NATS 2.12.1 report investigates stronger faults, including simulated power failures and replicated deployments~\cite{kingsbury2025}. It is an original technical report, not a peer-reviewed study, and concerns a different release and configuration. Its fault distinctions reinforce why killing a consumer while the broker remains alive is insufficient evidence for power-loss durability. We do not transfer its outcomes to our deployment.
+
+Our repetition and uncertainty analysis follows the principle that benchmark variation has several levels and that many observations within one execution do not substitute for repeated executions~\cite{kalibera2013}. Randomized block order reduces the association between treatment and time, although it cannot eliminate every environmental bias~\cite{mytkowicz2009}. We explicitly distinguish finite backlogs and closed-loop publication from open-loop offered loads, following the warning that these workload models can yield different conclusions~\cite{schroeder2006}. Our latencies are not coordinated-omission-corrected production SLA estimates~\cite{wrk2,hdrhistogram}.
+
+\section{System model and formal results}\label{sec:model}
+
+\subsection{Events, failure scope, and assumptions}
+
+An application assigns each message a unique identifier. We distinguish publication invocation $p$, publication confirmation $q$, broker delivery $d$, client receipt $\widehat d$, consumer failure $f$, redelivery receipt $\widehat r$, and acknowledgment completion $a$. All measured events use a common Linux monotonic clock on the driver node. The broker's internal delivery timestamp $d$ is not directly observed; replacing it with $\widehat d$ without qualification would misstate the timer origin.
+
+The fault model is a fail-stop consumer process killed with \code{SIGKILL} while its message is unacknowledged. The broker, network, retained payload, group/consumer state, and surviving consumer remain available. There is no message expiry, trimming, competing claim, negative acknowledgment, acknowledgment extension, or backoff change during the recovery episode. The timeout threshold is $\Delta>0$ and failure occurs at age $h=f-d$, with $0\leq h<\Delta$. These are assumptions of the isolated formal model; they do not characterize every production execution. The controller sets age relative to client receipt, so exact broker age is unobserved. Idealized eligibility also abstracts from timer quantization and assumes no relevant broker-clock discontinuity.
+
+For a bounded redelivery theorem, additional timing assumptions are required. Let $P$ bound the time from eligibility until a reclaimer or expiry mechanism selects the entry, and let $B$ bound subsequent scheduling, demand availability, transport, and client observation. Redis command execution time and scheduler delay must be included in $P$; its configured sleep alone is not such a bound. JetStream also requires pull demand, so $B$ cannot silently be set to zero.
+
+\begin{theorem}[Residual timeout and conditional recovery bound]\label{thm:recovery}
+Under the preceding assumptions, let selection be forbidden before $d+\Delta$, occur at some $s\in[d+\Delta,d+\Delta+P]$, and be observed after an additional delay $b\in[0,B]$. Then
+\[
+\Delta-h\ \leq\ \widehat r-f\ \leq\ \Delta-h+P+B.
+\]
+If the corresponding upper-bound premise is removed and admissible selection or observation delays are unbounded, no finite uniform upper bound on redelivery latency follows.
+\end{theorem}
+\begin{proof}
+By definition, $\widehat r=s+b$ and $f=d+h$. Hence
+\[
+\widehat r-f=\Delta-h+\bigl(s-(d+\Delta)\bigr)+b.
+\]
+The two final terms lie in $[0,P]$ and $[0,B]$, respectively, proving both inequalities. If either delay is unbounded, for any proposed finite upper bound choose an admissible delay exceeding it. The corresponding execution violates that proposed bound without violating eligibility or retention.
+\end{proof}
+
+\begin{corollary}[Why client-observed timer excess can be negative]\label{cor:observed}
+Write $\widehat d=d+u$, where $u\geq0$ is the initial delivery-to-receipt delay, and let $w=s-(d+\Delta)$. Then
+\[
+(\widehat r-\widehat d)-\Delta=w+b-u.
+\]
+Thus a measured receipt-to-redelivery interval slightly below $\Delta$ does not alone refute server-side timeout eligibility.
+\end{corollary}
+\begin{proof}
+Substitute $\widehat r=d+\Delta+w+b$ and $\widehat d=d+u$, and cancel $d$.
+\end{proof}
+
+\begin{proposition}[No autonomous Redis reassignment from new-message reads]\label{prop:no-reclaim}
+In the stated Redis 7.4.2 model, there exists an infinite execution with an available broker and surviving consumer, a retained message pending for a failed consumer, and no redelivery, if the survivor performs only new-message reads and no reclamation or pending-history recovery.
+\end{proposition}
+\begin{proof}
+Deliver the only message to the consumer that subsequently fails, thereby placing it in that consumer's PEL history. Repeat \code{XREADGROUP} with \code{>} from the survivor. Each read considers previously undelivered entries, while the retained entry remains pending for the failed consumer. With no further publication or state-changing recovery operation, every repetition preserves this state. The infinite repetition witnesses the claim.
+\end{proof}
+
+The proposition is a liveness counterexample, not a defect claim. A Redis application supplies the missing recovery operation. Likewise, a JetStream pull consumer without future pull demand has no unconditional delivery-time guarantee. The experimental contrast concerns who initiates eligibility/reassignment and the timing of the configured client policy.
+
+\subsection{Concurrency and finite-window throughput}
+
+\begin{definition}
+For $N>0$ completed messages, an integer $C\geq1$ of consumers, and a drain interval of duration $T>0$, let $X=N/T$ be acknowledged throughput. Message $i$ occupies one consumer during a nonoverlapping-on-that-consumer interval $[r_i,a_i]$, from its successful receive-request invocation to acknowledgment completion. Write $R_i=a_i-r_i$ and $\overline R=N^{-1}\sum_i R_i$.
+\end{definition}
+
+\begin{theorem}[Consumer occupancy bound]\label{thm:concurrency}
+If every interval lies within the measured drain window and each of $C$ consumers has at most one such interval active at a time, then
+\[
+X\overline R\leq C.
+\]
+More precisely, with $U=(CT)^{-1}\sum_iR_i\in[0,1]$, one has $X=C U/\overline R$ whenever $N>0$ and $\overline R>0$.
+\end{theorem}
+\begin{proof}
+For consumer $j$, its intervals have disjoint interiors and are contained in a window of length $T$, so their lengths sum to at most $T$. Summing over all $C$ consumers gives $\sum_iR_i\leq CT$. Since $X\overline R=(N/T)(\sum_iR_i/N)=\sum_iR_i/T$, the inequality follows. Substituting the definition of $U$ yields the identity.
+\end{proof}
+
+For two individual trials with positive mean cycle times, this gives the exact explanatory decomposition:
+\[
+\frac{X(C_2)}{X(C_1)}=
+\frac{C_2}{C_1}\frac{U(C_2)}{U(C_1)}
+\frac{\overline R(C_1)}{\overline R(C_2)}.
+\]
+The identity does not generally survive separately averaging throughput, occupancy, and cycle time across trials. Reported ratios of condition-mean throughputs are distinct summaries. Approximately stable cycle cost and occupancy are sufficient for approximately linear scaling within this model. More generally, linear scaling requires $U(C)/\overline R(C)$ to remain approximately constant; increasing $C$ alone does not prove it. For example, admissible conditions with $U=1$, $C_1=1$, $\overline R(C_1)=1$, $C_2=2$, and $\overline R(C_2)=3$ give throughputs $1$ and $2/3$. This counterexample rules out a universal monotonicity claim under unrestricted contention. Our analysis checks the occupancy inequality directly against every retained concurrency-trial event interval.
+
+\subsection{Acknowledgment, storage, and application effects}
+
+\begin{proposition}[Conditional stable-storage implication]\label{prop:storage}
+Assume (i) a successful synchronization makes the message and all metadata required for its recovery stable, (ii) subsequent failures preserve that stable state, (iii) recovery interprets it correctly, and (iv) confirmation occurs only after that synchronization completes successfully. Then every confirmed message is recoverable after such a failure. If confirmation is instead permitted before stabilization, confirmation alone does not imply recoverability.
+\end{proposition}
+\begin{proof}
+Under (iv), every confirmed message has already undergone the successful synchronization of (i). Its recovery state survives by (ii), and (iii) recovers it. For the second claim, choose an allowed execution in which confirmation precedes synchronization and a failure occurs strictly between them. Let the failure discard all unstable state. The message was confirmed but is not recoverable, providing a counterexample.
+\end{proof}
+
+This is a theorem about a storage contract, not a formal verification of either product. In particular, the pinned NATS append path invokes synchronization without checking its returned error in that path, whereas the corresponding Redis always-mode path treats a synchronization error as fatal~\cite{nats21024filestore,redis742aof}. The experiment injects no I/O faults and does not establish assumptions (i)--(iv) for every implementation execution. The source distinction prevents us from treating a mode name as an unconditional proof of identical fault handling.
+
+Consider an interval containing $F\geq1$ complete, nonoverlapping synchronization operations. If each occupies at least $f_{\min}>0$ time, every counted confirmation is assigned to one completed operation, and at most an integer $b\geq1$ of confirmations are assigned to each operation, those operations can confirm at most $bF$ messages while occupying at least $Ff_{\min}$ time. Their service rate is therefore at most $b/f_{\min}$. This bound applies to the explicitly serialized synchronization stage; overlapping stages and the rest of the pipeline require a different model. It explains why group commit and outstanding-publication count can affect cost without asserting a fixed number of hardware synchronization calls per message.
+
+\begin{proposition}[The application-effect/acknowledgment gap]\label{prop:effects}
+For a non-idempotent external effect and a broker acknowledgment that are separate operations, changing only their order cannot guarantee exactly one completed effect under arbitrary fail-stop interruption and eventual redelivery of unacknowledged work.
+\end{proposition}
+\begin{proof}
+If the effect precedes acknowledgment, interrupt after the effect and before acknowledgment. The retained unacknowledged message may be redelivered and its effect repeated. If acknowledgment precedes the effect, interrupt after acknowledgment and before the effect; the broker has no remaining obligation to redeliver, so the effect can be absent. Either order admits a counterexample. An atomic transaction, durable application deduplication, or an idempotent effect adds an assumption not present in this model.
+\end{proof}
+
+\subsection{What zero observed failures establishes}
+
+For $n\geq1$ independent identically distributed Bernoulli trials with failure probability $p$, observing zero failures has probability $(1-p)^n$. For $0<\alpha<1$, setting this to $\alpha$ gives the one-sided exact upper confidence limit
+\[
+p_\mathrm{upper}=1-\alpha^{1/n}.
+\]
+At $n=10$ and $\alpha=0.05$, this is approximately $0.259$, not zero~\cite{clopper1934}. Our heterogeneous configurations and temporally adjacent messages are not automatically independent Bernoulli draws from one population. We therefore report exact observed counts and do not turn millions of message completions into a misleading claim of extremely small universal failure probability.
+
+\subsection{Machine-checked subset and proof boundary}\label{sec:lean}
+
+The artifact additionally formalizes selected model statements in Lean 4.24.0 with its bundled \code{Std} library~\cite{demoura2021lean4,lean424release}. The integer-time residual bound and receipt-offset identities, the division-free sum of per-consumer busy times, and explicit finite effect/acknowledgment crash counterexamples form ten checked declarations. Verification ran on the homelab after all benchmark collection had ended, with warnings treated as errors; the final source digest, compiler version, exit status, and transitive logical dependencies are retained. An initial unused-binder warning was resolved by renaming that binder without changing any hypothesis. A fresh compilation of the unchanged source in a separate homelab namespace on 24 September 2026 again passed all ten declarations with the same transitive logical dependencies; both verification receipts are retained.
+
+The proof dependencies are the standard Lean principles \code{propext}, \code{Quot.sound}, and, in one offset equivalence, \code{Classical.choice}; the four finite-trace declarations use no axioms. No admitted proof, custom axiom, or native-evaluation shortcut is used. This formalization does not verify either broker implementation, the measurement software, real-number division, statistical inference, storage survival, or the infinite new-read-only execution. Those distinctions remain governed by the explicit paper proofs, source evidence, and empirical checks. A successful Lean check therefore strengthens the selected abstract arguments without upgrading an empirical observation into a universal system guarantee.
+
+\section{Experimental method}\label{sec:method}
+
+\subsection{Testbed, versions, and resource isolation}
+
+All experiment workloads run in the \code{homelab} Kubernetes context. The dedicated namespace is \code{msgrel-20260923}. The broker pods are fixed to \code{homelab-01}; the driver is fixed to \code{homelab-02}. The broker node exposes 16 logical CPUs from an AMD Ryzen 7 5825U and approximately 32~GiB of RAM. Both nodes run NixOS 24.05, Linux 6.6.68, K3s v1.30.4+k3s1, and containerd 1.7.20-k3s1. The driver node exposes four logical CPUs from an Intel N100 and approximately 16~GiB of RAM. Exact capacities, runtime details, and baseline utilization are retained in the environment receipts.
+
+Each broker has a 2-CPU and 1-GiB memory limit. The driver has a 2-CPU and 2-GiB limit, and its Go runtime uses \code{GOMAXPROCS=2}. It communicates with the brokers through cluster-internal services across the two nodes. No TLS or application authentication is included in the measured path. A namespace ingress policy permits only experiment-pod ingress; no broker is exposed externally. Pods have no mounted service-account credentials. The homelab hosts other services, which remain untouched. It is a shared testbed, not exclusive hardware or a CPU-pinned laboratory.
+
+The disk profiles use disk-backed Kubernetes \code{emptyDir} volumes on the same broker node. The observed backing filesystem is Btrfs on an NVMe device, mounted with \code{compress=zstd:3}. This is a filesystem compression setting, not a measured per-file compression ratio. This storage survives a container restart but is deleted with its pod; it is not a persistent-volume or host-failure experiment. We neither infer the drive's power-loss protection from its name nor claim to have validated its hardware cache semantics. The memory profile has no configured persistent stream payload.
+
+Redis is pinned to 7.4.2 and NATS Server to 2.10.24; these are deliberately historical releases supporting all evaluated mechanisms, not claims about the latest releases~\cite{redis742release,nats21024release}. The driver is compiled inside the homelab using Go 1.24.4, \code{go-redis/v9} 9.7.0, \code{nats.go} 1.39.1, and \code{x/sys} 0.29.0. Exact image digests and transitive Go module checksums accompany the artifact. These details constrain reproducibility more precisely than product names alone.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{L{.13\linewidth}L{.36\linewidth}L{.39\linewidth}}
+\toprule
+Profile & Redis 7.4.2 & JetStream 2.10.24\\
+\midrule
+Memory (M) & Snapshots off; AOF off & Memory stream; one replica\\
+Periodic (P) & AOF on; \code{appendfsync everysec} & File; \code{sync\_interval: 1s}\\
+Always (S) & AOF on; \code{appendfsync always} & File; \code{sync\_interval: always}\\
+\bottomrule
+\end{tabular}
+\caption{Configured append-persistence classes. ``Always'' requests synchronous append behavior; the consumer-state and I/O-error qualifications in Sections~\ref{sec:background} and~\ref{sec:model} remain applicable. All profiles use one broker replica.}
+\label{tab:configs}
+\end{table}
+
+For Redis, snapshots and automatic AOF rewrite are disabled. The option \code{no-\allowbreak appendfsync-\allowbreak on-\allowbreak rewrite} remains \code{no}; the memory policy is \code{noeviction}. These choices exclude rewrite interference and eviction from this bounded experiment. JetStream uses limits retention with no message-count, byte, or age expiration within the test stream. An acknowledgment removes pending state but retains the source message in both systems. There is no replication comparison.
+
+Logical stream cleanup does not reset persistent storage history. Redis appends stream creation, message, acknowledgment, and deletion commands to the same AOF throughout the campaign, with automatic rewriting disabled. JetStream deletes the separate stream store after each trial. These treatments therefore accumulate different storage histories even though their live logical streams are removed. The final Redis-periodic and Redis-always receipts report AOF sizes of 2,590,379,564 and 907,510,749 bytes, respectively. These are reported AOF lengths, not measured physical allocation after filesystem compression. Redis-periodic also reports \code{aof\_delayed\_fsync}=1, whereas Redis-always reports zero. These are cumulative final-state diagnostics, not time-resolved evidence assigning a particular stall to AOF growth or delayed synchronization. Randomized order does not reset this accumulated state; performance estimates include the interaction between configured policy and the evolving storage environment.
+
+
+\subsection{Workload and timing definitions}
+
+Each message contains exactly 512 application payload bytes, including an eight-byte identifier unique within its trial; all remaining bytes are the literal character \code{x}. The payload is therefore highly compressible, which matters for the configured filesystem. Protocol framing and metadata are additional bytes and differ between products. Publication uses confirmed \code{XADD} calls or JetStream \code{Publish} calls awaiting \code{PubAck}. Each publisher has one request outstanding and its own TCP connection. Consumption uses \code{XREADGROUP COUNT 1} followed by \code{XACK}, or \code{Fetch(1)} followed by \code{AckSync}, with one outstanding receive/acknowledgment cycle per consumer connection. No artificial application-processing delay is added.
+
+Client timeouts are distinct from broker eligibility timers. Redis uses five-second default socket read and write timeouts for publication and acknowledgment, and 30-second defaults on administrative connections. These are per socket stage, not an absolute whole-call deadline. For a positive blocking \code{XREADGROUP}, go-redis 9.7.0 instead assigns a socket read timeout of \code{BLOCK} plus ten seconds~\cite{goredis970,goredis970timeouts}. Ordinary drain and control reads use a 100\,ms server block and a 10.1\,s client socket read timeout; the victim's initial read uses a 5\,s server block and a 15\,s socket read timeout. An empty server read ordinarily returns near the shorter blocking interval. NATS publication and acknowledgment use five-second response waits; its \code{Fetch} calls receive the explicit 100\,ms or 5\,s client wait. None of these settings is the recovery eligibility timeout $\Delta$.
+
+
+The primary timestamps and estimands are:
+\begin{align*}
+L_{\mathrm{pub},i}&=q_i-p_i,&
+L_{\mathrm{cycle},i}&=a_i-r_i,\\
+L_{\mathrm{ack},i}&=a_i-\widehat d_i,&
+L_{\mathrm{drain},i}&=\widehat d_i-t_0,\\
+L_{\mathrm{recovery}}&=\widehat r-f,&
+X_{\mathrm{drain}}&=\frac{N}{\max_i a_i-t_0}.
+\end{align*}
+Here $t_0$ is the common drain start, after all messages have been published and all worker connections prepared. Trailing worker fetch timeouts after the last acknowledgment are excluded from the throughput denominator. For $N\geq1$ and $0<p\leq1$, a nearest-rank percentile selects sorted observation $\lceil pN\rceil$ at percentile fraction $p$. A reported mean p99 is the mean of completed trials' within-trial p99 values, not the p99 of pooled messages.
+
+For each publication trial, we also report its message count $N$, the selected p99 rank $k=\lceil0.99N\rceil$, and the number $N-k$ of higher order-statistic positions. The latter counts positions rather than strictly larger values, since observations can tie. A fixed admission duration produces different $N$ across conditions, so the empirical percentiles have different finite-sample resolutions. These counts characterize the information underlying each reported tail statistic; they do not supply an independent-sampling assumption or a population-percentile confidence guarantee.
+
+All benchmark intervals use \code{CLOCK\_MONOTONIC} on the driver node, including timestamps from its consumer child processes. This avoids subtracting wall clocks across hosts. The workload generator's connection setup, stream/group creation, warm-up, compression, and result serialization are outside the timed intervals. Source streams are distinct between trials and removed afterward. A 256-message excluded warm-up precedes each concurrency, durability, and serial-publisher trial, using a separate stream; it warms relevant execution paths but does not eliminate cold allocations in the measured stream. The single-message recovery trials use their own setup without that warm-up.
+
+\subsection{RQ1: consumer failure and redelivery}
+
+The recovery series measures redelivery after consumer failure using the periodic profile of each system while the broker remains alive. The driver creates a stream and one shared group/durable consumer, publishes one message, and starts a separate victim process. After receiving the message, that process reports its application ID and receipt timestamp through a pipe and remains alive without acknowledging. The controller then kills it at approximately $\alpha\Delta$ after receipt, with $\Delta\in\{250,1000\}$~ms and $\alpha\in\{0.10,0.75\}$. The exact kill-call start, process-exit observation, and termination status are recorded. The start of the kill call is the operational failure-time estimate; its bracket is reported rather than hidden. There is no matched control retaining a live, unacknowledging victim through timeout expiry. The experiment therefore measures recovery after a kill without identifying a separate causal effect of death on redelivery eligibility.
+
+For Redis, a separate live connection issues \code{XAUTOCLAIM} with \code{COUNT}=1, cursor \code{0-0}, and minimum idle age $\Delta$, sleeping $10$ or $100$~ms after unsuccessful replies. Its initial sleep phase is randomized uniformly over the configured sleep interval. Because only one entry is pending, restarting from \code{0-0} scans the complete relevant PEL; this would not be a general scalable reclamation policy for a large PEL.
+
+For JetStream, the survivor binds to the same durable consumer with explicit acknowledgments, \code{AckWait}=$\Delta$, no backoff, and a shared \code{MaxAckPending}=32768. It repeatedly requests one message with a 100~ms client timeout. The pinned Go client does not use an initial \code{no\_wait} probe for \code{Fetch(1)}, but its request expiration is approximately 90\% of that timeout. A pull may consequently expire about 10~ms before the client refreshes it~\cite{natsgo1391}. Recovery therefore includes this client's possible demand gap; it is not an isolated measurement of the server timer.
+
+Survivor polling starts before the kill, after the victim reports receipt. There are ten repetitions of each of the twelve configurations, in randomized order. A successful recovery requires the same application ID, successful acknowledgment, retained-message count one, and pending count zero. JetStream's delivery metadata must show exactly two deliveries. The nominal censoring budget is $5\Delta+2$~s, starting after the controller observes the victim's exit. The controller then stops the survivor loop and reconciles state after its current operation returns; this can extend the final observation interval. A trial reaching that budget without recovery is retained as censored, not removed from analysis. Ten Redis controls (five at each timeout, with $\alpha=0.10$) run only new-message reads, with no reclaimer; their corresponding nominal budget is $2\Delta$, and final reconciliation verifies that the entry is still pending.
+
+The historical recovery records do not timestamp the timer notification, survivor-loop completion, or final reconciliation. Their exact observation endpoints cannot therefore be reconstructed. We report the controls as non-recovery with pending state retained through that procedure, without assigning exact censor durations or fitting a survival model.
+
+\subsection{RQ2: increasing consumer concurrency}
+
+The concurrency series contains all six profiles and $C\in\{1,2,4,8,16\}$, with ten randomized complete blocks. Each measured trial first publishes 16384 messages using 16 publishers, then drains that retained backlog through $C$ independent worker connections. All workers share a single group/durable consumer. Outside the recovery experiment, JetStream uses a 30~s acknowledgment deadline, \code{MaxAckPending}=32768, and \code{MaxWaiting}=512; Redis performs no reclamation during these failure-free drains. This establishes a fixed amount of work while removing concurrent producer throughput as a limiting input to the drain phase. It measures the combined client, protocol, transport, broker, and acknowledgment path, not an intrinsic maximum server capacity.
+
+For every drained application ID, the harness records publication, its successful receive-request invocation, receipt, acknowledgment, and worker assignment. Empty or timed-out receive requests are not retained as per-message records. The harness requires the exact set of application IDs, no duplicates, no outstanding acknowledgments, and the expected retained stream length. Analysis reconstructs per-worker intervals and checks Theorem~\ref{thm:concurrency}. Application effects, large batches, application-level compression, custom partitioning, multiple streams, and consumer counts beyond 16 are not measured. In particular, these are concurrent logical consumers implemented by Go goroutines, not a cluster of separately scheduled consumer pods.
+
+\subsection{RQ3: separate publication-cost measurement}
+
+The primary durability series contains ten randomized complete blocks of the six profiles. Sixteen publisher connections continuously perform confirmed appends during a five-second admission window. Admitted requests are allowed to finish; throughput divides the completed count by the interval from the common start until the last confirmation. Thus trailing completions are included rather than assigned to an artificially short denominator. This interval spans several nominal one-second synchronization cycles, but remains a bounded append workload, not a long soak or proof of stationary performance.
+
+This series verifies the number of issued and confirmed application IDs against retained stream length. It does not read back every stored payload, and its integrity claim is correspondingly narrower than that of the drain series. A separate sensitivity series uses one publisher, 1024 messages, one consumer, and ten blocks. It provides a separate one-publisher workload sensitivity. Differences cannot be attributed solely to publisher count because duration and total workload also differ from the five-second experiment. We make no claim that these profiles have equal recovery-point objectives under a power cut.
+
+\subsection{Randomization, uncertainty, and evidence checks}
+
+The randomization seed is 20260923. The experimental unit is a trial, with pairing by block for treatment ratios. For each condition we report the arithmetic mean of its completed planned trials and a percentile bootstrap 95\% confidence interval using 10000 resamples of those trial indices. Conditions have ten completed trials except Redis-always publication, which has nine completions and one failed planned trial. That failure is reported separately, not assigned an artificial throughput or latency. A paired ratio is the ratio of resampled condition means under the same resampled block indices, not the mean of arbitrary per-message ratios. Comparisons involving a failed block use only the blocks completed by both conditions, so these are conditional-on-completion estimates. The bootstrap seed is fixed. These nominal, conditional confidence intervals summarize uncertainty in the condition mean under the working resampling assumption that completed block vectors are independent, identically distributed replicates. All blocks belong to one deployment campaign; their temporal dependence and the evolving storage history are not estimated away by resampling. They are not prediction intervals for individual runs, do not have proven exact finite-sample coverage here, and do not account for every systematic error or hardware population.
+
+These are descriptive effect estimates, not a collection of significance tests with familywise error claims. We specify no $p$-value threshold, do not stop when an interval becomes favorable, and do not pool individual messages as independent replications. Recovery tables report all ten values through medians and ranges rather than presenting a high percentile from ten failure episodes as a precise tail estimate. No finite trial count can prove absence of all possible losses.
+
+Additional post-observation diagnostics assess sensitivity without changing the primary dataset: leave-one-trial-out means for publication rates and within-trial p99 values; leave-one-common-block-out ratios for all thirteen paired effects; first-five versus last-five block summaries; and summaries between recorded execution interruptions. Leave-one-out ranges measure influence, not confidence coverage. Early/late contrasts and rank correlations with block order are descriptive, with no trend significance test or causal interpretation. The interruption segments follow planned trial ranges D001--D021, D022--D030, D031--D037, D038--D042, and D043--D060, using completed primary observations only. Their unequal, small cell counts prevent treating these segments as independent controlled replications. All computations and membership lists are retained.
+
+
+\subsection{Protocol development and execution incidents}
+
+The local protocol was written before main collection but was not externally preregistered. Twelve initial pilot trials were excluded. Before main collection, we added receive-request timestamps, increased the backlog from 4096 to 16384 messages after the pilot revealed short high-concurrency runs, and added the five-second primary durability series in place of relying on prefill timings. A final twelve-trial pilot verified the revised harness. Both pilot datasets and the prospective protocol versions are retained. The execution log records these changes; they are not presented as an immutable external registration.
+
+During collection, a stream-creation request exceeded the five-second client deadline before a measured interval began. The server logged an 8.0186-second stream-creation handler. We retained that failed setup and the original logs, added checkpointed continuation, and retried the condition with unchanged settings and a fresh stream name. No completed measurement was replaced. After trial 88, a Redis-always warm-up returned through an error path and its cleanup also timed out, masking the primary operation error. Its original stack and log are retained. Administrative create, inventory, and deletion timeout settings were subsequently increased to 30~s. Redis default publication and acknowledgment socket timeouts and NATS response waits remained 5~s; the blocking-read overrides described above were unchanged. The durability series also stopped after 21 completed trials when a NATS-always warm-up publication timed out; the server logged approximately 4.9925~s in deletion/read-loop processing for that warm-up stream. No timed sample for its next condition had begun. We preserved the original log and all completed samples, then added append-only continuation to that series without changing its measurement path or deadlines. A further NATS-always warm-up publication timed out after 30 completed durability trials, with a corresponding 3.5595~s deletion/read-loop warning; the existing checkpointed binary then continued without a further code change. The causes of these interruptions are not established. Setup and warm-up availability are therefore reported separately from timed outcomes.
+
+Planned timed-publication trial D038 (Redis-always) subsequently aborted with a socket read timeout. Its partial client timings and confirmed-request count were lost on process abort and cannot be reconstructed from the retained evidence. A later retained-state snapshot contained 1568 distinct application IDs and zero pending consumer acknowledgments; this cannot identify which publications the client had confirmed. We preserve the failure as the planned outcome and exclude its unavailable throughput and latency from completed-run estimates. An orchestration error during failure-ledger copying caused an unintended completed replay of D038; that replay is retained but excluded from primary statistics. Stopping that continuation also caused an operator interruption of D043, whose partial broker state was preserved and whose planned condition was rerun after cleanup. These operational deviations and the exact evidence are recorded in the artifact. No observed slow completed planned trial was removed. A plot of publication throughput by block was added as a descriptive diagnostic after observing this variability; it is not a preregistered hypothesis test.
+
+Table~\ref{tab:attempt-outcomes} consolidates the 550 planned outcomes and six additional documented attempts. Its accompanying record-level inventory links each entry to retained evidence and leaves unavailable times and confirmation counts missing. Successful warm-ups are part of their completed attempts, not additional rows. The two excluded twelve-trial pilots and infrastructure provisioning are outside this inventory. This is retrospective accounting of known execution outcomes, not a prospective exclusion rule or a denominator for estimating setup availability or total workload-completion cost. In particular, the later successful D043 attempt cannot reconstruct the interrupted attempt's client history.
+
+\begin{table}[htbp]
+\centering\small
+\input{../data/derived/attempt-outcomes-table.tex}
+\caption{Retained campaign outcomes and additional documented attempts. The first four rows account for all 550 planned outcomes. The remaining six attempts are separate from those outcomes. Counts do not reconstruct missing durations or establish end-to-end availability.}
+\label{tab:attempt-outcomes}
+\end{table}
+\FloatBarrier
+
+\section{Results}\label{sec:results}
+\input{results.tex}
+
+\section{Discussion}\label{sec:discussion}
+
+\subsection{Recovery is a joint broker/client policy}
+
+The useful operational parameter is the residual timeout at failure, followed by the delay until the client obtains the eligible message. A consumer that fails late in its unacknowledged interval can have a shorter failure-to-redelivery time than one that fails early, even with identical settings. Comparing either interval directly with a full \code{AckWait} or minimum idle age would confound message age with recovery performance. Theorem~\ref{thm:recovery} provides the appropriate decomposition, and Corollary~\ref{cor:observed} accounts for the unobserved initial network offset.
+
+Redis makes reclamation scheduling an explicit application responsibility in the selected release. That permits an application-specific polling policy, while requiring correct cursor progress, protection against premature claims of slow work, and a balance between recovery latency and additional command traffic. JetStream supplies expiry tracking but still depends on retained consumer state and sufficient pull demand. A smaller timeout alone is not a free reliability improvement: if normal processing can exceed it, work may be redelivered while the original consumer is still active. We do not measure long-running application effects or implement an application idempotency layer.
+
+\subsection{Concurrency gains and acknowledgment cost}
+
+The fixed-backlog workload asks how quickly this client path completes a bounded set of messages. More workers can overlap waiting on network responses or storage operations. At the same time, contention, wakeups, server serialization, and protocol traffic can increase per-message cycle latency. The exact occupancy identity distinguishes these two effects and prevents equating a throughput gain with a reduction in every latency metric. A queue's drain-delay percentile may fall while its per-consumer cycle percentile rises.
+
+The always profiles particularly require semantic care. Redis logs stream consumer-group mutations in its AOF path, while the pinned single-replica JetStream consumer uses an asynchronous state flusher. A fast JetStream acknowledgment path in that configuration is not evidence that an equivalent synchronous consumer-progress guarantee is cheaper. The primary append experiment measures publication confirmations separately, where the configured synchronization policy directly changes the intended append path. This separation is necessary for an interpretable answer to RQ3.
+
+\subsection{What the durability comparison supports}
+
+The configured profiles and repeated randomized trials support descriptive comparisons of confirmed-append cost in this environment. This is one component of the study's comparison of specific recovery policies, concurrency behavior, and acknowledgment costs under documented conditions. Because persistent processes accumulate different storage histories and share the underlying device, the comparison cannot isolate the causal effect of synchronization policy or identify the cause of individual stalls. It does not establish the stable-media contents after power failure, the loss probability under a disk error, or recovery time after a broker restart. A consumer kill leaves broker memory and the operating system page cache intact. Even killing the broker process would not by itself test host-power-loss behavior~\cite{natsjetstream}.
+
+The synchronized profiles' costs also depend on the filesystem, synchronization implementation, batching, and outstanding requests. We collect no syscall trace establishing a one-to-one relationship between messages and device flushes. The explanatory service bound in Section~\ref{sec:model} is therefore conditional, and the serial-publisher sensitivity describes an additional measured workload rather than proving a particular internal batching mechanism.
+
+\section{Threats to validity}\label{sec:validity}
+
+\paragraph{Construct validity.}
+``Reliability'' here comprises retained identities, observed completion counts, pending-state reconciliation, and consumer-failure redelivery. It does not mean exactly-once business effects, replicated consensus correctness, or power-failure durability. The six profiles align broad append-policy intentions but have different consumer-state and error-handling details. Client receipt is not broker delivery, and the failure instant is bracketed by a kill invocation and observed child exit. These are explicitly represented in the model and raw data.
+
+\paragraph{Internal validity.}
+The two-node homelab runs unrelated services and is neither CPU-pinned nor physically isolated. Randomization and repeated blocks reduce time-order confounding but cannot guarantee elimination of filesystem cache, background load, thermal, network, or control-plane effects. All six broker processes remain present, with only one treatment actively driven at a time; background synchronization can still outlive a measured interval. We record pod restarts, resource snapshots, cgroup CPU counters, effective configurations, startup logs, and image digests. Read-only resource snapshots run approximately every 30~s; monitoring overhead is not separately calibrated. AOF rewrite, eviction, stream trimming, and replication are intentionally excluded. In particular, disabling rewrite permits Redis AOF history to accumulate across logical deletions, while JetStream removes individual stream stores. This storage-history asymmetry is a specific carryover confound, not merely unspecified background noise. Final AOF sizes and the delayed-fsync counter establish its presence but not its performance effect. A fresh deployment campaign, or a justified common storage-reset protocol with its own warm-up treatment, is needed to investigate that effect.
+
+\paragraph{Measurement validity.}
+Both systems use the same Go driver and one TCP connection per logical worker, but different client libraries, protocols, and receive/acknowledgment round trips. Allocation, scheduler behavior, protocol parsing, and transport remain part of the measured path. The 256-message warm-up uses a different stream, so measured stream creation effects can persist after timing begins. Identifier and count reconciliation does not verify every byte of the stored payload. Five-second publication trials span several configured sync periods without establishing long-term stationarity. The one-publisher experiment has a different fixed message count and duration. Closed-loop request latency omits waiting that a fixed external arrival schedule might impose; no production p99 SLA is inferred.
+
+\paragraph{Statistical conclusion validity.}
+There are ten completed trials per concurrency and serial condition, ten planned publication trials per profile (nine Redis-always completions), and ten recovery episodes per configuration; these are not millions of independent experiments. Publication intervals condition on completion and cannot correct selection bias from an unavailable failed-trial metric. Bootstrap intervals with nine or ten replications can be sensitive to skew, serial dependence, and outliers. They describe conditional uncertainty under the stated resampling model; coverage and stability across independent deployments remain unverified. The influence and execution-order diagnostics characterize fragility but do not establish block independence or establish nominal coverage. Pairing by randomized block improves comparability but leaves treatment times separated within a block. Recovery medians and ranges are descriptive at ten episodes per cell. We retain all observed trials and controls and distinguish their claims from the stronger hypothetical IID failure-probability calculation in Section~\ref{sec:model}.
+
+\paragraph{External validity.}
+The conclusions concern the stated releases, single-replica deployments, one Btrfs/NVMe storage environment with filesystem compression enabled, highly compressible 512-byte payloads, at most 16 consumers, and explicit synchronous acknowledgment APIs. New releases, larger or incompressible payloads, different filesystems or compression settings, batches, multiple streams, application work, large PELs, lossy networks, geographically separated deployments, quorum replication, storage-volume failover, or alternative clients can change the result. The study is not a substitute for workload-specific evaluation before a production choice. Recovery uses one pending message in the periodic profile without the concurrent publication workload; interactions between heavy load and failure recovery are not measured. The source audit is targeted and does not constitute a systematic review proving exhaustive novelty.
+
+\section{Artifact availability and reproducibility}\label{sec:artifact}
+
+The accompanying local artifact contains the complete LaTeX source, bibliography, generated vector figures, homelab manifests, a checked Lean model and verification receipts, Go harness with locked modules, prospective protocol versions, deviation log, raw compressed timing records, JSONL trial summaries, environment receipts, and deterministic analysis code. A checksum manifest identifies the delivered files. The bibliography pins server source revisions where mutable documentation could otherwise introduce version ambiguity. Pilot and main datasets are stored separately.
+
+Reproducing the reported results begins with the retained campaign, not a new collection. The analysis verifies a frozen hash inventory of its raw data and environment records before recomputing identity checks, percentile values, throughputs, paired ratios, confidence intervals, occupancy bounds, and sensitivity diagnostics. Original records predate campaign identifiers; the hash inventory binds those exact bytes to the original adjudication ledger. Changed or additional campaign files are rejected. Tables and plot coordinates are generated from the verified values.
+
+A separate collection workflow requires explicit campaign and attempt identifiers, a fresh namespace, and new output directories. Structured observations and failure records carry both identifiers; each collection is sealed with file hashes and checked for identity consistency. Collection cannot overwrite the reported campaign, and failed attempts are retained without automatic replay. The original measured harness is archived separately from the revised collection harness. The latter preserves partial publication observations after returned request errors or caught worker panics, records unconfirmed requests as unknown, and synchronizes their files before broker cleanup. Cleanup errors cannot replace the primary error. Abrupt loss of the driver before serialization can still destroy buffered observations. The revised recovery controller separately records the nominal budget origin and deadline, receipt of a timer notification when applicable, completion of the survivor's work and the controller's wait, and the start and end of reconciliation. A receipt returned during shutdown is retained explicitly. These prospective safeguards cannot recover D038 or historical censoring endpoints and are not presented as having been used in the original measurements. Their functional validation is separate from the performance dataset. The README distinguishes exact data reanalysis, independent proof checking, and new experimental collection.
+
+The accompanying artifact, version~1.1.0, has a release manifest (\code{release/manifest.json}), citation metadata (\code{CITATION.cff}), and a detached SHA-256 archive checksum. The original manuscript, research data, figures, and narrative documentation are licensed under Creative Commons Attribution~4.0 International; original software and formalization are licensed under MIT. \artifact{LICENSE.md} specifies the scope and third-party exceptions. The artifact map distinguishes historical measured sources, subsequent validated harness snapshots, and current analysis and document. Current validation receipts identify the reviewed PDF by its content hash; older receipts remain explicitly historical. Hashes establish consistency of the supplied bytes, not independent certification of collection time or completeness. A public archival identifier has not yet been assigned. The retained evidence permits local computational reproduction and independent examination; no externally executed replication or external artifact evaluation is claimed.
+
+OpenAI Codex assisted with source investigation, experimental software, statistical analysis, formalization, manuscript drafting, and internal checking. Technical statements were checked against the cited primary sources, and numerical statements against retained homelab observations. Internal AI-assisted checking is distinct from independent scientific peer review. No generated or estimated benchmark result is substituted for a measured observation.
+
+\section{Conclusion}\label{sec:conclusion}
+\input{conclusion.tex}
+
+\appendix
+\section{Complete concurrency matrix}\label{app:matrix}
+The following table reports all thirty conditions. Throughput entries are trial means with nominal 95\% bootstrap intervals. Cycle p99 is the mean of within-trial request-to-acknowledgment p99 values; drain p99 is the mean of within-trial common-drain-start-to-receipt p99 values. Each cell has ten trials and a backlog of 16384 messages. These two latency definitions answer different questions.
+\begingroup\small\setlength{\tabcolsep}{3.5pt}
+\input{../data/derived/full-matrix.tex}
+\endgroup
+
+\section{Serial-publisher sensitivity}\label{app:serial}
+Each condition below uses one publisher with one request outstanding, 1024 messages per trial, and ten randomized blocks. The table is a separate fixed-count sensitivity experiment; it is not a change of publisher count under otherwise identical five-second trial duration.
+\begin{table}[htbp]
+\centering\small
+\input{../data/derived/serial-table.tex}
+\caption{Serial publication: means and nominal 95\% bootstrap intervals.}
+\end{table}
+\FloatBarrier
+
+\clearpage
+\section{Formal assumptions and claim-to-evidence map}\label{app:evidence}
+\begin{longtable}{L{.20\linewidth}L{.33\linewidth}L{.36\linewidth}}
+\toprule
+Claim & Evidence & Boundary\\
+\midrule\endhead
+Residual recovery delay & Theorem~\ref{thm:recovery}; all fault timestamps & Requires retained state and explicit finite selection/demand-delay bounds\\
+No new-read reclamation & Proposition~\ref{prop:no-reclaim}; ten negative controls; pinned Redis source & Specific to the stated new-message-read-only policy and Redis release\\
+Concurrency cost & Theorem~\ref{thm:concurrency}; 300 trial traces & Finite workload and measured client path; no universal monotonic scaling claim\\
+Persistence cost & 60 planned publication outcomes, including one failure; 60 serial trials; effective configuration receipts & Confirmation and configured policy, without power-loss or I/O-fault validation\\
+Stable-storage implication & Proposition~\ref{prop:storage} & Abstract successful-and-honored synchronization contract; no implementation verification\\
+Application effect ambiguity & Proposition~\ref{prop:effects} & Separate non-idempotent effect and acknowledgment; not an impossibility result for transactional applications\\
+Observed identities & Raw drained-message traces, complete ID-set checks, retained/pending counts & Publication-only trials reconcile counts without complete payload readback\\
+\bottomrule
+\end{longtable}
+
+\clearpage
+\begingroup\raggedright
+\bibliographystyle{plainurl}
+\bibliography{references}
+\endgroup
+\end{document}

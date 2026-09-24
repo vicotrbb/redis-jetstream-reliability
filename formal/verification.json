@@ -1,0 +1,56 @@
+{
+  "status": "pass",
+  "exit_code": 0,
+  "checked_at_utc": "2026-09-23T23:25:50Z",
+  "execution_context": "homelab",
+  "namespace": "msgrel-20260923",
+  "pod": "runner",
+  "execution_after_benchmark_collection": true,
+  "source": "formal/DeliveryModel.lean",
+  "source_sha256": "169fa4a50504ba59b34a3159bcdc0c1a1d89139c28a323856e4be40805928d03",
+  "compiler_version": "Lean 4.24.0",
+  "compiler_commit": "797c613eb9b6d4ec95db23e3e00af9ac6657f24b",
+  "compiler_binary_sha256": "8fadc3ed92cc9decb94c96ee9c0876e91e03a3a5e69138f32114f02789e2766c",
+  "toolchain_archive_sha256": "b14f5e5159219dd1a1956c3b806813319f5e94ccd5bdfd56f54520609a5bb5ec",
+  "container_image": "docker.io/library/golang@sha256:10f549dc8489597aa7ed2b62008199bb96717f52a8e8434ea035d5b44368f8a6",
+  "command": "lean-4.24.0-linux/bin/lean -DwarningAsError=true DeliveryModel.lean",
+  "imports": [
+    "Std"
+  ],
+  "logical_dependencies": {
+    "residual_decomposition": [
+      "propext",
+      "Quot.sound"
+    ],
+    "residual_timeout_bound": [
+      "propext",
+      "Quot.sound"
+    ],
+    "observed_receipt_offset": [
+      "propext",
+      "Quot.sound"
+    ],
+    "observed_excess_negative_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "busy_sum_le_capacity": [
+      "propext",
+      "Quot.sound"
+    ],
+    "consumer_capacity": [
+      "propext",
+      "Quot.sound"
+    ],
+    "uninterrupted_orders": [],
+    "effect_before_ack_crash": [],
+    "ack_before_effect_crash": [],
+    "each_order_has_counterexample": []
+  },
+  "scope": "Conditional abstract models only; no verification of broker implementations, host durability, harness, statistics, or universal performance.",
+  "initial_attempt": "verification-first.log retains a failed initial check: unused binder warning treated as error. Only the binder name changed to _hAgeNonnegative before success.",
+  "log": "formal/verification.log",
+  "initial_source_sha256": "e88b1b0de495455d5c08c0ea2ae7f2f831ecb8279185203f731b6a65c21d9b9d",
+  "initial_to_final_change_verified": "Renaming only hAgeNonnegative to _hAgeNonnegative reconstructs the exact initially checked source hash."
+}

@@ -1,0 +1,728 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "name": "msgrel-final20260924-a001",
+        "labels": {
+          "purpose": "message-reliability-paper",
+          "evidence-owner": "11c2b35fcbc4b98c641c8607"
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "redis-memory",
+        "namespace": "msgrel-final20260924-a001"
+      },
+      "data": {
+        "server.conf": "bind 0.0.0.0\nprotected-mode no\nport 6379\nsave \"\"\ndir /data\nmaxmemory 768mb\nmaxmemory-policy noeviction\nauto-aof-rewrite-percentage 0\nno-appendfsync-on-rewrite no\nappendonly no\n"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "redis-memory",
+        "namespace": "msgrel-final20260924-a001",
+        "labels": {
+          "app": "redis-memory"
+        }
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "automountServiceAccountToken": false,
+        "terminationGracePeriodSeconds": 5,
+        "containers": [
+          {
+            "name": "server",
+            "image": "docker.io/library/redis@sha256:02419de7eddf55aa5bcf49efb74e88fa8d931b4d77c07eff8a6b2144472b6952",
+            "command": [
+              "redis-server",
+              "/config/server.conf"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "2",
+                "memory": "1Gi"
+              }
+            },
+            "ports": [
+              {
+                "containerPort": 6379
+              }
+            ],
+            "readinessProbe": {
+              "tcpSocket": {
+                "port": 6379
+              },
+              "initialDelaySeconds": 1,
+              "periodSeconds": 2
+            },
+            "volumeMounts": [
+              {
+                "name": "config",
+                "mountPath": "/config",
+                "readOnly": true
+              },
+              {
+                "name": "data",
+                "mountPath": "/data"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "config",
+            "configMap": {
+              "name": "redis-memory"
+            }
+          },
+          {
+            "name": "data",
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "redis-memory",
+        "namespace": "msgrel-final20260924-a001"
+      },
+      "spec": {
+        "selector": {
+          "app": "redis-memory"
+        },
+        "ports": [
+          {
+            "port": 6379,
+            "targetPort": 6379
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "redis-periodic",
+        "namespace": "msgrel-final20260924-a001"
+      },
+      "data": {
+        "server.conf": "bind 0.0.0.0\nprotected-mode no\nport 6379\nsave \"\"\ndir /data\nmaxmemory 768mb\nmaxmemory-policy noeviction\nauto-aof-rewrite-percentage 0\nno-appendfsync-on-rewrite no\nappendonly yes\nappendfsync everysec\n"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "redis-periodic",
+        "namespace": "msgrel-final20260924-a001",
+        "labels": {
+          "app": "redis-periodic"
+        }
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "automountServiceAccountToken": false,
+        "terminationGracePeriodSeconds": 5,
+        "containers": [
+          {
+            "name": "server",
+            "image": "docker.io/library/redis@sha256:02419de7eddf55aa5bcf49efb74e88fa8d931b4d77c07eff8a6b2144472b6952",
+            "command": [
+              "redis-server",
+              "/config/server.conf"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "2",
+                "memory": "1Gi"
+              }
+            },
+            "ports": [
+              {
+                "containerPort": 6379
+              }
+            ],
+            "readinessProbe": {
+              "tcpSocket": {
+                "port": 6379
+              },
+              "initialDelaySeconds": 1,
+              "periodSeconds": 2
+            },
+            "volumeMounts": [
+              {
+                "name": "config",
+                "mountPath": "/config",
+                "readOnly": true
+              },
+              {
+                "name": "data",
+                "mountPath": "/data"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "config",
+            "configMap": {
+              "name": "redis-periodic"
+            }
+          },
+          {
+            "name": "data",
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "redis-periodic",
+        "namespace": "msgrel-final20260924-a001"
+      },
+      "spec": {
+        "selector": {
+          "app": "redis-periodic"
+        },
+        "ports": [
+          {
+            "port": 6379,
+            "targetPort": 6379
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "redis-always",
+        "namespace": "msgrel-final20260924-a001"
+      },
+      "data": {
+        "server.conf": "bind 0.0.0.0\nprotected-mode no\nport 6379\nsave \"\"\ndir /data\nmaxmemory 768mb\nmaxmemory-policy noeviction\nauto-aof-rewrite-percentage 0\nno-appendfsync-on-rewrite no\nappendonly yes\nappendfsync always\n"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "redis-always",
+        "namespace": "msgrel-final20260924-a001",
+        "labels": {
+          "app": "redis-always"
+        }
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "automountServiceAccountToken": false,
+        "terminationGracePeriodSeconds": 5,
+        "containers": [
+          {
+            "name": "server",
+            "image": "docker.io/library/redis@sha256:02419de7eddf55aa5bcf49efb74e88fa8d931b4d77c07eff8a6b2144472b6952",
+            "command": [
+              "redis-server",
+              "/config/server.conf"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "2",
+                "memory": "1Gi"
+              }
+            },
+            "ports": [
+              {
+                "containerPort": 6379
+              }
+            ],
+            "readinessProbe": {
+              "tcpSocket": {
+                "port": 6379
+              },
+              "initialDelaySeconds": 1,
+              "periodSeconds": 2
+            },
+            "volumeMounts": [
+              {
+                "name": "config",
+                "mountPath": "/config",
+                "readOnly": true
+              },
+              {
+                "name": "data",
+                "mountPath": "/data"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "config",
+            "configMap": {
+              "name": "redis-always"
+            }
+          },
+          {
+            "name": "data",
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "redis-always",
+        "namespace": "msgrel-final20260924-a001"
+      },
+      "spec": {
+        "selector": {
+          "app": "redis-always"
+        },
+        "ports": [
+          {
+            "port": 6379,
+            "targetPort": 6379
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "nats-memory",
+        "namespace": "msgrel-final20260924-a001"
+      },
+      "data": {
+        "server.conf": "port: 4222\nhttp_port: 8222\njetstream {\n  store_dir: /data\n  max_memory_store: 512MB\n  max_file_store: 2GB\n  sync_interval: 1s\n}\n"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "nats-memory",
+        "namespace": "msgrel-final20260924-a001",
+        "labels": {
+          "app": "nats-memory"
+        }
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "automountServiceAccountToken": false,
+        "terminationGracePeriodSeconds": 5,
+        "containers": [
+          {
+            "name": "server",
+            "image": "docker.io/library/nats@sha256:fd981e2ab99000964bd15286054e61fcc445732fd907db039f260fc0b824b314",
+            "command": [
+              "nats-server",
+              "-c",
+              "/config/server.conf"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "2",
+                "memory": "1Gi"
+              }
+            },
+            "ports": [
+              {
+                "containerPort": 4222
+              }
+            ],
+            "readinessProbe": {
+              "tcpSocket": {
+                "port": 4222
+              },
+              "initialDelaySeconds": 1,
+              "periodSeconds": 2
+            },
+            "volumeMounts": [
+              {
+                "name": "config",
+                "mountPath": "/config",
+                "readOnly": true
+              },
+              {
+                "name": "data",
+                "mountPath": "/data"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "config",
+            "configMap": {
+              "name": "nats-memory"
+            }
+          },
+          {
+            "name": "data",
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "nats-memory",
+        "namespace": "msgrel-final20260924-a001"
+      },
+      "spec": {
+        "selector": {
+          "app": "nats-memory"
+        },
+        "ports": [
+          {
+            "port": 4222,
+            "targetPort": 4222
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "nats-periodic",
+        "namespace": "msgrel-final20260924-a001"
+      },
+      "data": {
+        "server.conf": "port: 4222\nhttp_port: 8222\njetstream {\n  store_dir: /data\n  max_memory_store: 512MB\n  max_file_store: 2GB\n  sync_interval: 1s\n}\n"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "nats-periodic",
+        "namespace": "msgrel-final20260924-a001",
+        "labels": {
+          "app": "nats-periodic"
+        }
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "automountServiceAccountToken": false,
+        "terminationGracePeriodSeconds": 5,
+        "containers": [
+          {
+            "name": "server",
+            "image": "docker.io/library/nats@sha256:fd981e2ab99000964bd15286054e61fcc445732fd907db039f260fc0b824b314",
+            "command": [
+              "nats-server",
+              "-c",
+              "/config/server.conf"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "2",
+                "memory": "1Gi"
+              }
+            },
+            "ports": [
+              {
+                "containerPort": 4222
+              }
+            ],
+            "readinessProbe": {
+              "tcpSocket": {
+                "port": 4222
+              },
+              "initialDelaySeconds": 1,
+              "periodSeconds": 2
+            },
+            "volumeMounts": [
+              {
+                "name": "config",
+                "mountPath": "/config",
+                "readOnly": true
+              },
+              {
+                "name": "data",
+                "mountPath": "/data"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "config",
+            "configMap": {
+              "name": "nats-periodic"
+            }
+          },
+          {
+            "name": "data",
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "nats-periodic",
+        "namespace": "msgrel-final20260924-a001"
+      },
+      "spec": {
+        "selector": {
+          "app": "nats-periodic"
+        },
+        "ports": [
+          {
+            "port": 4222,
+            "targetPort": 4222
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "nats-always",
+        "namespace": "msgrel-final20260924-a001"
+      },
+      "data": {
+        "server.conf": "port: 4222\nhttp_port: 8222\njetstream {\n  store_dir: /data\n  max_memory_store: 512MB\n  max_file_store: 2GB\n  sync_interval: always\n}\n"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "nats-always",
+        "namespace": "msgrel-final20260924-a001",
+        "labels": {
+          "app": "nats-always"
+        }
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "automountServiceAccountToken": false,
+        "terminationGracePeriodSeconds": 5,
+        "containers": [
+          {
+            "name": "server",
+            "image": "docker.io/library/nats@sha256:fd981e2ab99000964bd15286054e61fcc445732fd907db039f260fc0b824b314",
+            "command": [
+              "nats-server",
+              "-c",
+              "/config/server.conf"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "2",
+                "memory": "1Gi"
+              }
+            },
+            "ports": [
+              {
+                "containerPort": 4222
+              }
+            ],
+            "readinessProbe": {
+              "tcpSocket": {
+                "port": 4222
+              },
+              "initialDelaySeconds": 1,
+              "periodSeconds": 2
+            },
+            "volumeMounts": [
+              {
+                "name": "config",
+                "mountPath": "/config",
+                "readOnly": true
+              },
+              {
+                "name": "data",
+                "mountPath": "/data"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "config",
+            "configMap": {
+              "name": "nats-always"
+            }
+          },
+          {
+            "name": "data",
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "nats-always",
+        "namespace": "msgrel-final20260924-a001"
+      },
+      "spec": {
+        "selector": {
+          "app": "nats-always"
+        },
+        "ports": [
+          {
+            "port": 4222,
+            "targetPort": 4222
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "runner",
+        "namespace": "msgrel-final20260924-a001"
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-02"
+        },
+        "tolerations": [
+          {
+            "key": "node-role.kubernetes.io/control-plane",
+            "operator": "Exists",
+            "effect": "NoSchedule"
+          }
+        ],
+        "automountServiceAccountToken": false,
+        "containers": [
+          {
+            "name": "runner",
+            "image": "docker.io/library/golang@sha256:10f549dc8489597aa7ed2b62008199bb96717f52a8e8434ea035d5b44368f8a6",
+            "command": [
+              "sleep",
+              "86400"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "250m",
+                "memory": "256Mi"
+              },
+              "limits": {
+                "cpu": "2",
+                "memory": "2Gi"
+              }
+            },
+            "volumeMounts": [
+              {
+                "name": "work",
+                "mountPath": "/work"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "work",
+            "emptyDir": {
+              "sizeLimit": "8Gi"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "namespace-only-ingress",
+        "namespace": "msgrel-final20260924-a001"
+      },
+      "spec": {
+        "podSelector": {},
+        "policyTypes": [
+          "Ingress"
+        ],
+        "ingress": [
+          {
+            "from": [
+              {
+                "podSelector": {}
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

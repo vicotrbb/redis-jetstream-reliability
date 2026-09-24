@@ -1,0 +1,270 @@
+.venv/bin/python bench/analyze.py
+{
+  "checks": {
+    "main": {
+      "trials": 300,
+      "messages": 4915200,
+      "max_concurrency_bound_utilization": 0.9995462504088956,
+      "min_concurrency_bound_utilization": 0.9936312612795556,
+      "driver_throttled_trials": 0,
+      "driver_throttled_usec_total": 0,
+      "excluded_setup_attempts": [
+        {
+          "block": 1,
+          "error": "context deadline exceeded",
+          "key": "Tmain052",
+          "kind": "error",
+          "profile": "nats-always"
+        }
+      ]
+    },
+    "durability": {
+      "trials": 59,
+      "messages": 12434648,
+      "max_concurrency_bound_utilization": 0.0,
+      "min_concurrency_bound_utilization": null,
+      "driver_throttled_trials": 0,
+      "driver_throttled_usec_total": 0,
+      "planned_trials": 60,
+      "failed_planned_trials": [
+        {
+          "kind": "durability_failure",
+          "key": "D038",
+          "profile": "redis-always",
+          "block": 6,
+          "stage": "timed_publication",
+          "record_origin": "post_run_failure_adjudication",
+          "error": "read tcp: i/o timeout",
+          "configured_request_timeout_seconds": 5,
+          "valid_trial_metrics_available": false,
+          "partial_client_events_available": false,
+          "broker_snapshot_count": 1568,
+          "broker_snapshot_unique_ids": 1568,
+          "broker_snapshot_min_id": 0,
+          "broker_snapshot_max_id": 1567,
+          "snapshot_encoding": "redis-cli JSON output with non-ASCII payload bytes; parse byte-preserving Latin-1",
+          "failure_log_mtime_utc": "2026-09-23T22:58:31.065701251Z",
+          "adjudicated_utc": "2026-09-23T23:03:41.315208+00:00",
+          "evidence": [
+            "data/environment/durability-through-D038.log",
+            "data/environment/D038-panic-log-stat.txt",
+            "data/environment/D038-broker-snapshot.txt",
+            "data/environment/D038-retained-stream.json.gz"
+          ]
+        }
+      ],
+      "excluded_diagnostic_replays": [
+        {
+          "block": 6,
+          "driver_cpu_after": "usage_usec 988512393\nuser_usec 472362277\nsystem_usec 516150115\ncore_sched.force_idle_usec 0\nnr_periods 41032\nnr_throttled 434\nthrottled_usec 11718480\nnr_bursts 0\nburst_usec 0\n",
+          "driver_cpu_before": "usage_usec 988256838\nuser_usec 472252725\nsystem_usec 516004113\ncore_sched.force_idle_usec 0\nnr_periods 40981\nnr_throttled 434\nthrottled_usec 11718480\nnr_bursts 0\nburst_usec 0\n",
+          "end_ns": 18211555826853195,
+          "harness_revision": "durability-outcomes-v5",
+          "key": "D038",
+          "kind": "durability",
+          "n": 3431,
+          "pending": 0,
+          "per_second_counts": [
+            1008,
+            672,
+            631,
+            569,
+            535,
+            16,
+            0
+          ],
+          "profile": "redis-always",
+          "publish_mps": 683.4452021578898,
+          "publish_ms": {
+            "max": 48.736513,
+            "mean": 23.35594366336347,
+            "p50": 22.863181,
+            "p95": 40.249119,
+            "p99": 47.095668
+          },
+          "publishers": 16,
+          "start_ns": 18211550806699437,
+          "stored": 3431,
+          "target_seconds": 5,
+          "utc_end": "2026-09-23T23:03:03.048526687Z"
+        }
+      ]
+    },
+    "serial": {
+      "trials": 60,
+      "messages": 61440,
+      "max_concurrency_bound_utilization": 0.9992371291251203,
+      "min_concurrency_bound_utilization": 0.993450798276475,
+      "driver_throttled_trials": 0,
+      "driver_throttled_usec_total": 0
+    },
+    "recovery": {
+      "trials": 130,
+      "successful_recoveries": 120,
+      "no_reclaim_censored": 10,
+      "max_kill_bracket_ms": 2.291135
+    }
+  },
+  "effects": {
+    "redis-memory:C16/C1": {
+      "ratio": 12.586921967820976,
+      "low": 12.127304285235928,
+      "high": 13.154352080434906,
+      "paired_trials": 10
+    },
+    "redis-periodic:C16/C1": {
+      "ratio": 11.0158775981052,
+      "low": 10.217514781327,
+      "high": 11.785248023229782,
+      "paired_trials": 10
+    },
+    "redis-always:C16/C1": {
+      "ratio": 8.594861451195744,
+      "low": 8.468430803299793,
+      "high": 8.716804552791187,
+      "paired_trials": 10
+    },
+    "nats-memory:C16/C1": {
+      "ratio": 12.944296340740436,
+      "low": 12.690513407778287,
+      "high": 13.233237563220067,
+      "paired_trials": 10
+    },
+    "nats-periodic:C16/C1": {
+      "ratio": 12.361683825900457,
+      "low": 11.793361133849217,
+      "high": 12.828800131242666,
+      "paired_trials": 10
+    },
+    "nats-always:C16/C1": {
+      "ratio": 12.239614427192619,
+      "low": 11.983722953364481,
+      "high": 12.539019346067782,
+      "paired_trials": 10
+    },
+    "redis:periodic/memory:publish": {
+      "ratio": 0.830499035411376,
+      "low": 0.8237305415237105,
+      "high": 0.8370616625522647,
+      "paired_trials": 10,
+      "paired_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "redis:always/memory:publish": {
+      "ratio": 0.04097164857174045,
+      "low": 0.023326100706127714,
+      "high": 0.05834178910095555,
+      "paired_trials": 9,
+      "paired_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9
+      ]
+    },
+    "nats:periodic/memory:publish": {
+      "ratio": 0.8197466190888747,
+      "low": 0.7933329493989977,
+      "high": 0.8510768137794,
+      "paired_trials": 10,
+      "paired_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "nats:always/memory:publish": {
+      "ratio": 0.006208703918007749,
+      "low": 0.003175373953745011,
+      "high": 0.009450356649850165,
+      "paired_trials": 10,
+      "paired_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "redis/nats:memory:publish": {
+      "ratio": 1.2240890781577525,
+      "low": 1.2031204266887607,
+      "high": 1.254648045722819,
+      "paired_trials": 10,
+      "paired_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "redis/nats:periodic:publish": {
+      "ratio": 1.240145155825762,
+      "low": 1.217506771301494,
+      "high": 1.2675640673251698,
+      "paired_trials": 10,
+      "paired_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "redis/nats:always:publish": {
+      "ratio": 7.318526552339724,
+      "low": 3.9267901970252357,
+      "high": 14.194598090797188,
+      "paired_trials": 9,
+      "paired_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9
+      ]
+    }
+  }
+}

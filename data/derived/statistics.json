@@ -1,0 +1,3204 @@
+{
+  "checks": {
+    "main": {
+      "trials": 300,
+      "messages": 4915200,
+      "max_concurrency_bound_utilization": 0.9995462504088956,
+      "min_concurrency_bound_utilization": 0.9936312612795556,
+      "driver_throttled_trials": 0,
+      "driver_throttled_usec_total": 0,
+      "excluded_setup_attempts": [
+        {
+          "block": 1,
+          "error": "context deadline exceeded",
+          "key": "Tmain052",
+          "kind": "error",
+          "profile": "nats-always"
+        }
+      ]
+    },
+    "durability": {
+      "trials": 59,
+      "messages": 12434648,
+      "max_concurrency_bound_utilization": 0.0,
+      "min_concurrency_bound_utilization": null,
+      "driver_throttled_trials": 0,
+      "driver_throttled_usec_total": 0,
+      "planned_trials": 60,
+      "failed_planned_trials": [
+        {
+          "kind": "durability_failure",
+          "key": "D038",
+          "profile": "redis-always",
+          "block": 6,
+          "stage": "timed_publication",
+          "record_origin": "post_run_failure_adjudication",
+          "error": "read tcp: i/o timeout",
+          "configured_request_timeout_seconds": 5,
+          "valid_trial_metrics_available": false,
+          "partial_client_events_available": false,
+          "broker_snapshot_count": 1568,
+          "broker_snapshot_unique_ids": 1568,
+          "broker_snapshot_min_id": 0,
+          "broker_snapshot_max_id": 1567,
+          "snapshot_encoding": "redis-cli JSON output with non-ASCII payload bytes; parse byte-preserving Latin-1",
+          "failure_log_mtime_utc": "2026-09-23T22:58:31.065701251Z",
+          "adjudicated_utc": "2026-09-23T23:03:41.315208+00:00",
+          "evidence": [
+            "data/environment/durability-through-D038.log",
+            "data/environment/D038-panic-log-stat.txt",
+            "data/environment/D038-broker-snapshot.txt",
+            "data/environment/D038-retained-stream.json.gz"
+          ]
+        }
+      ],
+      "excluded_diagnostic_replays": [
+        {
+          "block": 6,
+          "driver_cpu_after": "usage_usec 988512393\nuser_usec 472362277\nsystem_usec 516150115\ncore_sched.force_idle_usec 0\nnr_periods 41032\nnr_throttled 434\nthrottled_usec 11718480\nnr_bursts 0\nburst_usec 0\n",
+          "driver_cpu_before": "usage_usec 988256838\nuser_usec 472252725\nsystem_usec 516004113\ncore_sched.force_idle_usec 0\nnr_periods 40981\nnr_throttled 434\nthrottled_usec 11718480\nnr_bursts 0\nburst_usec 0\n",
+          "end_ns": 18211555826853195,
+          "harness_revision": "durability-outcomes-v5",
+          "key": "D038",
+          "kind": "durability",
+          "n": 3431,
+          "pending": 0,
+          "per_second_counts": [
+            1008,
+            672,
+            631,
+            569,
+            535,
+            16,
+            0
+          ],
+          "profile": "redis-always",
+          "publish_mps": 683.4452021578898,
+          "publish_ms": {
+            "max": 48.736513,
+            "mean": 23.35594366336347,
+            "p50": 22.863181,
+            "p95": 40.249119,
+            "p99": 47.095668
+          },
+          "publishers": 16,
+          "start_ns": 18211550806699437,
+          "stored": 3431,
+          "target_seconds": 5,
+          "utc_end": "2026-09-23T23:03:03.048526687Z"
+        }
+      ]
+    },
+    "serial": {
+      "trials": 60,
+      "messages": 61440,
+      "max_concurrency_bound_utilization": 0.9992371291251203,
+      "min_concurrency_bound_utilization": 0.993450798276475,
+      "driver_throttled_trials": 0,
+      "driver_throttled_usec_total": 0
+    },
+    "recovery": {
+      "trials": 130,
+      "successful_recoveries": 120,
+      "no_reclaim_censored": 10,
+      "max_kill_bracket_ms": 2.291135
+    }
+  },
+  "main": {
+    "redis-always:4": {
+      "publish_mps": {
+        "mean": 5056.400709944439,
+        "low": 4948.445703226359,
+        "high": 5155.519289246706,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 3.0816113,
+        "low": 3.0337833624999995,
+        "high": 3.1317712325000002,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 3.7541776,
+        "low": 3.4884276950000004,
+        "high": 4.1863319825,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 5.7933988,
+        "low": 5.111242800000001,
+        "high": 6.453912064999998,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 669.7336017300247,
+        "low": 660.6267533776065,
+        "high": 678.7341499438082,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 5.9724274460144,
+        "low": 5.892257989238439,
+        "high": 6.053572216242674,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 5.7632893,
+        "low": 5.6958753474999995,
+        "high": 5.83493659,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 6.4114301,
+        "low": 6.288731197500001,
+        "high": 6.5591089275,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 11.2909384,
+        "low": 10.614369202500002,
+        "high": 11.959748574999999,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 5.5871142,
+        "low": 5.2470764050000005,
+        "high": 5.941292332499999,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 24240.6713978,
+        "low": 23912.543228500002,
+        "high": 24572.8962066325,
+        "completed_trials": 10
+      }
+    },
+    "redis-memory:16": {
+      "publish_mps": {
+        "mean": 68329.21978120191,
+        "low": 66965.35298494961,
+        "high": 69576.09272910908,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.20741840000000003,
+        "low": 0.2046037,
+        "high": 0.210578325,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.4158809,
+        "low": 0.400023675,
+        "high": 0.43354723,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.6743544000000001,
+        "low": 0.6455776875,
+        "high": 0.7125652375,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 36372.00103675014,
+        "low": 35939.45894928698,
+        "high": 36826.57504079735,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.43885823032836974,
+        "low": 0.4334248575628678,
+        "high": 0.4440975357167052,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.4195888,
+        "low": 0.416255945,
+        "high": 0.42304903750000006,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.6175764,
+        "low": 0.5913701000000001,
+        "high": 0.645610745,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.8673426000000001,
+        "low": 0.8337430825,
+        "high": 0.9017185575,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.46625459999999996,
+        "low": 0.44017029999999996,
+        "high": 0.4943775075,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 445.7971974,
+        "low": 440.35708652,
+        "high": 451.0248173675,
+        "completed_trials": 10
+      }
+    },
+    "redis-periodic:1": {
+      "publish_mps": {
+        "mean": 60254.7066523301,
+        "low": 58736.75678441772,
+        "high": 61648.04268442134,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.24707290000000004,
+        "low": 0.24226345000000005,
+        "high": 0.2524599225,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.4247993,
+        "low": 0.40061573,
+        "high": 0.4489822175,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.6369064,
+        "low": 0.6147765525000001,
+        "high": 0.6604733750000001,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 2661.1733566150065,
+        "low": 2557.858392409753,
+        "high": 2760.799325173326,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.37503444487914983,
+        "low": 0.3606058746421809,
+        "high": 0.39004850655105533,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.3759341,
+        "low": 0.36086156,
+        "high": 0.39123442250000007,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.4447653,
+        "low": 0.43307130750000006,
+        "high": 0.457133285,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.5650036,
+        "low": 0.5507072150000001,
+        "high": 0.5813546624999999,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.2639167,
+        "low": 0.255340775,
+        "high": 0.2726259124999999,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 6116.8692745,
+        "low": 5881.5627493950005,
+        "high": 6361.1061767775,
+        "completed_trials": 10
+      }
+    },
+    "nats-always:8": {
+      "publish_mps": {
+        "mean": 691.8074056718862,
+        "low": 683.9892663610283,
+        "high": 698.5450030844021,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 22.6679436,
+        "low": 22.4819631,
+        "high": 22.93045311,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 26.4568669,
+        "low": 26.2129491275,
+        "high": 26.710999592500002,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 45.076385699999996,
+        "low": 44.2199597775,
+        "high": 45.9917890125,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 19658.736161375033,
+        "low": 19485.02266347793,
+        "high": 19807.551784542713,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.4057274401123047,
+        "low": 0.4026354620002757,
+        "high": 0.40939692951553325,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.37843899999999997,
+        "low": 0.37627883,
+        "high": 0.3814200225,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.5609316,
+        "low": 0.5503353099999999,
+        "high": 0.572166315,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.8504996,
+        "low": 0.80830793,
+        "high": 0.8936201350000001,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.43364959999999997,
+        "low": 0.4151938,
+        "high": 0.453483495,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 824.451691,
+        "low": 818.0095737425,
+        "high": 831.7289325524999,
+        "completed_trials": 10
+      }
+    },
+    "redis-always:1": {
+      "publish_mps": {
+        "mean": 4973.709165018614,
+        "low": 4850.636479787835,
+        "high": 5096.703614475998,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 3.1101425,
+        "low": 3.0640583550000002,
+        "high": 3.1532199575,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 3.9230513,
+        "low": 3.5490986925000003,
+        "high": 4.415456799999999,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 5.5522253,
+        "low": 5.0417207,
+        "high": 6.1205365125,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 291.817260511057,
+        "low": 288.0517818552067,
+        "high": 295.49743607259234,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 3.425639478521732,
+        "low": 3.382421901331636,
+        "high": 3.47049022571442,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 3.3215461,
+        "low": 3.2829973650000004,
+        "high": 3.3640350150000002,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 3.8247191000000003,
+        "low": 3.76572952,
+        "high": 3.8822372,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 5.9420474,
+        "low": 5.8470181525,
+        "high": 6.043805,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 2.9455406,
+        "low": 2.8959367499999997,
+        "high": 3.0056836024999996,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 55604.9090493,
+        "low": 54894.97653698499,
+        "high": 56343.006595145,
+        "completed_trials": 10
+      }
+    },
+    "redis-periodic:16": {
+      "publish_mps": {
+        "mean": 56259.49586826448,
+        "low": 51275.241272687366,
+        "high": 59456.88980101219,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.25660659999999996,
+        "low": 0.25021314250000004,
+        "high": 0.26597408250000004,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.48804379999999997,
+        "low": 0.4337855375,
+        "high": 0.5678752125000001,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.9579555,
+        "low": 0.6424152275000002,
+        "high": 1.5673137225,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 29315.15996380967,
+        "low": 27732.759042757258,
+        "high": 30503.25948881615,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.548447437109376,
+        "low": 0.523453505614472,
+        "high": 0.5829427918061838,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.5138054000000001,
+        "low": 0.5054504974999999,
+        "high": 0.52403081,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.8014005,
+        "low": 0.7336852599999999,
+        "high": 0.8843660600000001,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 1.334126,
+        "low": 0.9648235225000001,
+        "high": 1.9505771800000002,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.7829719,
+        "low": 0.5409547349999999,
+        "high": 1.2064805675,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 557.5971036000001,
+        "low": 531.8892222775,
+        "high": 593.0994997524998,
+        "completed_trials": 10
+      }
+    },
+    "nats-periodic:8": {
+      "publish_mps": {
+        "mean": 48266.963810385125,
+        "low": 47326.79720257662,
+        "high": 49131.281463046216,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.2870651,
+        "low": 0.283020855,
+        "high": 0.291408725,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.599501,
+        "low": 0.5815003124999999,
+        "high": 0.6203299500000001,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 1.0030642999999997,
+        "low": 0.9568035850000003,
+        "high": 1.05430309,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 19549.038021009965,
+        "low": 19275.563035432424,
+        "high": 19796.313604344887,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.4082229096252445,
+        "low": 0.40301575891632135,
+        "high": 0.41405393876953156,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.3709169,
+        "low": 0.3687607,
+        "high": 0.37330387249999997,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.5515937999999999,
+        "low": 0.54290132,
+        "high": 0.5604494525000001,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.8574668000000001,
+        "low": 0.8213451175,
+        "high": 0.9074539749999999,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.4294301,
+        "low": 0.41124089750000004,
+        "high": 0.45067714249999996,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 829.5979251000001,
+        "low": 818.7180206475,
+        "high": 841.6571910524999,
+        "completed_trials": 10
+      }
+    },
+    "redis-periodic:2": {
+      "publish_mps": {
+        "mean": 58204.579842347695,
+        "low": 57196.70659459572,
+        "high": 59163.947714867805,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.252888,
+        "low": 0.24954858999999996,
+        "high": 0.2568231825,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.4553255000000001,
+        "low": 0.4437197825,
+        "high": 0.4673168749999999,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.6683201999999999,
+        "low": 0.6503597575000001,
+        "high": 0.6864726675,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 6340.983137730472,
+        "low": 5813.983012777523,
+        "high": 6897.319148426984,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.3197791994323729,
+        "low": 0.2930493039666753,
+        "high": 0.3458785784860227,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.3090977,
+        "low": 0.2813870825,
+        "high": 0.33606885000000003,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.4109205,
+        "low": 0.37959435,
+        "high": 0.44078710499999996,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.5227495,
+        "low": 0.4885790275,
+        "high": 0.5561817075,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.2572259,
+        "low": 0.2369958225,
+        "high": 0.27665050999999996,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 2606.0495271000004,
+        "low": 2389.22822282,
+        "high": 2817.6683742875002,
+        "completed_trials": 10
+      }
+    },
+    "redis-memory:2": {
+      "publish_mps": {
+        "mean": 68416.17082887908,
+        "low": 66838.14816890688,
+        "high": 69705.52687719015,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.20875830000000004,
+        "low": 0.20581110000000002,
+        "high": 0.212883195,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.41862780000000005,
+        "low": 0.40213286249999997,
+        "high": 0.4347210475,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.646757,
+        "low": 0.6325453974999999,
+        "high": 0.6625498074999999,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 6474.168783367089,
+        "low": 6057.039042994778,
+        "high": 6902.988897283516,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.3109252056213377,
+        "low": 0.2912469836866759,
+        "high": 0.33089100669372523,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.3024956,
+        "low": 0.284058095,
+        "high": 0.3182253025,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.40764849999999997,
+        "low": 0.38829415250000004,
+        "high": 0.42674752,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.5086697,
+        "low": 0.48767305499999997,
+        "high": 0.5307771749999999,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.25157250000000003,
+        "low": 0.24039049,
+        "high": 0.2629128,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 2532.2837105000003,
+        "low": 2371.7989706199996,
+        "high": 2695.9476722124996,
+        "completed_trials": 10
+      }
+    },
+    "nats-periodic:2": {
+      "publish_mps": {
+        "mean": 47599.04941895184,
+        "low": 45403.4463552233,
+        "high": 49222.719105070435,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.28986199999999995,
+        "low": 0.28377100000000005,
+        "high": 0.2967617925,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.6167149,
+        "low": 0.5757729924999999,
+        "high": 0.6798815175,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 1.0711312000000002,
+        "low": 0.95522123,
+        "high": 1.2459008125,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 5504.594274514917,
+        "low": 5204.381042924897,
+        "high": 5838.589770845374,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.364616989331055,
+        "low": 0.3440861509277345,
+        "high": 0.3830602900225837,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.34775,
+        "low": 0.32365737250000004,
+        "high": 0.36909464999999997,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.463549,
+        "low": 0.4460231,
+        "high": 0.4822350999999999,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.6272643,
+        "low": 0.5944886974999999,
+        "high": 0.6681226025,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.3005147,
+        "low": 0.2860604375,
+        "high": 0.319015315,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 2970.7736122,
+        "low": 2802.9532096175,
+        "high": 3121.1301355375,
+        "completed_trials": 10
+      }
+    },
+    "nats-periodic:1": {
+      "publish_mps": {
+        "mean": 48190.739275807995,
+        "low": 45899.92992206188,
+        "high": 49760.20412327244,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.2863612,
+        "low": 0.2809487,
+        "high": 0.29438967,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.6254708,
+        "low": 0.5743246625,
+        "high": 0.7076205725000001,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 1.0836909,
+        "low": 0.9663144174999998,
+        "high": 1.2699497324999998,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 2267.576822165587,
+        "low": 2240.5659037887212,
+        "high": 2291.2725729124836,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.43893912884521435,
+        "low": 0.4342907332218921,
+        "high": 0.44427940042358427,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.4376006,
+        "low": 0.43305144749999996,
+        "high": 0.44343281249999994,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.5256426000000001,
+        "low": 0.5231496800000001,
+        "high": 0.5283626050000001,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.6356136999999998,
+        "low": 0.626926835,
+        "high": 0.6459957900000001,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.30648620000000004,
+        "low": 0.3026873775000001,
+        "high": 0.31040361,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 7155.0368703,
+        "low": 7079.68349541,
+        "high": 7241.242254485001,
+        "completed_trials": 10
+      }
+    },
+    "nats-always:2": {
+      "publish_mps": {
+        "mean": 628.6398065877527,
+        "low": 549.0348596078904,
+        "high": 687.6820912915374,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 23.0589654,
+        "low": 22.7226976,
+        "high": 23.472265097500003,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 60.3129608,
+        "low": 26.6644002,
+        "high": 110.58309039999999,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 92.82779409999999,
+        "low": 44.792222125,
+        "high": 161.51298898999997,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 5337.80746137725,
+        "low": 5145.145172643061,
+        "high": 5613.954716414999,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.3747840390319826,
+        "low": 0.3576513860351561,
+        "high": 0.3875172804574591,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.3621591,
+        "low": 0.343197815,
+        "high": 0.37529250500000005,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.47344410000000003,
+        "low": 0.45924149750000004,
+        "high": 0.48747885250000006,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.631053,
+        "low": 0.6063398249999999,
+        "high": 0.66194547,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.30613520000000005,
+        "low": 0.29635849000000003,
+        "high": 0.31904095749999994,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 3051.8668227,
+        "low": 2912.2892313225,
+        "high": 3155.3359332025,
+        "completed_trials": 10
+      }
+    },
+    "redis-always:8": {
+      "publish_mps": {
+        "mean": 5065.9983140794375,
+        "low": 5002.910587700697,
+        "high": 5125.570108995295,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 3.0814969999999997,
+        "low": 3.04941376,
+        "high": 3.11775214,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 3.5338746,
+        "low": 3.4869520075,
+        "high": 3.5907461024999994,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 5.361719500000001,
+        "low": 4.873594477499999,
+        "high": 5.836518354999999,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 1310.9056943061098,
+        "low": 1296.4156420638603,
+        "high": 1326.262660581733,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 6.101085976281734,
+        "low": 6.030332405691826,
+        "high": 6.168251097482767,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 5.9109837999999995,
+        "low": 5.844650097500001,
+        "high": 5.97898618,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 6.5826929000000005,
+        "low": 6.479766822499999,
+        "high": 6.700421534999999,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 11.3952415,
+        "low": 10.724124024999998,
+        "high": 12.185785717499998,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 5.6931034,
+        "low": 5.315136334999999,
+        "high": 6.1239450725,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 12379.971099400002,
+        "low": 12235.948139537499,
+        "high": 12517.13423002,
+        "completed_trials": 10
+      }
+    },
+    "nats-memory:4": {
+      "publish_mps": {
+        "mean": 56122.937298993485,
+        "low": 55234.86323347452,
+        "high": 56805.38606961912,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.2461003,
+        "low": 0.24383772,
+        "high": 0.24910781,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.5177077000000001,
+        "low": 0.5021820925,
+        "high": 0.5338760174999999,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.994896,
+        "low": 0.9576506799999998,
+        "high": 1.0308752399999999,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 11691.624021843369,
+        "low": 11519.177577670825,
+        "high": 11895.585576027992,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.3412341775268552,
+        "low": 0.3354664037432859,
+        "high": 0.3462191357353211,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.3185396,
+        "low": 0.3141094525,
+        "high": 0.3228344,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.4673617,
+        "low": 0.4582077625,
+        "high": 0.4763506575,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.6666508,
+        "low": 0.6498793875000001,
+        "high": 0.6932313075000002,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.32978640000000004,
+        "low": 0.31932088499999994,
+        "high": 0.3448438325,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 1388.0801298000001,
+        "low": 1364.5613535575,
+        "high": 1408.411124325,
+        "completed_trials": 10
+      }
+    },
+    "nats-memory:16": {
+      "publish_mps": {
+        "mean": 55301.532362817714,
+        "low": 54326.75760428711,
+        "high": 56180.53559722754,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.24705080000000001,
+        "low": 0.2444980525,
+        "high": 0.24958261499999998,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.5553925,
+        "low": 0.53233089,
+        "high": 0.580786995,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 1.0429340999999999,
+        "low": 1.0142042274999998,
+        "high": 1.0729191999999999,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 29793.710575762485,
+        "low": 29428.514028831603,
+        "high": 30116.63814967082,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.5358638486999512,
+        "low": 0.5299571140327454,
+        "high": 0.5426102992758177,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.4923741,
+        "low": 0.48802014499999996,
+        "high": 0.497149115,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.8360679,
+        "low": 0.818316345,
+        "high": 0.85663216,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 1.3100808,
+        "low": 1.2601214775,
+        "high": 1.360445435,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.7101809,
+        "low": 0.68834871,
+        "high": 0.7332316625000002,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 544.2813439000001,
+        "low": 538.340639625,
+        "high": 551.0374567824999,
+        "completed_trials": 10
+      }
+    },
+    "redis-always:2": {
+      "publish_mps": {
+        "mean": 5057.072390781957,
+        "low": 4957.548877575021,
+        "high": 5144.7322786340255,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 3.0996113999999997,
+        "low": 3.0387573249999997,
+        "high": 3.1664512999999994,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 3.5502027,
+        "low": 3.4617263525,
+        "high": 3.6504119600000005,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 4.9919615,
+        "low": 4.4835872000000005,
+        "high": 5.522740997500001,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 340.0192358873454,
+        "low": 334.40121670421365,
+        "high": 345.1524428040982,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 5.883209142730726,
+        "low": 5.793502886415415,
+        "high": 5.982169592040118,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 5.7105766000000004,
+        "low": 5.625086675,
+        "high": 5.8057191475,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 6.3362699,
+        "low": 6.208607747499999,
+        "high": 6.47449046,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 10.9152168,
+        "low": 10.7177860075,
+        "high": 11.144388974999998,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 5.413349500000001,
+        "low": 5.29989647,
+        "high": 5.542795554999999,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 47736.5021918,
+        "low": 47012.4721950025,
+        "high": 48529.82756342999,
+        "completed_trials": 10
+      }
+    },
+    "redis-memory:1": {
+      "publish_mps": {
+        "mean": 66851.64761665344,
+        "low": 64906.84582860137,
+        "high": 68485.05856363899,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.21113180000000004,
+        "low": 0.2078433,
+        "high": 0.21505196000000001,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.43758759999999997,
+        "low": 0.41402675000000005,
+        "high": 0.4638320724999999,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.6618877,
+        "low": 0.6389824224999999,
+        "high": 0.6912309375,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 2889.6660462134246,
+        "low": 2742.9358791173167,
+        "high": 3008.769659799932,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.3461445379455569,
+        "low": 0.3304694720759585,
+        "high": 0.3661630144267287,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.3477269,
+        "low": 0.3329505925,
+        "high": 0.36787009000000004,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.4224297999999999,
+        "low": 0.40984608750000007,
+        "high": 0.4379495775,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.5429298,
+        "low": 0.5140759799999999,
+        "high": 0.5805479625000001,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.25685839999999993,
+        "low": 0.2422414,
+        "high": 0.27655445,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 5649.8752939999995,
+        "low": 5396.4082985000005,
+        "high": 5973.784299502499,
+        "completed_trials": 10
+      }
+    },
+    "nats-memory:8": {
+      "publish_mps": {
+        "mean": 56025.806292892994,
+        "low": 55020.98846687492,
+        "high": 57112.644060487284,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.24567719999999998,
+        "low": 0.2427811975,
+        "high": 0.24842650250000003,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.5252686000000001,
+        "low": 0.5003826600000001,
+        "high": 0.5483756025,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 1.0248829000000002,
+        "low": 0.98298946,
+        "high": 1.064910005,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 20324.20487421439,
+        "low": 20045.265868317798,
+        "high": 20614.368414988687,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.3926322546264646,
+        "low": 0.3870607914462284,
+        "high": 0.39808622830306983,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.3685113,
+        "low": 0.363915985,
+        "high": 0.37292815,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.5430864,
+        "low": 0.5325167625,
+        "high": 0.5533027199999999,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.8505627,
+        "low": 0.8125188300000001,
+        "high": 0.8933944249999999,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.43838679999999997,
+        "low": 0.42146951,
+        "high": 0.4579493150000001,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 798.3740956,
+        "low": 786.8669733050001,
+        "high": 809.58020341,
+        "completed_trials": 10
+      }
+    },
+    "redis-memory:4": {
+      "publish_mps": {
+        "mean": 66803.91696659694,
+        "low": 64454.50650723426,
+        "high": 68406.02498671217,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.2098512,
+        "low": 0.20688078749999997,
+        "high": 0.2136711775,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.44434830000000003,
+        "low": 0.42028177499999997,
+        "high": 0.4796563350000001,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.6881248,
+        "low": 0.6550904925000001,
+        "high": 0.7252217,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 13210.574263138094,
+        "low": 12822.987604326432,
+        "high": 13643.522930111649,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.30243526307983404,
+        "low": 0.2928524486314387,
+        "high": 0.31115744638488785,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.2919078,
+        "low": 0.28015038750000004,
+        "high": 0.3025506275,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.4048338,
+        "low": 0.38972600249999995,
+        "high": 0.41997448749999994,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.5394393,
+        "low": 0.5149167699999999,
+        "high": 0.5666371325,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.2771222,
+        "low": 0.2634957725,
+        "high": 0.2917329,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 1231.1636334999998,
+        "low": 1192.337183225,
+        "high": 1266.297729555,
+        "completed_trials": 10
+      }
+    },
+    "nats-memory:1": {
+      "publish_mps": {
+        "mean": 55502.72002321713,
+        "low": 54278.41410148172,
+        "high": 56611.50709250651,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.24651979999999996,
+        "low": 0.2442035175,
+        "high": 0.24900582250000003,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.5442073,
+        "low": 0.5186623975,
+        "high": 0.5732115925,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 1.0374687,
+        "low": 0.992292385,
+        "high": 1.0961239999999999,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 2301.686379196278,
+        "low": 2256.9627793051527,
+        "high": 2336.315629934776,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.4326568662963871,
+        "low": 0.4258962805541987,
+        "high": 0.4414661481301893,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.4342899,
+        "low": 0.42867723750000003,
+        "high": 0.44212156249999995,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.5256551,
+        "low": 0.5204836675,
+        "high": 0.531701105,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.6526616000000001,
+        "low": 0.6327225025,
+        "high": 0.6775855,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.3116957,
+        "low": 0.30341565749999994,
+        "high": 0.32110776499999993,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 7052.189877,
+        "low": 6940.7740505500005,
+        "high": 7196.18547683,
+        "completed_trials": 10
+      }
+    },
+    "redis-memory:8": {
+      "publish_mps": {
+        "mean": 67667.77569746537,
+        "low": 64528.234678299625,
+        "high": 70265.79097603363,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.2110644,
+        "low": 0.20451632500000003,
+        "high": 0.2205037775,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.4233745,
+        "low": 0.39771961250000004,
+        "high": 0.45105102750000003,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.650186,
+        "low": 0.6259664699999999,
+        "high": 0.67578569,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 24419.36075435464,
+        "low": 23977.423794857354,
+        "high": 24826.22893812518,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.3268012940246586,
+        "low": 0.3212992136544804,
+        "high": 0.3328290782402034,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.3138832,
+        "low": 0.31148976000000006,
+        "high": 0.31634161000000005,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.4275289,
+        "low": 0.41482867,
+        "high": 0.4422385575,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.5656665000000001,
+        "low": 0.5376939625,
+        "high": 0.6003457600000001,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.2896813,
+        "low": 0.2740283725,
+        "high": 0.3093666375,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 664.3721981000001,
+        "low": 653.320474415,
+        "high": 676.2432909,
+        "completed_trials": 10
+      }
+    },
+    "nats-always:4": {
+      "publish_mps": {
+        "mean": 682.9196890648587,
+        "low": 672.7139758982283,
+        "high": 692.7974320516028,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 23.044680300000003,
+        "low": 22.754502297500004,
+        "high": 23.3491479175,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 27.2092096,
+        "low": 26.4735904,
+        "high": 28.17096291,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 44.6954786,
+        "low": 44.1449187,
+        "high": 45.37597892,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 11497.170690397861,
+        "low": 11203.694118690177,
+        "high": 11787.999289043284,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.34735903609008706,
+        "low": 0.33863436906021005,
+        "high": 0.3563563958502185,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.32252089999999994,
+        "low": 0.317217635,
+        "high": 0.3274845325000001,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.47851429999999995,
+        "low": 0.4679035975,
+        "high": 0.48959540999999995,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.727697,
+        "low": 0.631803745,
+        "high": 0.8799714075,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.3473079,
+        "low": 0.32046848499999997,
+        "high": 0.3838306,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 1413.678152,
+        "low": 1378.2697347825,
+        "high": 1450.2387638,
+        "completed_trials": 10
+      }
+    },
+    "redis-periodic:4": {
+      "publish_mps": {
+        "mean": 56712.68883902839,
+        "low": 54465.79099797524,
+        "high": 58522.285942140814,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.25766100000000003,
+        "low": 0.25191254,
+        "high": 0.2634570375,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.4770571,
+        "low": 0.450113685,
+        "high": 0.5183176974999999,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.6953520000000001,
+        "low": 0.6642003,
+        "high": 0.7466064175,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 12937.000741901435,
+        "low": 12312.60489833454,
+        "high": 13620.814513311028,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.31014873908691465,
+        "low": 0.2948391912124641,
+        "high": 0.32527737323486394,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.2960313,
+        "low": 0.282546415,
+        "high": 0.30676549499999994,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.4161026,
+        "low": 0.39611917750000003,
+        "high": 0.432767115,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.6399697,
+        "low": 0.5267700850000001,
+        "high": 0.83630986,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.29382329999999995,
+        "low": 0.26923257750000007,
+        "high": 0.3278940074999999,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 1261.7754433,
+        "low": 1199.4475310875,
+        "high": 1323.542625585,
+        "completed_trials": 10
+      }
+    },
+    "nats-periodic:4": {
+      "publish_mps": {
+        "mean": 49454.49870124817,
+        "low": 48365.16824068642,
+        "high": 50414.52631002262,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.2810189,
+        "low": 0.2763703725,
+        "high": 0.2865898050000001,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.5739119,
+        "low": 0.5551941774999999,
+        "high": 0.596116315,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.9961230000000001,
+        "low": 0.945982115,
+        "high": 1.0596405275000003,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 11430.030265768659,
+        "low": 11226.694042780744,
+        "high": 11651.685196644006,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.3491354044982911,
+        "low": 0.34251233393753083,
+        "high": 0.35528162302337624,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.3214694,
+        "low": 0.31645001749999996,
+        "high": 0.32603911750000003,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.4763173,
+        "low": 0.463944725,
+        "high": 0.4891570275,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.664097,
+        "low": 0.637378495,
+        "high": 0.6951370374999999,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.3321467,
+        "low": 0.31685631000000003,
+        "high": 0.3492788475,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 1421.1124531,
+        "low": 1393.717394595,
+        "high": 1446.6060497925,
+        "completed_trials": 10
+      }
+    },
+    "nats-always:1": {
+      "publish_mps": {
+        "mean": 683.3145995935319,
+        "low": 671.3859126794295,
+        "high": 693.2424225843969,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 23.0910902,
+        "low": 22.760799422500003,
+        "high": 23.497386482499998,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 26.925234,
+        "low": 26.417038159999997,
+        "high": 27.489932050000004,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 45.0227658,
+        "low": 44.09307481,
+        "high": 45.9123787,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 2241.1411568671183,
+        "low": 2206.756123360282,
+        "high": 2270.8250263419563,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.4442006905334467,
+        "low": 0.43819818681533806,
+        "high": 0.4511669548161311,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.44251589999999996,
+        "low": 0.43689781999999994,
+        "high": 0.44912089999999993,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.5287758,
+        "low": 0.5249338925,
+        "high": 0.5328439624999999,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.6359394,
+        "low": 0.6282973675,
+        "high": 0.6438120325,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.30942970000000003,
+        "low": 0.30411406250000006,
+        "high": 0.31499243250000003,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 7244.9846622,
+        "low": 7148.581575367501,
+        "high": 7355.6619459125,
+        "completed_trials": 10
+      }
+    },
+    "nats-always:16": {
+      "publish_mps": {
+        "mean": 689.294021882485,
+        "low": 679.0936702469319,
+        "high": 698.5875745808695,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 22.888633399999996,
+        "low": 22.602440772500003,
+        "high": 23.20710588,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 26.7092332,
+        "low": 26.2557978075,
+        "high": 27.21958545,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 45.445366899999996,
+        "low": 44.6891203625,
+        "high": 46.10764878249999,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 27430.703636965936,
+        "low": 27043.147236973247,
+        "high": 27830.276006320706,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.5818983522155768,
+        "low": 0.5734182975523392,
+        "high": 0.5902249774273686,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.5184323000000001,
+        "low": 0.512040575,
+        "high": 0.5244788899999999,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.9570667,
+        "low": 0.9350800825000001,
+        "high": 0.9788359475,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 1.5406197000000001,
+        "low": 1.4640434750000002,
+        "high": 1.6190865225000002,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.8098473,
+        "low": 0.7796133524999999,
+        "high": 0.838070915,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 591.9040307000001,
+        "low": 583.342889105,
+        "high": 600.2173418450001,
+        "completed_trials": 10
+      }
+    },
+    "redis-always:16": {
+      "publish_mps": {
+        "mean": 4225.905000378878,
+        "low": 3100.3508844102503,
+        "high": 5022.617348717363,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 4.7497543,
+        "low": 3.10276372,
+        "high": 7.965812367500001,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 11.530680999999998,
+        "low": 3.6509667975,
+        "high": 22.76224062,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 15.6608656,
+        "low": 5.308209300000001,
+        "high": 30.286509599999995,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 2508.12892316003,
+        "low": 2468.4804629412106,
+        "high": 2549.325210837245,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 6.378058563244633,
+        "low": 6.273736078130353,
+        "high": 6.479054658822029,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 6.2140515,
+        "low": 6.1214695375,
+        "high": 6.310009415000001,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 6.9048,
+        "low": 6.794134700000001,
+        "high": 7.0180833675,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 10.3108003,
+        "low": 9.5392011625,
+        "high": 10.968094104999999,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 5.192476299999999,
+        "low": 4.911776797499999,
+        "high": 5.446274215,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 6469.7013078,
+        "low": 6363.9310502625,
+        "high": 6572.091445064999,
+        "completed_trials": 10
+      }
+    },
+    "nats-periodic:16": {
+      "publish_mps": {
+        "mean": 48574.329092968364,
+        "low": 46155.66420872474,
+        "high": 50373.67561790846,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.28487880000000004,
+        "low": 0.278166065,
+        "high": 0.2931714325,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.6074609,
+        "low": 0.562472585,
+        "high": 0.6723714525,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 1.0644177,
+        "low": 0.9316740875,
+        "high": 1.2669300149999998,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 28031.067726551097,
+        "low": 26890.52370162457,
+        "high": 28966.78850445863,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.5716847593017581,
+        "low": 0.5511923170065315,
+        "high": 0.5973811677076717,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.5047846,
+        "low": 0.49406429999999996,
+        "high": 0.5176672775,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.9102314,
+        "low": 0.8655670350000001,
+        "high": 0.9639486750000001,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 1.5203789999999997,
+        "low": 1.392217695,
+        "high": 1.71390804,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.7761433,
+        "low": 0.7191962875,
+        "high": 0.85623591,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 580.5683801,
+        "low": 559.3552391049999,
+        "high": 606.8225434850001,
+        "completed_trials": 10
+      }
+    },
+    "nats-memory:2": {
+      "publish_mps": {
+        "mean": 55895.858101316066,
+        "low": 55269.51955599444,
+        "high": 56544.04537795135,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.2463314,
+        "low": 0.24461650499999996,
+        "high": 0.24778149999999996,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.5280142,
+        "low": 0.5092671974999999,
+        "high": 0.5473207975000001,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 1.0381858,
+        "low": 0.9865975725,
+        "high": 1.0879339375,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 5457.337647444231,
+        "low": 5254.109454373258,
+        "high": 5736.587627003146,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.3666980616027828,
+        "low": 0.35044373904373083,
+        "high": 0.37948595479614167,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.35294829999999994,
+        "low": 0.33529007250000004,
+        "high": 0.36700821999999994,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.4647298,
+        "low": 0.45018165250000003,
+        "high": 0.47569848750000004,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.6325082,
+        "low": 0.6019579275,
+        "high": 0.6684450724999998,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.2997447,
+        "low": 0.29179659500000005,
+        "high": 0.30583227249999995,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 2986.5878771,
+        "low": 2853.2409088025,
+        "high": 3091.3902763225,
+        "completed_trials": 10
+      }
+    },
+    "redis-periodic:8": {
+      "publish_mps": {
+        "mean": 58820.30009249819,
+        "low": 56059.0904927506,
+        "high": 60735.079559673104,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.250625,
+        "low": 0.24584415250000005,
+        "high": 0.256546045,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.45094130000000004,
+        "low": 0.41605686250000007,
+        "high": 0.5036938175,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.6742186,
+        "low": 0.632348575,
+        "high": 0.7316527150000001,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 22282.687054171583,
+        "low": 22019.48241051855,
+        "high": 22553.523469451487,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.35807354628295895,
+        "low": 0.35376609898528977,
+        "high": 0.3623281898439031,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.3433837,
+        "low": 0.33967289999999994,
+        "high": 0.347051995,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.4748754,
+        "low": 0.4664048,
+        "high": 0.4846419474999999,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.6437141,
+        "low": 0.614760025,
+        "high": 0.67631255,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.3376858,
+        "low": 0.32537667000000003,
+        "high": 0.35111761250000006,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 728.0049606,
+        "low": 719.57569772,
+        "high": 736.051833195,
+        "completed_trials": 10
+      }
+    }
+  },
+  "durability": {
+    "nats-periodic": {
+      "publish_mps": {
+        "mean": 49492.26204667591,
+        "low": 48288.33307780005,
+        "high": 50480.26987130184,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.28113029999999994,
+        "low": 0.27930765,
+        "high": 0.282801465,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.5599077,
+        "low": 0.548936275,
+        "high": 0.5704953,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.8491538999999999,
+        "low": 0.8317790975,
+        "high": 0.8693375325,
+        "completed_trials": 10
+      }
+    },
+    "redis-memory": {
+      "publish_mps": {
+        "mean": 73904.46756827575,
+        "low": 73601.90150712122,
+        "high": 74191.20622109051,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.2037597,
+        "low": 0.20316398249999998,
+        "high": 0.20435003749999997,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.31598800000000005,
+        "low": 0.31264125000000004,
+        "high": 0.319350135,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.47439090000000006,
+        "low": 0.46601013,
+        "high": 0.48606115750000006,
+        "completed_trials": 10
+      }
+    },
+    "nats-always": {
+      "publish_mps": {
+        "mean": 374.8509528734612,
+        "low": 193.64491561553947,
+        "high": 563.6815125734656,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 108.66433839999998,
+        "low": 55.009888274999994,
+        "high": 162.35661437000002,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 554.1598847,
+        "low": 72.52374376249999,
+        "high": 1438.384670245,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 579.5683876,
+        "low": 91.36229017,
+        "high": 1459.6468623699998,
+        "completed_trials": 10
+      }
+    },
+    "nats-memory": {
+      "publish_mps": {
+        "mean": 60375.07309476331,
+        "low": 58988.871047539884,
+        "high": 61319.92740035123,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.2408334,
+        "low": 0.23936280000000001,
+        "high": 0.2426678225,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.41988709999999996,
+        "low": 0.40526162749999994,
+        "high": 0.4409940300000001,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.7042327,
+        "low": 0.6781380349999999,
+        "high": 0.742234125,
+        "completed_trials": 10
+      }
+    },
+    "redis-always": {
+      "publish_mps": {
+        "mean": 3028.2104110765335,
+        "low": 1725.122349126556,
+        "high": 4305.635274904047,
+        "completed_trials": 9
+      },
+      "publish_ms.p50": {
+        "mean": 9.959188777777777,
+        "low": 4.0745958416666666,
+        "high": 16.789270602777776,
+        "completed_trials": 9
+      },
+      "publish_ms.p95": {
+        "mean": 20.962308555555556,
+        "low": 8.835655883333333,
+        "high": 35.26683547222222,
+        "completed_trials": 9
+      },
+      "publish_ms.p99": {
+        "mean": 29.00143544444444,
+        "low": 11.614713547222223,
+        "high": 50.92890545833332,
+        "completed_trials": 9
+      }
+    },
+    "redis-periodic": {
+      "publish_mps": {
+        "mean": 61377.589028044335,
+        "low": 61078.70515273352,
+        "high": 61673.838868839586,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.24724210000000002,
+        "low": 0.2457418,
+        "high": 0.2489137,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.3880447,
+        "low": 0.383644895,
+        "high": 0.3933797725,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.557434,
+        "low": 0.550655545,
+        "high": 0.564865325,
+        "completed_trials": 10
+      }
+    }
+  },
+  "serial": {
+    "nats-periodic": {
+      "publish_mps": {
+        "mean": 4911.538701119799,
+        "low": 4457.734997738718,
+        "high": 5425.784767482479,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.2003155,
+        "low": 0.17983834,
+        "high": 0.21901299749999997,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.25692339999999997,
+        "low": 0.2324941125,
+        "high": 0.2778117375,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.3341552,
+        "low": 0.30370486750000003,
+        "high": 0.3622685275,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 2371.512598508059,
+        "low": 2136.75898627373,
+        "high": 2685.628638162174,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.4320566975585939,
+        "low": 0.38875520226318333,
+        "high": 0.4664007048999023,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.4277221000000001,
+        "low": 0.381998715,
+        "high": 0.462808815,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.4981039,
+        "low": 0.4443059,
+        "high": 0.5381189,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.6425703,
+        "low": 0.5685464324999999,
+        "high": 0.6916650099999999,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.2904883,
+        "low": 0.255659835,
+        "high": 0.3199833875,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 439.8307399,
+        "low": 395.8573306275,
+        "high": 474.936845045,
+        "completed_trials": 10
+      }
+    },
+    "redis-memory": {
+      "publish_mps": {
+        "mean": 5946.839910326626,
+        "low": 5385.563413974978,
+        "high": 6724.070044496076,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.167459,
+        "low": 0.1508265925,
+        "high": 0.18207842750000003,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.20115310000000003,
+        "low": 0.18095935750000003,
+        "high": 0.21647,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.2403973,
+        "low": 0.21749367249999998,
+        "high": 0.2567147625000001,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 2976.7734559115247,
+        "low": 2919.1911620932174,
+        "high": 3054.879475780128,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.3343990469726564,
+        "low": 0.32644117108398424,
+        "high": 0.3404654317993165,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.3303946,
+        "low": 0.32285732,
+        "high": 0.33580552750000003,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.400664,
+        "low": 0.38118581,
+        "high": 0.41455594500000004,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.4968565,
+        "low": 0.46455885,
+        "high": 0.5211425649999999,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.23325999999999997,
+        "low": 0.21919815000000004,
+        "high": 0.2454829275,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 341.049795,
+        "low": 332.6553461975,
+        "high": 347.4261099600001,
+        "completed_trials": 10
+      }
+    },
+    "nats-always": {
+      "publish_mps": {
+        "mean": 584.8265020747805,
+        "low": 564.7914354833644,
+        "high": 597.9715028178424,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 1.662218,
+        "low": 1.64859215,
+        "high": 1.6764412,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 2.0184819999999997,
+        "low": 1.858509695,
+        "high": 2.3095938325000005,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 2.755512,
+        "low": 2.0634347675000004,
+        "high": 3.8074741174999995,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 2221.1636676121025,
+        "low": 2137.394731761914,
+        "high": 2328.0081913910435,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.4500741118164062,
+        "low": 0.4306828906103514,
+        "high": 0.4662394702026367,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.44558149999999996,
+        "low": 0.432622115,
+        "high": 0.45657010749999993,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.5456365999999999,
+        "low": 0.5315721525,
+        "high": 0.5616284350000001,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.7319966,
+        "low": 0.6450418650000002,
+        "high": 0.8685674099999999,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.34429930000000003,
+        "low": 0.306425315,
+        "high": 0.4022180375,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 458.3106602,
+        "low": 438.368751475,
+        "high": 474.82577855999995,
+        "completed_trials": 10
+      }
+    },
+    "nats-memory": {
+      "publish_mps": {
+        "mean": 4736.833866068082,
+        "low": 4479.76737998609,
+        "high": 5070.665218463657,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.20551029999999998,
+        "low": 0.18875227000000003,
+        "high": 0.21811998,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.262518,
+        "low": 0.25403033500000005,
+        "high": 0.27117139999999995,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.32451169999999996,
+        "low": 0.30427908749999993,
+        "high": 0.3511398,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 2237.805606534969,
+        "low": 2156.123523402256,
+        "high": 2362.7175347115726,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.4470344497070311,
+        "low": 0.42564707939453095,
+        "high": 0.461744721799316,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.44263050000000004,
+        "low": 0.4198985575,
+        "high": 0.45688974749999994,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.5311703,
+        "low": 0.5187376475,
+        "high": 0.54308651,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.6218477,
+        "low": 0.5974434300000001,
+        "high": 0.6494012050000001,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.3029295,
+        "low": 0.29548552,
+        "high": 0.31051913999999997,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 455.17152939999994,
+        "low": 433.08946994,
+        "high": 470.28518407000007,
+        "completed_trials": 10
+      }
+    },
+    "redis-always": {
+      "publish_mps": {
+        "mean": 602.7094612577732,
+        "low": 591.2606087064513,
+        "high": 613.5592962906264,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 1.5921482,
+        "low": 1.5775345,
+        "high": 1.6070551575000003,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 1.8816735999999998,
+        "low": 1.8240832075,
+        "high": 1.9581424174999997,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 2.8466750999999997,
+        "low": 2.3646894025,
+        "high": 3.3400650399999994,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 300.00708004246235,
+        "low": 295.1506792711585,
+        "high": 304.58780163607133,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 3.3328038095703114,
+        "low": 3.2816144156274394,
+        "high": 3.3877900192089823,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 3.2304114,
+        "low": 3.1791216149999997,
+        "high": 3.2779310925,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 3.7486463999999997,
+        "low": 3.5544364050000006,
+        "high": 3.9828794899999997,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 5.5713062,
+        "low": 4.8633773925,
+        "high": 6.286940094999999,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 2.7344687999999997,
+        "low": 2.4103860999999998,
+        "high": 3.061307905,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 3377.4808404000005,
+        "low": 3326.6923781474998,
+        "high": 3432.3469726999997,
+        "completed_trials": 10
+      }
+    },
+    "redis-periodic": {
+      "publish_mps": {
+        "mean": 5494.4380656917765,
+        "low": 5076.829065823844,
+        "high": 6107.238469608267,
+        "completed_trials": 10
+      },
+      "publish_ms.p50": {
+        "mean": 0.1786211,
+        "low": 0.162910905,
+        "high": 0.19132768249999998,
+        "completed_trials": 10
+      },
+      "publish_ms.p95": {
+        "mean": 0.2140258,
+        "low": 0.1964960125,
+        "high": 0.2261504325,
+        "completed_trials": 10
+      },
+      "publish_ms.p99": {
+        "mean": 0.25713759999999997,
+        "low": 0.23270318,
+        "high": 0.27833443999999996,
+        "completed_trials": 10
+      },
+      "drain_mps": {
+        "mean": 2791.753862000262,
+        "low": 2566.415712188554,
+        "high": 3129.954765940398,
+        "completed_trials": 10
+      },
+      "cycle_ms.mean": {
+        "mean": 0.3640404975585937,
+        "low": 0.33118123156250023,
+        "high": 0.38927421602050766,
+        "completed_trials": 10
+      },
+      "cycle_ms.p50": {
+        "mean": 0.36037949999999996,
+        "low": 0.32657582500000004,
+        "high": 0.38635883,
+        "completed_trials": 10
+      },
+      "cycle_ms.p95": {
+        "mean": 0.428566,
+        "low": 0.3869370325,
+        "high": 0.4568587874999999,
+        "completed_trials": 10
+      },
+      "cycle_ms.p99": {
+        "mean": 0.5407311000000001,
+        "low": 0.4787479925,
+        "high": 0.5965548374999999,
+        "completed_trials": 10
+      },
+      "ack_ms.p99": {
+        "mean": 0.24754749999999998,
+        "low": 0.221651245,
+        "high": 0.2666945875,
+        "completed_trials": 10
+      },
+      "drain_delivery_ms.p99": {
+        "mean": 371.06787549999996,
+        "low": 337.4542374,
+        "high": 396.7657086850001,
+        "completed_trials": 10
+      }
+    }
+  },
+  "effects": {
+    "redis-memory:C16/C1": {
+      "ratio": 12.586921967820976,
+      "low": 12.127304285235928,
+      "high": 13.154352080434906,
+      "paired_trials": 10
+    },
+    "redis-periodic:C16/C1": {
+      "ratio": 11.0158775981052,
+      "low": 10.217514781327,
+      "high": 11.785248023229782,
+      "paired_trials": 10
+    },
+    "redis-always:C16/C1": {
+      "ratio": 8.594861451195744,
+      "low": 8.468430803299793,
+      "high": 8.716804552791187,
+      "paired_trials": 10
+    },
+    "nats-memory:C16/C1": {
+      "ratio": 12.944296340740436,
+      "low": 12.690513407778287,
+      "high": 13.233237563220067,
+      "paired_trials": 10
+    },
+    "nats-periodic:C16/C1": {
+      "ratio": 12.361683825900457,
+      "low": 11.793361133849217,
+      "high": 12.828800131242666,
+      "paired_trials": 10
+    },
+    "nats-always:C16/C1": {
+      "ratio": 12.239614427192619,
+      "low": 11.983722953364481,
+      "high": 12.539019346067782,
+      "paired_trials": 10
+    },
+    "redis:periodic/memory:publish": {
+      "ratio": 0.830499035411376,
+      "low": 0.8237305415237105,
+      "high": 0.8370616625522647,
+      "paired_trials": 10,
+      "paired_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "redis:always/memory:publish": {
+      "ratio": 0.04097164857174045,
+      "low": 0.023326100706127714,
+      "high": 0.05834178910095555,
+      "paired_trials": 9,
+      "paired_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9
+      ]
+    },
+    "nats:periodic/memory:publish": {
+      "ratio": 0.8197466190888747,
+      "low": 0.7933329493989977,
+      "high": 0.8510768137794,
+      "paired_trials": 10,
+      "paired_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "nats:always/memory:publish": {
+      "ratio": 0.006208703918007749,
+      "low": 0.003175373953745011,
+      "high": 0.009450356649850165,
+      "paired_trials": 10,
+      "paired_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "redis/nats:memory:publish": {
+      "ratio": 1.2240890781577525,
+      "low": 1.2031204266887607,
+      "high": 1.254648045722819,
+      "paired_trials": 10,
+      "paired_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "redis/nats:periodic:publish": {
+      "ratio": 1.240145155825762,
+      "low": 1.217506771301494,
+      "high": 1.2675640673251698,
+      "paired_trials": 10,
+      "paired_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "redis/nats:always:publish": {
+      "ratio": 7.318526552339724,
+      "low": 3.9267901970252357,
+      "high": 14.194598090797188,
+      "paired_trials": 9,
+      "paired_blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9
+      ]
+    }
+  },
+  "recovery": {
+    "(1000, 0.75, 'nats-periodic', 0)": {
+      "median_ms": 257.89720850000003,
+      "min_ms": 255.487416,
+      "max_ms": 260.643417,
+      "excess_median_ms": 8.613051999999982,
+      "excess_min_ms": 6.027000000000044,
+      "excess_max_ms": 11.602874000000043
+    },
+    "(1000, 0.1, 'redis-periodic', 10)": {
+      "median_ms": 903.5313835,
+      "min_ms": 900.448212,
+      "max_ms": 913.74535,
+      "excess_median_ms": 3.999591500000008,
+      "excess_min_ms": 0.7231600000000071,
+      "excess_max_ms": 14.509244999999964
+    },
+    "(1000, 0.75, 'redis-periodic', 10)": {
+      "median_ms": 255.3944525,
+      "min_ms": 251.235929,
+      "max_ms": 269.376347,
+      "excess_median_ms": 6.193105000000003,
+      "excess_min_ms": 1.6473790000000008,
+      "excess_max_ms": 19.44109000000003
+    },
+    "(250, 0.75, 'redis-periodic', 10)": {
+      "median_ms": 67.8995045,
+      "min_ms": 63.937654,
+      "max_ms": 70.633517,
+      "excess_median_ms": 6.01687050000001,
+      "excess_min_ms": 2.090082999999993,
+      "excess_max_ms": 8.798850000000016
+    },
+    "(250, 0.1, 'redis-periodic', 10)": {
+      "median_ms": 230.230009,
+      "min_ms": 228.385611,
+      "max_ms": 234.271792,
+      "excess_median_ms": 6.034464,
+      "excess_min_ms": 3.8460959999999886,
+      "excess_max_ms": 9.662556999999993
+    },
+    "(250, 0.1, 'nats-periodic', 0)": {
+      "median_ms": 226.45104600000002,
+      "min_ms": 225.851162,
+      "max_ms": 226.855399,
+      "excess_median_ms": 1.8754519999999957,
+      "excess_min_ms": 1.2602899999999977,
+      "excess_max_ms": 2.1952660000000037
+    },
+    "(1000, 0.75, 'redis-periodic', 100)": {
+      "median_ms": 319.430118,
+      "min_ms": 258.889163,
+      "max_ms": 339.442038,
+      "excess_median_ms": 69.96444099999997,
+      "excess_min_ms": 9.51297999999997,
+      "excess_max_ms": 89.71394600000008
+    },
+    "(1000, 0.1, 'nats-periodic', 0)": {
+      "median_ms": 907.0988325000001,
+      "min_ms": 905.363259,
+      "max_ms": 910.154913,
+      "excess_median_ms": 7.9751924999999915,
+      "excess_min_ms": 5.438806,
+      "excess_max_ms": 10.184712999999988
+    },
+    "(250, 0.75, 'nats-periodic', 0)": {
+      "median_ms": 63.607391500000006,
+      "min_ms": 63.107231,
+      "max_ms": 64.470424,
+      "excess_median_ms": 1.9777040000000028,
+      "excess_min_ms": 1.6483340000000055,
+      "excess_max_ms": 2.1560650000000123
+    },
+    "(250, 0.1, 'redis-periodic', 100)": {
+      "median_ms": 265.403485,
+      "min_ms": 233.964452,
+      "max_ms": 313.899101,
+      "excess_median_ms": 40.70122549999999,
+      "excess_min_ms": 9.268721000000028,
+      "excess_max_ms": 89.21818400000001
+    },
+    "(1000, 0.1, 'redis-periodic', 100)": {
+      "median_ms": 943.5287795,
+      "min_ms": 911.725759,
+      "max_ms": 981.117321,
+      "excess_median_ms": 43.69890100000009,
+      "excess_min_ms": 12.531932999999981,
+      "excess_max_ms": 81.28200900000002
+    },
+    "(250, 0.75, 'redis-periodic', 100)": {
+      "median_ms": 133.99586699999998,
+      "min_ms": 75.825354,
+      "max_ms": 161.24835,
+      "excess_median_ms": 72.16439050000002,
+      "excess_min_ms": 13.681763999999987,
+      "excess_max_ms": 98.81352399999997
+    }
+  },
+  "durability_run_diagnostic": {
+    "redis-memory": {
+      "blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "publish_mps_by_block": [
+        74075.69983703496,
+        74150.61456471132,
+        73098.34644230612,
+        74129.31365923054,
+        74423.23561845835,
+        74389.32942937569,
+        73855.58396320319,
+        73234.54108058037,
+        74346.39935476483,
+        73341.61173309217
+      ],
+      "publish_p99_ms_by_block": [
+        0.457973,
+        0.468833,
+        0.522908,
+        0.47165,
+        0.463454,
+        0.483772,
+        0.46344,
+        0.471319,
+        0.469082,
+        0.471478
+      ]
+    },
+    "redis-periodic": {
+      "blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "publish_mps_by_block": [
+        60731.31310131355,
+        61261.31414395766,
+        62013.04550556522,
+        62038.26135712231,
+        60878.52308610997,
+        60770.6700627046,
+        61765.20724909511,
+        61391.94129919816,
+        61104.747585397556,
+        61820.86688997918
+      ],
+      "publish_p99_ms_by_block": [
+        0.554308,
+        0.573727,
+        0.550293,
+        0.554183,
+        0.563297,
+        0.561862,
+        0.555884,
+        0.540433,
+        0.577743,
+        0.54261
+      ]
+    },
+    "redis-always": {
+      "blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9
+      ],
+      "publish_mps_by_block": [
+        5139.289746730009,
+        5205.143876192131,
+        5014.758652442876,
+        519.4749269817438,
+        3035.493934416506,
+        554.2700947318004,
+        1034.3558434280842,
+        1512.1950817429138,
+        5238.911543022733
+      ],
+      "publish_p99_ms_by_block": [
+        5.806109,
+        4.236849,
+        6.221108,
+        59.384193,
+        7.458387,
+        99.782011,
+        37.441333,
+        35.089168,
+        5.593761
+      ]
+    },
+    "nats-memory": {
+      "blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "publish_mps_by_block": [
+        54753.235654109434,
+        60771.06304147615,
+        61252.46321852821,
+        60431.43751495723,
+        61199.746743090276,
+        60595.03530295884,
+        62171.988522646774,
+        61914.19282854837,
+        60739.71733601734,
+        59921.850785300616
+      ],
+      "publish_p99_ms_by_block": [
+        0.858326,
+        0.670152,
+        0.671788,
+        0.695729,
+        0.696528,
+        0.699171,
+        0.673378,
+        0.673509,
+        0.670085,
+        0.733661
+      ]
+    },
+    "nats-periodic": {
+      "blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "publish_mps_by_block": [
+        51534.71255128352,
+        49337.0504388467,
+        50464.78951717214,
+        51547.78395045841,
+        48848.03378848316,
+        45082.75420029722,
+        49523.58795768839,
+        49632.35466790876,
+        48608.88798270426,
+        50342.66541191648
+      ],
+      "publish_p99_ms_by_block": [
+        0.818927,
+        0.854388,
+        0.830431,
+        0.819886,
+        0.914104,
+        0.819724,
+        0.873696,
+        0.846032,
+        0.879896,
+        0.834455
+      ]
+    },
+    "nats-always": {
+      "blocks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "publish_mps_by_block": [
+        706.7774792863914,
+        74.23845312099186,
+        668.8839611744602,
+        712.206972309501,
+        83.54915920532908,
+        90.05824474598596,
+        24.55040871532787,
+        109.09957998762809,
+        701.4525561224516,
+        577.6927140665448
+      ],
+      "publish_p99_ms_by_block": [
+        41.461677,
+        277.779826,
+        46.007516,
+        41.39417,
+        277.285952,
+        307.886011,
+        4440.93891,
+        270.683746,
+        42.414926,
+        49.831142
+      ]
+    }
+  }
+}

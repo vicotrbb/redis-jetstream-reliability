@@ -1,0 +1,149 @@
+{
+  "pages": 30,
+  "required_sections": [
+    "Abstract",
+    "Introduction",
+    "Background and related work",
+    "System model and formal results",
+    "Experimental method",
+    "Results",
+    "Discussion",
+    "Threats to validity",
+    "Artifact availability and reproducibility",
+    "Conclusion",
+    "References"
+  ],
+  "unresolved_references": false,
+  "overfull_boxes": false,
+  "raw_data_checks": {
+    "main": {
+      "trials": 300,
+      "messages": 4915200,
+      "max_concurrency_bound_utilization": 0.9995462504088956,
+      "min_concurrency_bound_utilization": 0.9936312612795556,
+      "driver_throttled_trials": 0,
+      "driver_throttled_usec_total": 0,
+      "excluded_setup_attempts": [
+        {
+          "block": 1,
+          "error": "context deadline exceeded",
+          "key": "Tmain052",
+          "kind": "error",
+          "profile": "nats-always"
+        }
+      ]
+    },
+    "durability": {
+      "trials": 59,
+      "messages": 12434648,
+      "max_concurrency_bound_utilization": 0.0,
+      "min_concurrency_bound_utilization": null,
+      "driver_throttled_trials": 0,
+      "driver_throttled_usec_total": 0,
+      "planned_trials": 60,
+      "failed_planned_trials": [
+        {
+          "kind": "durability_failure",
+          "key": "D038",
+          "profile": "redis-always",
+          "block": 6,
+          "stage": "timed_publication",
+          "record_origin": "post_run_failure_adjudication",
+          "error": "read tcp: i/o timeout",
+          "configured_request_timeout_seconds": 5,
+          "valid_trial_metrics_available": false,
+          "partial_client_events_available": false,
+          "broker_snapshot_count": 1568,
+          "broker_snapshot_unique_ids": 1568,
+          "broker_snapshot_min_id": 0,
+          "broker_snapshot_max_id": 1567,
+          "snapshot_encoding": "redis-cli JSON output with non-ASCII payload bytes; parse byte-preserving Latin-1",
+          "failure_log_mtime_utc": "2026-09-23T22:58:31.065701251Z",
+          "adjudicated_utc": "2026-09-23T23:03:41.315208+00:00",
+          "evidence": [
+            "data/environment/durability-through-D038.log",
+            "data/environment/D038-panic-log-stat.txt",
+            "data/environment/D038-broker-snapshot.txt",
+            "data/environment/D038-retained-stream.json.gz"
+          ]
+        }
+      ],
+      "excluded_diagnostic_replays": [
+        {
+          "block": 6,
+          "driver_cpu_after": "usage_usec 988512393\nuser_usec 472362277\nsystem_usec 516150115\ncore_sched.force_idle_usec 0\nnr_periods 41032\nnr_throttled 434\nthrottled_usec 11718480\nnr_bursts 0\nburst_usec 0\n",
+          "driver_cpu_before": "usage_usec 988256838\nuser_usec 472252725\nsystem_usec 516004113\ncore_sched.force_idle_usec 0\nnr_periods 40981\nnr_throttled 434\nthrottled_usec 11718480\nnr_bursts 0\nburst_usec 0\n",
+          "end_ns": 18211555826853195,
+          "harness_revision": "durability-outcomes-v5",
+          "key": "D038",
+          "kind": "durability",
+          "n": 3431,
+          "pending": 0,
+          "per_second_counts": [
+            1008,
+            672,
+            631,
+            569,
+            535,
+            16,
+            0
+          ],
+          "profile": "redis-always",
+          "publish_mps": 683.4452021578898,
+          "publish_ms": {
+            "max": 48.736513,
+            "mean": 23.35594366336347,
+            "p50": 22.863181,
+            "p95": 40.249119,
+            "p99": 47.095668
+          },
+          "publishers": 16,
+          "start_ns": 18211550806699437,
+          "stored": 3431,
+          "target_seconds": 5,
+          "utc_end": "2026-09-23T23:03:03.048526687Z"
+        }
+      ]
+    },
+    "serial": {
+      "trials": 60,
+      "messages": 61440,
+      "max_concurrency_bound_utilization": 0.9992371291251203,
+      "min_concurrency_bound_utilization": 0.993450798276475,
+      "driver_throttled_trials": 0,
+      "driver_throttled_usec_total": 0
+    },
+    "recovery": {
+      "trials": 130,
+      "successful_recoveries": 120,
+      "no_reclaim_censored": 10,
+      "max_kill_bracket_ms": 2.291135
+    }
+  },
+  "formal_receipt_matches_source": true,
+  "formal_declarations": 10,
+  "pdf_sha256": "d26b97ccc214ac0b1d7a16315fc9a5430d4ff04eaf33265db1b1ab0e12a35051",
+  "source_sha256": {
+    "data/derived/attempt-outcomes-table.tex": "be92af0126bc83cee911076e41c986214621b02180cff577fd1cf5f1162ea6de",
+    "data/derived/concurrency-table.tex": "2957b3ee96be7726f49c0b45500a420a03ce3d2d192f61f3ee26a5beab857e4c",
+    "data/derived/durability-table.tex": "c3a9962f1245c45eeeddc0cce11ea55c59adfaed0bcef943c1a5148902422069",
+    "data/derived/full-matrix.tex": "550f075d06bfb86fd575bc99eeaa4667d37255fcc7d1b7f0987574c911bbe03b",
+    "data/derived/publication-tail-counts.tex": "19f704bbed35582a146bcb13ff4e6833af036d3feb6aed0eb1551585d513d815",
+    "data/derived/recovery-table.tex": "4184ec9ce62a657a9d47bf672c0916bf390cb4d436839275bac7179e621e52c5",
+    "data/derived/robustness-table.tex": "77762fd7746e4c91a26931ca039dd0ddad1a2fecfe4aabee65b9f0b46adbece8",
+    "data/derived/robustness-values.tex": "f41b3b6899b9798d7581b34881323d93b5577463073d77eb5b484bf0f6ce1962",
+    "data/derived/serial-table.tex": "c40718d1e69507d08906c4c40378be0ca341ecc7bc3dbe5714aacdd0a3f04712",
+    "data/derived/values.tex": "ad1f2ac14394c12cc9f82f9df996113b32374e78fd7876f46a4ef2bc8ac9d49f",
+    "paper/abstract.tex": "3c1a1d752f6e1fef8a658a2bbd2ae3b9a45750224eb79306128e1ee9d520d40d",
+    "paper/conclusion.tex": "4d497226c0ad7604e7944436d7af666b7789b4ae24f2d0bc27ed9eee93686821",
+    "paper/figures/concurrency.pdf": "d73a151afcf9479c39bea8e2832e349a6efce9c6b6ed160e0a796a615b2afbe5",
+    "paper/figures/durability-blocks.pdf": "0bbcfebd5954745bfb408fdb6b04947b5d9e96ed95efc361787ed64a9fec30cd",
+    "paper/figures/durability.pdf": "23d72945d19a11ce83074ed229bc5af64c3a4595a5aa5392b06942a0314ef939",
+    "paper/figures/recovery.pdf": "284098de257bfeb7c30861cab77aeeb5809080987f68577a8179d32040537e7a",
+    "paper/main.tex": "868deca1a5b2e56045d691621e7bf709df85852e49006ad70714e62abcab0416",
+    "paper/references.bib": "84dfbe8a9db24b521727d388266972e8c8fcf7b8db704f786cd1d44d8c30b788",
+    "paper/results.tex": "1811c4dcd933d465238879cef16f2ce2e8ac74bbe5adf2687e343cfc6eead31f"
+  },
+  "successful_build_receipt_verified": true,
+  "reference_count": 31
+}
