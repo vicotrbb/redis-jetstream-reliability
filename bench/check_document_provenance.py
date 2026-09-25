@@ -41,8 +41,6 @@ def validate_review(review,pdf=PDF):
 def main():
     review=json.loads((ROOT/'data/derived/visual-review.json').read_text())
     validate_review(review)
-    supplement=json.loads((ROOT/'data/derived/supplement-visual-review.json').read_text())
-    validate_review(supplement,PDF.with_name('redis-jetstream-reliability-supplement.pdf'))
     check=json.loads((ROOT/'data/derived/paper-check.json').read_text())
     assert check['pdf_sha256']==review['pdf_sha256']
     assert check['source_sha256']==review['source_sha256']
@@ -51,7 +49,8 @@ def main():
     rejected={}
     for name in ('revisions/20260924-final/historical-visual-review.json',
                  'revisions/20260924-submission/historical-visual-review.json',
-                 'revisions/20260924-followup/historical-visual-review.json'):
+                 'revisions/20260924-followup/historical-visual-review.json',
+                 'revisions/20260925-integrated/historical-visual-review.json'):
         previous=json.loads((ROOT/name).read_text())
         try:
             validate_review(previous)
@@ -72,9 +71,7 @@ def main():
             'source_inputs_checked':len(review['source_sha256']),
             'rendered_pages_checked':len(review['rendered_page_sha256']),
             'historical_review_rejected':True,'historical_reviews_rejected':rejected}
-    result['supplement_pdf_sha256']=supplement['pdf_sha256']
-    result['supplement_pages']=supplement['page_count']
-    (ROOT/'revisions/20260924-followup/document-provenance-check.json').write_text(json.dumps(result,indent=2)+'\n')
+    (ROOT/'revisions/20260925-integrated/document-provenance-check.json').write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps(result,indent=2))
 
 

@@ -1,5 +1,5 @@
 PYTHON ?= .venv/bin/python
-.PHONY: analyze analyze-followup paper verify experiment collect clean-homelab checksums verify-revision validate-homelab release
+.PHONY: analyze analyze-followup report-operational paper verify experiment collect clean-homelab checksums verify-revision validate-homelab release
 
 analyze:
 	$(PYTHON) bench/analyze.py
@@ -7,8 +7,12 @@ analyze:
 analyze-followup:
 	$(PYTHON) bench/followup/analyze.py
 	$(PYTHON) bench/followup/report.py
+	$(PYTHON) bench/report_operational.py --write
 
-paper:
+report-operational:
+	$(PYTHON) bench/report_operational.py --write
+
+paper: report-operational
 	$(PYTHON) bench/build_paper.py
 
 verify:
@@ -37,5 +41,7 @@ verify-revision:
 	$(PYTHON) bench/check_paper.py
 	$(PYTHON) bench/check_revision.py
 	$(PYTHON) bench/check_followup.py
+	$(PYTHON) bench/report_operational.py
 	$(PYTHON) bench/check_manuscript_numbers.py
+	$(PYTHON) bench/check_integrated_paper.py
 	$(PYTHON) bench/check_document_provenance.py

@@ -20,7 +20,12 @@ def check():
     now=json.loads((ROOT/'data/derived/statistics.json').read_text())
     assert before==now,'Primary numerical result changed'
     tex=(ROOT/'paper/main.tex').read_text()
-    assert re.findall(r'\\section\{([^}]+)\}',oldtex)==re.findall(r'\\section\{([^}]+)\}',tex),'Paper section structure changed'
+    original_sections=re.findall(r'\\section\{([^}]+)\}',oldtex)
+    current_sections=re.findall(r'\\section\{([^}]+)\}',tex)
+    assert current_sections[:len(original_sections)]==original_sections,'Original section order changed'
+    appended_sections=['Original statistical method and detailed diagnostics',
+                       'Client waits and observation conventions','Complete follow-up results']
+    assert current_sections[len(original_sections):]==appended_sections,'Unexpected appended sections'
     assert oldtex.split('\\begin{document}')[0].replace('\\input{../data/derived/values.tex}','') == tex.split('\\begin{document}')[0].replace('\\input{../data/derived/values.tex}','').replace('\\input{../data/derived/robustness-values.tex}\n',''),'Template changed'
     for path in (ROOT/'paper').glob('*'):
         if path.suffix in ('.tex','.bib'):
@@ -119,7 +124,8 @@ def check():
             assert r['timer_notification_observed_ns'] is None and r['pending']==0
     assert sum(r['censored'] for r in endpoints)==1
     result={'status':'pass','original_evidence_files':evidence_count,'primary_statistics_identical':True,
-            'template_and_section_structure_preserved':True,'paired_effect_directions_checked':13,
+            'template_and_original_section_order_preserved':True,'appended_sections':appended_sections,
+            'paired_effect_directions_checked':13,
             'sensitivity_recomputed_independently':True,'sealed_collections_checked':checked,
             'publication_tail_samples_checked':59,'historical_outcome_records_checked':556,
             'planned_outcomes_checked':550,'additional_documented_attempts':6,
@@ -127,7 +133,7 @@ def check():
             'validated_driver_source_files':len(driver_inputs),'homelab_validation_flows':len(flows),
             'homelab_go_tests_with_race_detector':5,'homelab_campaign_isolation_tests':9,
             'recovery_endpoint_flows_checked':len(endpoints)}
-    (ROOT/'revisions/20260924-followup/legacy-evidence-check.json').write_text(json.dumps(result,indent=2)+'\n')
+    (ROOT/'revisions/20260925-integrated/legacy-evidence-check.json').write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps(result,indent=2))
 
 

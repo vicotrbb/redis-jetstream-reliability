@@ -120,7 +120,7 @@ Two counterexamples delimit reliability. Repeating plain Redis new-message reads
 
 Under the following sufficient storage-contract assumptions, confirmation implies recoverability: successful synchronization stabilizes the payload and required metadata, the failure preserves that state, recovery interprets it correctly, and confirmation follows successful synchronization. Our consumer faults do not test those storage premises. Likewise, if every counted confirmation is assigned to a completed synchronization in a serialized stage, each operation takes at least $f_{\min}>0$, and at most $k\geq1$ confirmations share it, that stage has rate at most $k/f_{\min}$. Overlapping stages require another model. For IID Bernoulli trials only, zero failures in $n$ trials gives one-sided upper limit $1-\alpha^{1/n}$, which is 0.259 at $n=10$, $\alpha=0.05$~\cite{clopper1934}. Millions of dependent message completions are not millions of independent reliability trials.
 
-Full assumptions, hand proofs, and counterexamples are retained in the supplementary analytical model. Ten selected integer-time identities, capacity statements, and finite crash witnesses are checked with Lean 4.24.0~\cite{demoura2021lean4,lean424release}; this is abstract-model verification, not verification of broker code, the harness, storage survival, or statistical coverage.
+Full assumptions, hand proofs, and counterexamples are provided in Appendix~\ref{app:evidence}. Ten selected integer-time identities, capacity statements, and finite crash witnesses are checked with Lean 4.24.0~\cite{demoura2021lean4,lean424release}; this is abstract-model verification, not verification of broker code, the harness, storage survival, or statistical coverage.
 
 \section{Experimental method}\label{sec:method}
 
@@ -155,7 +155,7 @@ Core messages contain 512 application bytes: an eight-byte trial-unique ID and \
 
 Publication latency is request invocation to confirmation. Cycle latency is successful receive-request invocation to acknowledgment completion. Drain throughput divides acknowledged count by common drain start to the last acknowledgment; trailing empty-fetch waits are excluded. Publication trials admit requests for a fixed budget and divide confirmed count by common start to the final confirmation, including the completion tail. Admission precedes payload preparation, so an admitted network call can begin after the budget. A nearest-rank percentile selects order statistic $\lceil pN\rceil$; reported mean p99 values average trial percentiles, rather than pooling all messages. Per-trial counts, ranks and higher-order positions are retained.
 
-All request timestamps use the driver's Linux monotonic clock; broker telemetry uses its own node clock. Setup, warm-up, trace serialization and stored-payload readback are outside timing. Recovery survivor requests use a 100 ms block/fetch wait. Follow-up drain and victim initial reads use five seconds. Client socket/response deadlines and fetch expiry are distinct from broker eligibility; their exact version-specific behavior is documented in the supplement~\cite{goredis970timeouts,natsgo1391}.
+All request timestamps use the driver's Linux monotonic clock; broker telemetry uses its own node clock. Setup, warm-up, trace serialization and stored-payload readback are outside timing. Recovery survivor requests use a 100 ms block/fetch wait. Follow-up drain and victim initial reads use five seconds. Client socket/response deadlines and fetch expiry are distinct from broker eligibility; their exact version-specific behavior is documented in Appendix~\ref{sec:client-waits}~\cite{goredis970timeouts,natsgo1391}.
 
 \subsection{Original campaign and retained limitations}
 
@@ -163,7 +163,7 @@ The original campaign uses 2-CPU/1-GiB brokers and a 2-CPU/2-GiB driver with \co
 
 Recovery uses one pending message in periodic profiles, thresholds 250/1000 ms, and kills at scheduled receipt ages 10\%/75\%. Redis reclamation sleeps 10 or 100 ms after unsuccessful \code{XAUTOCLAIM COUNT 1}, restarting from \code{0-0}; this is appropriate for the one-entry PEL. JetStream supplies the same durable consumer through repeated pulls. Ten episodes per cell produce 120 active recoveries; ten additional Redis controls issue only new-message reads. Historical censor endpoints were not timestamped. Their nominal budgets and final pending-state checks cannot support precise exposure-time analysis.
 
-Logical cleanup leaves Redis's unre-written AOF growing across trials, while JetStream deletes separate stream stores. Final Redis periodic/always AOF lengths are 2,590,379,564 and 907,510,749 bytes. Original RQ3 estimates therefore include unequal storage history. Planned Redis-always trial D038 failed during timed publication before buffered client timings were serialized. A later 1568-ID store snapshot cannot reconstruct confirmations or latencies. The failed outcome remains missing numerically; its accidental completed replay remains excluded. Setup/warm-up failures and the interrupted D043 attempt are separately retained. The supplement gives the complete retrospective attempt inventory and sensitivity diagnostics. No slow completed planned observation is removed.
+Logical cleanup leaves Redis's unre-written AOF growing across trials, while JetStream deletes separate stream stores. Final Redis periodic/always AOF lengths are 2,590,379,564 and 907,510,749 bytes. Original RQ3 estimates therefore include unequal storage history. Planned Redis-always trial D038 failed during timed publication before buffered client timings were serialized. A later 1568-ID store snapshot cannot reconstruct confirmations or latencies. The failed outcome remains missing numerically; its accidental completed replay remains excluded. Setup/warm-up failures and the interrupted D043 attempt are separately retained. Appendix~\ref{app:history} gives the complete retrospective attempt inventory and sensitivity diagnostics. No slow completed planned observation is removed.
 
 \subsection{Prospective follow-up and storage reset}\label{sec:followup-method}
 
@@ -235,11 +235,11 @@ The study uses one Btrfs/NVMe environment, single replicas, 512-byte payloads, a
 
 \section{Artifact availability and reproducibility}\label{sec:artifact}
 
-The public repository is \url{https://github.com/vicotrbb/redis-jetstream-reliability}. The retained version~1.1.0 release preserves the preceding manuscript and evidence. Version~1.2.0 contains the main article and supplement, raw compressed timings, plans, failure/development records, environment and binary receipts, pinned source references, analysis, figures, and the selected Lean model. Original manuscript, data and narrative material use CC-BY-4.0; original software and formalization use MIT. \artifact{LICENSE.md} defines third-party exceptions. No DOI assignment or peer-reviewed publication is claimed.
+The public repository is \url{https://github.com/vicotrbb/redis-jetstream-reliability}. The retained versions~1.1.0 and~1.2.0 preserve their preceding manuscripts and evidence. Version~1.3.0 contains this integrated article with all proofs and detailed tables in its appendices, raw compressed timings, plans, failure/development records, environment and binary receipts, pinned source references, analysis, figures, and the selected Lean model. Original manuscript, data and narrative material use CC-BY-4.0; original software and formalization use MIT. \artifact{LICENSE.md} defines third-party exceptions. No DOI assignment or peer-reviewed publication is claimed.
 
 Offline reanalysis checks original evidence against its frozen inventory and verifies each follow-up campaign's input, invocation, environment and raw-data records. It reconstructs IDs, counts, intervals, throughput, order statistics, paired contrasts, CPU deltas and synchronization summaries. The original and follow-up datasets remain separate. D038's missing client observations and historical censor endpoints remain unavailable. New collection requires new identities and destinations; failed attempts cannot be overwritten or automatically replayed.
 
-Release manifests bind the exact source, main PDF, supplement, analysis and rendered document QA. The builder refuses version reuse and verifies a fresh archive extraction. Hashes establish consistency of supplied bytes, not independent certification of collection time or completeness. Public access and computational reproduction are distinct from an external experimental replication or an independent artifact evaluation.
+Release manifests bind the exact source, complete article PDF, analysis and rendered document QA. The builder refuses version reuse and verifies a fresh archive extraction. Hashes establish consistency of supplied bytes, not independent certification of collection time or completeness. Public access and computational reproduction are distinct from an external experimental replication or an independent artifact evaluation.
 
 OpenAI Codex assisted with source investigation, software, analysis, formalization, drafting and internal checking. Scientific claims are grounded in cited primary sources, stated assumptions and retained measurements. AI-assisted internal review is not independent scientific peer review, and no generated benchmark value substitutes for an observation.
 
@@ -248,10 +248,22 @@ OpenAI Codex assisted with source investigation, software, analysis, formalizati
 
 \appendix
 \section{Complete concurrency matrix}\label{app:matrix}
-The supplement's complete original concurrency matrix retains all thirty conditions, each with ten trials and 16384 messages. It reports trial-mean throughput with nominal bootstrap intervals and distinguishes cycle p99 from common-drain-start-to-receipt p99. The follow-up matrix separately reports each deployment, driver quota, concurrency and persistence profile. Machine-readable trial and condition summaries accompany both matrices in the artifact.
+The complete original concurrency matrix retains all thirty conditions, each with ten trials and 16384 messages. It reports trial-mean throughput with nominal bootstrap intervals and distinguishes cycle p99 from common-drain-start-to-receipt p99. Appendix~\ref{app:followup} separately reports the follow-up by deployment, driver quota, concurrency and persistence profile. Machine-readable trial and condition summaries accompany both matrices in the artifact.
+
+\begingroup\small\setlength{\tabcolsep}{3.5pt}
+\input{../data/derived/full-matrix.tex}
+\endgroup
+\FloatBarrier
 
 \section{Serial-publisher sensitivity}\label{app:serial}
-The supplement retains the original serial table: one publisher, one outstanding request, 1024 messages per trial and ten randomized blocks. That fixed-count experiment differs in duration from the original five-second concurrent workload. The follow-up instead compares one and sixteen publishers under the same 15-second admission budget, with completion counts and paired estimates reported separately.
+The following table retains the original serial sensitivity: one publisher, one outstanding request, 1024 messages per trial and ten randomized blocks. That fixed-count experiment differs in duration from the original five-second concurrent workload. The follow-up instead compares one and sixteen publishers under the same 15-second admission budget, with completion counts and paired estimates reported separately.
+
+\begin{table}[htbp]\centering\small
+\input{../data/derived/serial-table.tex}
+\caption{Original fixed-count, one-publisher sensitivity.}
+\label{tab:serial}
+\end{table}
+\FloatBarrier
 
 \section{Formal assumptions and claim-to-evidence map}\label{app:evidence}
 \begin{longtable}{L{.20\linewidth}L{.33\linewidth}L{.36\linewidth}}
@@ -262,11 +274,26 @@ Residual recovery delay & Equation~\ref{eq:residual}; fault/reference timestamps
 No new-read reclamation & Model counterexample; plain-read controls; pinned Redis source & Specific to plain new-message reads without reclamation\\
 Concurrency cost & Equation~\ref{eq:occupancy}; original and follow-up drain traces & Finite workload and measured client path; no universal monotonic scaling claim\\
 Persistence cost & Original publication/serial outcomes; fresh-store campaigns; matched durations and traces & Confirmation and configured policy, without power-loss or I/O-fault validation\\
-Stable-storage implication & Conditional storage argument and full supplementary proof & Abstract successful-and-honored synchronization contract; no implementation verification\\
-Application effect ambiguity & Two-order crash counterexamples and supplementary proof & Separate non-idempotent effect and acknowledgment; not an impossibility result for transactional applications\\
+Stable-storage implication & Conditional storage argument and Proposition~\ref{prop:storage} & Abstract successful-and-honored synchronization contract; no implementation verification\\
+Application effect ambiguity & Two-order crash counterexamples and Proposition~\ref{prop:effects} & Separate non-idempotent effect and acknowledgment; not an impossibility result for transactional applications\\
 Observed identities & ID/count checks; follow-up full stored-payload readback & Historical checks are narrower; readback is not a storage-fault test\\
 \bottomrule
 \end{longtable}
+
+\FloatBarrier
+\input{appendix-proofs.tex}
+\FloatBarrier
+
+\section{Original statistical method and detailed diagnostics}\label{app:history}
+These details concern Redis 7.4.2 and NATS Server 2.10.24 in the original accumulated-storage campaign. They remain separate from the fresh-store follow-up in Appendix~\ref{app:followup}.
+\input{appendix-history.tex}
+\FloatBarrier
+
+\section{Client waits and observation conventions}\label{sec:client-waits}
+\input{appendix-client-waits.tex}
+
+\section{Complete follow-up results}\label{app:followup}
+\input{appendix-followup.tex}
 
 \clearpage
 \begingroup\raggedright

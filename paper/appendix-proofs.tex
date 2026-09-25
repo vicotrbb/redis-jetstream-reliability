@@ -1,5 +1,3 @@
-\section{System model and formal results}\label{sec:model}
-
 \subsection{Events, failure scope, and assumptions}
 
 An application assigns each message a unique identifier. We distinguish publication invocation $p$, publication confirmation $q$, broker delivery $d$, client receipt $\widehat d$, consumer failure $f$, redelivery receipt $\widehat r$, and acknowledgment completion $a$. All request and recovery event intervals use a common Linux monotonic clock on the driver node. Broker telemetry uses the broker node's clock and is never subtracted from driver timestamps. The broker's internal delivery timestamp $d$ is not directly observed; replacing it with $\widehat d$ without qualification would misstate the timer origin.
@@ -99,4 +97,3 @@ At $n=10$ and $\alpha=0.05$, this is approximately $0.259$, not zero~\cite{clopp
 \subsection{Machine-checked subset and proof boundary}\label{sec:lean}
 
 Ten declarations in the artifact's Lean 4.24.0 model check integer-time residual and receipt-offset identities, a division-free consumer-capacity lemma, and finite effect/acknowledgment crash witnesses~\cite{demoura2021lean4,lean424release}. The retained homelab compiler receipts identify the source, compiler, exit status, and transitive logical dependencies. No admitted proof, custom axiom, or native-evaluation shortcut is used. The capacity lemma assumes each consumer's busy-time bound; the interval argument deriving that premise remains the hand proof above. This checks selected abstract statements, not broker implementations, measurement software, storage survival, or statistical coverage.
-

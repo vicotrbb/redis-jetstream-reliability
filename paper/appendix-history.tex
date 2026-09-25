@@ -1,45 +1,4 @@
-\documentclass[11pt]{article}
-
-% Typography and page geometry match bfs-avoidance-frontier/paper/main.tex.
-\usepackage[margin=1.1in]{geometry}
-\usepackage[T1]{fontenc}
-\usepackage{microtype}
-\usepackage{amsmath,amssymb,amsthm}
-\usepackage{booktabs,longtable,array}
-\usepackage{graphicx}
-\usepackage{flafter}
-\usepackage{placeins}
-\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
-\usepackage{enumitem}
-\usepackage{xurl}
-\usepackage[hidelinks]{hyperref}
-\hypersetup{
- pdftitle={Supplementary material: Redis Streams and NATS JetStream reliability study},
- pdfauthor={Victor Bona},
- pdfsubject={Reproducible evaluation of message recovery, concurrency, and persistence},
- pdfkeywords={Redis Streams, NATS JetStream, recovery, durability, consumer failure, empirical evaluation}
-}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
-\theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{remark}[theorem]{Remark}
-\newcommand{\code}[1]{\texttt{#1}}
-\newcommand{\artifact}[1]{\texttt{\path{#1}}}
-\input{../data/derived/values.tex}
-\input{../data/derived/robustness-values.tex}
-
-
-\title{Supplementary Material for\\An Empirical Evaluation of Message Delivery Reliability and Recovery Characteristics in Redis Streams and NATS JetStream}
-\author{Victor Bona}
-\date{September 2026}
-\begin{document}
-\maketitle
-\noindent This supplement retains full analytical arguments, the original campaign's detailed diagnostics, and the follow-up's complete condition summaries. Historical numerical observations are unchanged. Statements in the original results concern Redis 7.4.2 and NATS Server 2.10.24 in the original accumulated-storage campaign. They are not descriptions of the subsequent fresh-store deployments, reported separately below and in the main article.
-
-\input{supplement-model.tex}
-\section{Original statistical method and attempt history}\label{sec:method}
+\subsection{Original statistical method and attempt history}\label{app:history-method}
 The randomization seed is 20260923. The experimental unit is a trial, with pairing by block for treatment ratios. For each condition we report the arithmetic mean of its completed planned trials and a percentile bootstrap 95\% confidence interval using 10000 resamples of those trial indices. Conditions have ten completed trials except Redis-always publication, which has nine completions and one failed planned trial. That failure is reported separately, not assigned an artificial throughput or latency. A paired ratio is the ratio of resampled condition means under the same resampled block indices, not the mean of arbitrary per-message ratios. Comparisons involving a failed block use only the blocks completed by both conditions, so these are conditional-on-completion estimates. The bootstrap seed is fixed. These nominal, conditional confidence intervals summarize uncertainty in the condition mean under the working resampling assumption that completed block vectors are independent, identically distributed replicates. All blocks belong to one deployment campaign; their temporal dependence and the evolving storage history are not estimated away by resampling. They are not prediction intervals for individual runs, do not have proven exact finite-sample coverage here, and do not account for every systematic error or hardware population.
 
 These are descriptive effect estimates, not a collection of significance tests with familywise error claims. We specify no $p$-value threshold, do not stop when an interval becomes favorable, and do not pool individual messages as independent replications. Recovery tables report all ten values through medians and ranges rather than presenting a high percentile from ten failure episodes as a precise tail estimate. No finite trial count can prove absence of all possible losses.
@@ -47,7 +6,7 @@ These are descriptive effect estimates, not a collection of significance tests w
 Additional post-observation diagnostics assess sensitivity without changing the primary dataset: leave-one-trial-out means for publication rates and within-trial p99 values; leave-one-common-block-out ratios for all thirteen paired effects; first-five versus last-five block summaries; and summaries between recorded execution interruptions. Leave-one-out ranges measure influence, not confidence coverage. Early/late contrasts and rank correlations with block order are descriptive, with no trend significance test or causal interpretation. The interruption segments follow planned trial ranges D001--D021, D022--D030, D031--D037, D038--D042, and D043--D060, using completed primary observations only. Their unequal, small cell counts prevent treating these segments as independent controlled replications. All computations and membership lists are retained.
 
 
-\subsection{Protocol development and execution incidents}
+\subsubsection{Protocol development and execution incidents}
 
 The local protocol was written before main collection but was not externally preregistered. Twelve initial pilot trials were excluded. Before main collection, we added receive-request timestamps, increased the backlog from 4096 to 16384 messages after the pilot revealed short high-concurrency runs, and added the five-second primary durability series in place of relying on prefill timings. A final twelve-trial pilot verified the revised harness. Both pilot datasets and the prospective protocol versions are retained. The execution log records these changes; they are not presented as an immutable external registration.
 
@@ -66,13 +25,13 @@ Table~\ref{tab:attempt-outcomes} consolidates the 550 planned outcomes and six a
 \FloatBarrier
 
 
-\section{Original campaign results}\label{sec:results}
-\subsection{Recorded outcomes and evidence quality}
+\subsection{Original campaign results}\label{app:history-results}
+\subsubsection{Recorded outcomes and evidence quality}
 All 300 planned backlog-drain trials completed and their \MainMessages{} message records passed complete identifier-set, uniqueness, retained-count, and pending-state checks. The 60 serial sensitivity trials similarly reconciled \SerialMessages{} messages. The primary publication series has 59 completed planned trials with \TimedMessages{} confirmed appends and one retained Redis-always timeout. Its accidental completed replay is excluded as specified in Section~\ref{sec:method}. Publication-only integrity checks establish the retained count, not a complete payload readback. The analyzer reconstructs each reported throughput and percentile from raw timings and rejects inconsistent summaries or a missing failure ledger.
 
 All 120 active recovery episodes returned the original identifier, acknowledged it, and left one retained message with zero pending acknowledgments; JetStream reported two deliveries in each episode. All ten Redis no-reclaimer controls remained pending at the end of their observation windows. Every victim exit was recorded as killed by a signal. The largest kill-invocation-to-observed-exit bracket was \KillBracket{}\,ms. The final seven-pod snapshot reported zero container restarts and zero cgroup OOM kills. Recorded driver CPU-counter differences showed no throttling within completed timed trials; this does not establish an idle testbed or identify the cause of the recorded timeouts.
 
-\subsection{RQ1: failure age, reclamation, and observed redelivery}
+\subsubsection{RQ1: failure age, reclamation, and observed redelivery}
 
 \begin{table}[htbp]
 \centering\small
@@ -93,7 +52,7 @@ Redis reclamation frequency also matters. With a 100\,ms sleep, the late-failure
 
 The negative controls isolate a separate mechanism: ten observed non-recoveries with pending state intact are consistent with Proposition~\ref{prop:no-reclaim}. Their finite observation procedures do not empirically prove infinite non-delivery; the proposition supplies that conditional counterexample from the stated new-read-only policy. Because exact censor endpoints were not recorded, these controls contribute descriptive evidence rather than exposure-time or survival estimates. The answer to RQ1 is therefore twofold: a failure leaves a residual timeout, and actual recovery additionally depends on reclamation or expiry selection and available demand. Under the active policies studied, all episodes recovered; without Redis reclamation, none of the controls did during observation.
 
-\subsection{RQ2: concurrency gains and cycle-latency cost}
+\subsubsection{RQ2: concurrency gains and cycle-latency cost}
 
 \begin{table}[htbp]
 \centering\small\setlength{\tabcolsep}{4pt}
@@ -116,7 +75,7 @@ Reconstructed occupancy $U$ lies between 0.9936 and 0.9995 across all 300 trials
 
 The always-mode endpoint is particularly easy to misread: JetStream drains 27.43\,kmsg/s and Redis 2.51\,kmsg/s, but their consumer-state synchronization contracts differ. RQ2 is answered by sublinear endpoint scaling with rising cycle tails within each profile. A cross-system ranking under an equal synchronous consumer-progress durability guarantee is not established by these configurations.
 
-\subsection{RQ3: confirmed-publication cost under persistence policies}
+\subsubsection{RQ3: confirmed-publication cost under persistence policies}
 
 \begin{table}[htbp]
 \centering\small\setlength{\tabcolsep}{4pt}
@@ -158,7 +117,7 @@ The direction of all thirteen reported paired contrasts survives every leave-one
 
 Against memory mode, the paired always/memory throughput ratio is 0.0410 [0.0233, 0.0583] for Redis over nine common completed blocks and 0.00621 [0.00318, 0.00945] for JetStream over ten blocks. Their reciprocal point estimates are \RedisSyncSlowdown{}- and \NatsSyncSlowdown{}-fold slowdowns. Because the Redis estimate excludes an unavailable failed-trial metric, it describes successful runs and can understate the operational cost of the complete outcome distribution. We neither impute zero throughput nor replace the failed outcome with its diagnostic replay.
 
-The original serial-publisher sensitivity gives a different view (the serial table below): always-mode publication averaged 603\,msg/s [591, 614] for Redis and 585\,msg/s [565, 598] for JetStream. The close point estimates do not establish equivalence. This shorter fixed-count workload differs in both publication concurrency and duration, so it cannot isolate batching as the cause of the contrast with the sixteen-publisher results. No syscall or storage-device trace was collected in that original campaign to establish the mechanism. The follow-up's matched-duration publication and syscall diagnostics are a separate dataset.
+The original serial-publisher sensitivity gives a different view (Appendix~\ref{app:serial}): always-mode publication averaged 603\,msg/s [591, 614] for Redis and 585\,msg/s [565, 598] for JetStream. The close point estimates do not establish equivalence. This shorter fixed-count workload differs in both publication concurrency and duration, so it cannot isolate batching as the cause of the contrast with the sixteen-publisher results. No syscall or storage-device trace was collected in that original campaign to establish the mechanism. The follow-up's matched-duration publication and syscall diagnostics are a separate dataset.
 
 RQ3 is therefore answered as a descriptive, workload-specific tradeoff: the configured periodic profiles preserve most memory-mode throughput with modestly higher observed tails, whereas always-mode confirmed publication incurs much larger and more variable observed costs in this shared Btrfs/NVMe environment. The synchronization contract, accumulated storage history, completion conditioning, and failure class must accompany that performance statement. Neither these append measurements nor the fast JetStream drain acknowledgments prove equivalent durable consumer progress or stable-media survival after a power cut.
 
@@ -168,73 +127,3 @@ RQ3 is therefore answered as a descriptive, workload-specific tradeoff: the conf
 \caption{Descriptive publication-throughput diagnostic by randomized block. Each point is one completed planned trial. The timeout annotation has no throughput coordinate and identifies the failed Redis-always trial in block seven. A missing value interrupts its line; no failure is imputed as zero. Blocks are ordered experimental groups, not equal wall-time intervals.}
 \label{fig:durability-blocks}
 \end{figure}
-
-\section{Complete original concurrency matrix}\label{app:matrix}
-\begingroup\small\setlength{\tabcolsep}{3.5pt}
-\input{../data/derived/full-matrix.tex}
-\endgroup
-\section{Original serial-publisher sensitivity}\label{app:serial}
-\begin{table}[htbp]\centering\small
-\input{../data/derived/serial-table.tex}
-\caption{Original fixed-count, one-publisher sensitivity.}
-\end{table}
-\FloatBarrier
-
-\section{Client waits and observation conventions}\label{sec:client-waits}
-All request timestamps use the driver's Linux monotonic clock. Broker telemetry uses its own node clock. Setup, warm-up, trace serialization and stored-payload readback are outside timing. Original ordinary reads and recovery survivor polls use a 100 ms Redis block or JetStream fetch wait. Follow-up drain requests and victim initial reads use five seconds. The pinned Redis client adds ten seconds to positive typed blocking-read socket deadlines, producing 10.1 s or 15 s, respectively~\cite{goredis970timeouts}; the raw CLAIM command instead retains the default five-second socket timeout. JetStream's fetch-request expiry is approximately 90\% of the client wait and can leave a pull-demand gap~\cite{natsgo1391}. Redis publication and acknowledgment use five-second socket-stage read/write limits, not a whole-call deadline; NATS uses five-second response waits. The original drain loop additionally checks a 120 s budget, while the external follow-up invocation has a separate 600 s controller limit. None of these waits is the broker eligibility threshold.
-
-\section{Follow-up condition summaries}
-The following tables concern the separately collected fresh-store follow-up. Runs 01, 02 and 03 identify separate deployments on the same hardware. Cross-run point summaries equally weight the available run estimates. Bracketed ranges contain their minimum and maximum; they are not confidence or prediction intervals. M, P and S denote memory, periodic and always append profiles. Publication $P$ is the number of publishers, whereas drain $C$ is the number of consumers. A failed outcome is absent from successful-run numerical means but remains in the outcome and pair counts.
-
-\subsection{Publication means and tail sample information}
-Rates are in kmsg/s. Trial p99 is the equally weighted mean of within-trial nearest-rank percentiles inside each run, followed by equal weighting across available run means. $n$ is completed/planned trials. The range of sample counts is reported by run below; every trial's count, selected p99 rank and number of positions above that rank are in the accompanying \artifact{followup/derived/trials.csv}.
-\begingroup\footnotesize\setlength{\tabcolsep}{3pt}
-\input{../data/derived/followup-publication.tex}
-\endgroup
-
-\subsection{Publication by deployment}
-Each condition has three planned trials within a deployment. Columns report the condition's arithmetic mean throughput and mean empirical trial p99, conditional on completion. Count range is the minimum/maximum number of confirmed publications among those completed trials.
-\begingroup\footnotesize\setlength{\tabcolsep}{3pt}
-\input{../data/derived/followup-publication-campaigns.tex}
-\endgroup
-
-\subsection{Drain by deployment}
-Each condition has two planned trials per deployment and 65536 messages per completed trial. CPU is the driver quota, with matching GOMAXPROCS. Driver and Broker columns give observed mean cores during their phase-bracketing samples, including other processes within the respective containers. The p99 column is the mean empirical request-to-acknowledgment cycle p99 in milliseconds.
-\begingroup\footnotesize\setlength{\tabcolsep}{3pt}
-\input{../data/derived/followup-drain-campaigns.tex}
-\endgroup
-
-\subsection{Recovery excess and paired controls}
-Excess is redelivery receipt minus initial receipt minus the configured threshold. Each live/killed cell has two planned episodes in each deployment. Entries give equally weighted deployment means and their observed ranges. Killed minus live is calculated within paired blocks before averaging deployment estimates. R7/R8 denote Redis 7.4.2/8.10.2, auto denotes XAUTOCLAIM with a 10 ms sleep, and J denotes JetStream. Neither a small observed difference nor overlap establishes equivalence.
-\begingroup\footnotesize\setlength{\tabcolsep}{3pt}
-\input{../data/derived/followup-recovery.tex}
-\endgroup
-
-The plain-read controls below report actual reference-to-survivor-loop-completion durations. Their nominal observation budget starts after the reference/kill bracket and equals twice the threshold. A complete outcome means that the message remained pending without redelivery through that procedure. These endpoints are available for the follow-up and are not reconstructed for the historical controls.
-\begingroup\small
-\input{../data/derived/followup-controls.tex}
-\endgroup
-
-\subsection{Compression-policy diagnostics}
-\begin{table}[!ht]
-\centering\footnotesize\setlength{\tabcolsep}{3pt}
-\input{../data/derived/followup-compression.tex}
-\caption{Current always-profile compression-policy sensitivity at sixteen publishers: equal-weight deployment means and ranges. Filler is the original compressible payload; Template is the fixed pseudorandom bank. Off/inherited is a matched throughput ratio; $n_i/n_o/n_p$ counts complete inherited/off trials/paired comparisons, each out of three. Both policies use the same Btrfs filesystem and NVMe device.}
-\label{tab:followup-compression}
-\end{table}
-
-\FloatBarrier
-
-\subsection{Failed follow-up outcomes}
-The table identifies each retained failed trial and its stage. Conf. and Unknown are client event classifications, not a broker-presence partition. Join is elapsed time from the timed phase's start until workers joined, when available. Stored is the count at a later inventory query. Inventory queries are sequential, and timed-out operations can complete between them; these counts do not reconstruct the identities or confirmations of unknown calls. A dash marks an unavailable field, not zero. No failed observation is replayed into a planned success.
-\begingroup\footnotesize\setlength{\tabcolsep}{3pt}
-\input{../data/derived/followup-failures.tex}
-\endgroup
-
-Complete paired contrasts, trial memberships and unavailable-pair counts are in \artifact{followup/derived/statistics.json}. Individual event, telemetry and syscall observations remain in the campaign directories and trial table. The main article presents synchronization diagnostics.
-\FloatBarrier
-\begingroup\raggedright
-\bibliographystyle{plainurl}
-\bibliography{references}
-\endgroup
-\end{document}

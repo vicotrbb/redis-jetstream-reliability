@@ -16,7 +16,7 @@ The checked target is **Lean 4.24.0**, pinned in `lean-toolchain`. The sole impo
 
 ## What is formalized
 
-In version 1.2.0, the main article presents the short analytical model without numbered theorems. The labels in the mapping below refer to the complete hand proofs in `paper/supplement-model.tex`, compiled into the supplementary PDF. The main article's residual and occupancy equations retain the corresponding assumptions and scope.
+In version 1.3.0, the main analytical section presents the short model without numbered theorems. The labels in the mapping below refer to the complete hand proofs in `paper/appendix-proofs.tex`, compiled into Appendix C of the complete article. The statements and proof source are unchanged from the version 1.2.0 supplement. The main article's residual and occupancy equations retain the corresponding assumptions and scope.
 
 | Declaration in `DeliveryModel.lean` | Mathematical statement | Manuscript mapping |
 |---|---|---|

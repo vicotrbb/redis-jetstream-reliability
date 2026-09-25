@@ -71,3 +71,7 @@ python3 bench/verify_release.py --directory .
 ```
 
 Public GitHub hosting is distinct from DOI-bearing archival deposit, independent replication, external artifact evaluation, and scientific peer review. No Zenodo DOI or journal acceptance is claimed. The paper and artifact licenses are in `LICENSE.md`; third-party material retains its applicable terms. The original release's preparation-time declarations and validation receipts remain historical records and have not been rewritten to imply earlier publication.
+
+## Version 1.3.0 preparation checkpoint
+
+Version 1.3.0 integrates all former supplementary material into a single 43-page article and adds reporting of retained failures, long requests and version contrasts. No observations or proof source changed. Its distribution has five files: the named versioned archive, the complete article PDF, `RELEASE.json`, `VERIFICATION.log` and detached `SHA256SUMS`. The older version 1.2.0 article and supplement remain preserved in their original release and in the current historical document archive. This paragraph records preparation; a subsequent hosting receipt must identify actual publication and verify remote identities.

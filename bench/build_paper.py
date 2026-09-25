@@ -8,9 +8,7 @@ from pypdf import PdfReader
 from check_document_provenance import ROOT, PDF, digest, source_hashes
 
 before=source_hashes()
-for stem,destination,record in (
-        ('main',PDF,'build-receipt.json'),
-        ('supplement',PDF.with_name('redis-jetstream-reliability-supplement.pdf'),'supplement-build-receipt.json')):
+for stem,destination,record in (('main',PDF,'build-receipt.json'),):
     command=['latexmk','-pdf','-interaction=nonstopmode','-halt-on-error',stem+'.tex']
     subprocess.run(command,cwd=ROOT/'paper',check=True)
     assert source_hashes()==before,'Document inputs changed while compiling'

@@ -8,18 +8,18 @@ from check_document_provenance import source_hashes
 
 ROOT=Path(__file__).resolve().parents[1]
 paper=ROOT/"output/pdf/redis-jetstream-reliability.pdf"
-supplement=paper.with_name('redis-jetstream-reliability-supplement.pdf')
+assert list(paper.parent.glob('*.pdf'))==[paper], 'Expected one complete current article'
 text="\n".join(p.extract_text() or "" for p in PdfReader(paper).pages)
 required=["Abstract","Introduction","Background and related work","System model and formal results","Experimental method","Results","Discussion","Threats to validity","Artifact availability and reproducibility","Conclusion","References"]
 missing=[s for s in required if s not in text]
 assert not missing,missing
 documents={}
-for stem,pdf,receipt in (('main',paper,'build-receipt.json'),('supplement',supplement,'supplement-build-receipt.json')):
+for stem,pdf,receipt in (('main',paper,'build-receipt.json'),):
     extracted="\n".join(p.extract_text() or "" for p in PdfReader(pdf).pages)
     for bad in ("??","TODO","TBD","PLACEHOLDER","\u2014"):
         assert bad not in extracted,(stem,bad)
     log=(ROOT/'paper'/(stem+'.log')).read_text()
-    for bad in ("undefined references","undefined citations","There were undefined","Overfull ","Missing character:","LaTeX Error","Undefined control sequence","Emergency stop","Fatal error","\\Url Error"):
+    for bad in ("undefined references","undefined citations","There were undefined","multiply defined","Overfull ","Missing character:","LaTeX Error","Undefined control sequence","Emergency stop","Fatal error","\\Url Error"):
         assert bad not in log,(stem,bad)
     build=json.loads((ROOT/'data/derived'/receipt).read_text())
     assert build['status']=='pass' and build['compiler_exit_code']==0
@@ -30,6 +30,7 @@ for stem,pdf,receipt in (('main',paper,'build-receipt.json'),('supplement',suppl
                      'reference_count':len(re.findall(r'\\bibitem',(ROOT/'paper'/(stem+'.bbl')).read_text()))}
 for source in (ROOT/'paper').glob('*.tex'):
     assert '\u2014' not in source.read_text() and '---' not in source.read_text(),source
+    assert 'supplement' not in source.read_text().lower(), 'A current source still points outside the integrated article'
 followup=json.loads((ROOT/'followup/derived/statistics.json').read_text())
 assert sum(followup['outcomes'].values())==612
 assert [r['campaign'] for r in followup['campaigns']]==['main01','main02','main03']

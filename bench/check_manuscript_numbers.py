@@ -11,7 +11,7 @@ def main():
     report = json.loads((folder/'report.json').read_text())
     with (folder/'trials.csv').open(newline='') as stream:
         rows = [{k: parsed(v) for k,v in row.items()} for row in csv.DictReader(stream)]
-    sources = ['paper/'+name+'.tex' for name in ('abstract','main','results','followup-results','conclusion')]
+    sources = ['paper/'+name+'.tex' for name in ('abstract','main','results','followup-results','conclusion','appendix-followup')]
     text = '\n'.join((ROOT/name).read_text() for name in sources)
     checks = []
 
@@ -95,10 +95,35 @@ def main():
     values = [v for r in report['compression'] for v in r['off_inherited_ratio']['campaign_estimates'].values()]
     displayed('minimum compression ratio',min(values),3,'0.935')
     displayed('maximum compression ratio',max(values),3,'1.063')
+    operational=json.loads((ROOT/'data/derived/operational-report.json').read_text())
+    assert operational['profiles']['always']=={'planned':72,'completed':62,'failed':10,
+        'warmup_failed':4,'timed_failed':6,'failed_percent':100*10/72}
+    for profile,written in [('always','13.9'),('periodic','1.4')]:
+        displayed(profile+' planned-attempt failure percentage',operational['profiles'][profile]['failed_percent'],1,written)
+    waits=[v for r in operational['timed_timeouts'] for v in r['request_wait_seconds']]
+    assert len(waits)==22 and len(operational['timed_timeouts'])==7
+    displayed('minimum unknown request wait seconds',min(waits),3,'5.000')
+    displayed('maximum unknown request wait seconds',max(waits),3,'5.002')
+    maxima=operational['completed_max_at_least_1000_ms']
+    assert len(maxima)==7 and all(r['profile']=='always' for r in maxima)
+    above=[r['max_ms']/1000 for r in maxima if r['max_ms']>=2000]
+    assert len(above)==4
+    displayed('minimum completed maximum above two seconds',min(above),3,'2.297')
+    displayed('maximum completed publication request seconds',max(above),3,'4.183')
+    displayed('next completed request maximum seconds',max(r['max_ms']/1000 for r in maxima if r['max_ms']<2000),3,'1.969')
+    versions=operational['versions']
+    displayed('minimum version contrast mean',min(r['mean_ratio'] for r in versions),4,'0.9603')
+    displayed('maximum version contrast mean',max(r['mean_ratio'] for r in versions),4,'1.0232')
+    displayed('minimum deployment version contrast',min(r['min_ratio'] for r in versions),4,'0.9401')
+    displayed('maximum deployment version contrast',max(r['max_ratio'] for r in versions),4,'1.1237')
+    displayed('largest traced sync milliseconds',operational['largest_traced_sync_ms'],1,'544.6')
+    displayed('Redis P16 confirmations per synchronization, reciprocal aggregate',
+              1/select('trace',engine='redis',publishers=16)['sync_calls_per_confirmed_message']['mean'],1,'8.3')
     receipt = {'status':'pass','displayed_numbers':checks,'source_sha256':{n:digest(ROOT/n) for n in sources},
                'statistics_sha256':digest(folder/'statistics.json'),'report_sha256':digest(folder/'report.json'),
+               'operational_report_sha256':digest(ROOT/'data/derived/operational-report.json'),
                'scope':'Displayed-number binding to the separately verified report; not external replication.'}
-    (ROOT/'revisions/20260924-followup/manuscript-number-check.json').write_text(json.dumps(receipt,indent=2)+'\n')
+    (ROOT/'revisions/20260925-integrated/manuscript-number-check.json').write_text(json.dumps(receipt,indent=2)+'\n')
     print(json.dumps({'status':'pass','displayed_numbers_checked':len(checks)}))
 
 

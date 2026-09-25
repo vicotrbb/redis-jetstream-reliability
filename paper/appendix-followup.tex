@@ -1,0 +1,77 @@
+The following tables concern the separately collected fresh-store follow-up. Runs 01, 02 and 03 identify separate deployments on the same hardware. Cross-run point summaries equally weight the available run estimates. Bracketed ranges contain their minimum and maximum; they are not confidence or prediction intervals. M, P and S denote memory, periodic and always append profiles. Publication $P$ is the number of publishers, whereas drain $C$ is the number of consumers. A failed outcome is absent from successful-run numerical means but remains in the outcome and pair counts.
+
+\subsection{Publication means and tail sample information}
+Rates are in kmsg/s. Trial p99 is the equally weighted mean of within-trial nearest-rank percentiles inside each run, followed by equal weighting across available run means. $n$ is completed/planned trials. The range of sample counts is reported by run below; every trial's count, selected p99 rank and number of positions above that rank are in the accompanying \artifact{followup/derived/trials.csv}.
+\begingroup\footnotesize\setlength{\tabcolsep}{3pt}
+\input{../data/derived/followup-publication.tex}
+\endgroup
+
+\subsection{Publication by deployment}
+Each condition has three planned trials within a deployment. Columns report the condition's arithmetic mean throughput and mean empirical trial p99, conditional on completion. Count range is the minimum/maximum number of confirmed publications among those completed trials.
+\begingroup\footnotesize\setlength{\tabcolsep}{3pt}
+\input{../data/derived/followup-publication-campaigns.tex}
+\endgroup
+
+\subsection{Current versus historical releases}\label{app:version-contrasts}
+Each entry is the equal-weight mean of the three deployment-specific paired throughput ratios, followed by their observed range. Ratios use jointly completed blocks under the same profile and publisher count. Redis compares 8.10.2 with 7.4.2; JetStream compares 2.15.0 with 2.10.24. Pairs gives available/planned matched blocks. The intervals are descriptive ranges, and proximity to one is not an equivalence test.
+\begin{table}[htbp]
+\centering\small
+\input{../data/derived/publication-version-contrasts.tex}
+\caption{Current/historical publication throughput ratios for memory and periodic profiles.}
+\label{tab:version-contrasts}
+\end{table}
+\FloatBarrier
+
+\subsection{Drain by deployment}
+Each condition has two planned trials per deployment and 65536 messages per completed trial. CPU is the driver quota, with matching GOMAXPROCS. Driver and Broker columns give observed mean cores during their phase-bracketing samples, including other processes within the respective containers. The p99 column is the mean empirical request-to-acknowledgment cycle p99 in milliseconds.
+\begingroup\footnotesize\setlength{\tabcolsep}{3pt}
+\input{../data/derived/followup-drain-campaigns.tex}
+\endgroup
+
+\subsection{Recovery excess and paired controls}
+Excess is redelivery receipt minus initial receipt minus the configured threshold. Each live/killed cell has two planned episodes in each deployment. Entries give equally weighted deployment means and their observed ranges. Killed minus live is calculated within paired blocks before averaging deployment estimates. R7/R8 denote Redis 7.4.2/8.10.2, auto denotes XAUTOCLAIM with a 10 ms sleep, and J denotes JetStream. Neither a small observed difference nor overlap establishes equivalence.
+\begingroup\footnotesize\setlength{\tabcolsep}{3pt}
+\input{../data/derived/followup-recovery.tex}
+\endgroup
+
+The plain-read controls below report actual reference-to-survivor-loop-completion durations. Their nominal observation budget starts after the reference/kill bracket and equals twice the threshold. A complete outcome means that the message remained pending without redelivery through that procedure. These endpoints are available for the follow-up and are not reconstructed for the historical controls.
+\begingroup\small
+\input{../data/derived/followup-controls.tex}
+\endgroup
+
+\subsection{Compression-policy diagnostics}
+\begin{table}[!ht]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\input{../data/derived/followup-compression.tex}
+\caption{Current always-profile compression-policy sensitivity at sixteen publishers: equal-weight deployment means and ranges. Filler is the original compressible payload; Template is the fixed pseudorandom bank. Off/inherited is a matched throughput ratio; $n_i/n_o/n_p$ counts complete inherited/off trials/paired comparisons, each out of three. Both policies use the same Btrfs filesystem and NVMe device.}
+\label{tab:followup-compression}
+\end{table}
+
+\FloatBarrier
+
+\subsection{Failed follow-up outcomes}\label{app:followup-failures}
+The table identifies each retained failed trial and its stage. Conf. and Unknown are client event classifications, not a broker-presence partition. Join is elapsed time from the timed phase's start until workers joined, when available. Stored is the count at a later inventory query. Inventory queries are sequential, and timed-out operations can complete between them; these counts do not reconstruct the identities or confirmations of unknown calls. A dash marks an unavailable field, not zero. No failed observation is replayed into a planned success.
+\begingroup\footnotesize\setlength{\tabcolsep}{3pt}
+\input{../data/derived/followup-failures.tex}
+\endgroup
+
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\input{../data/derived/publication-timeouts.tex}
+\caption{Recorded request waits in each measurement-stage failure. Ranges span unknown requests within the trial. Error classes are returned client errors; these times do not identify broker completion or storage-device latency. The NATS error text is \code{nats: timeout}; the Redis error text ends in \code{i/o timeout}.}
+\label{tab:publication-timeouts}
+\end{table}
+\FloatBarrier
+
+\subsection{Long requests in completed publication trials}\label{app:request-maxima}
+The table lists all seven completed primary publication trials with a maximum confirmed-request latency of at least 1000 ms. All used always profiles. Four maxima exceed 2000 ms; the next is 1969.216 ms. The threshold is a post-observation descriptive selection for this table. Every listed trial remains in the complete primary summaries, and trials below the threshold remain in the full condition tables and machine-readable evidence. The publication admission budget is fifteen seconds; completion tails remain in the throughput denominator. These counts must not be combined with untimed warm-up failures to estimate a frequency of stalls in equal-duration windows.
+\begin{table}[htbp]
+\centering\small
+\input{../data/derived/publication-request-maxima.tex}
+\caption{Largest confirmed-request latency in each completed primary publication trial meeting the descriptive 1000 ms threshold.}
+\label{tab:publication-request-maxima}
+\end{table}
+\FloatBarrier
+
+Complete paired contrasts, trial memberships and unavailable-pair counts are in \artifact{followup/derived/statistics.json}. Individual event, telemetry and syscall observations remain in the campaign directories and trial table. Section~\ref{sec:followup-diagnostics} presents synchronization diagnostics.
+\FloatBarrier

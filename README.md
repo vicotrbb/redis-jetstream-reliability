@@ -1,21 +1,22 @@
 # An Empirical Evaluation of Message Delivery Reliability and Recovery Characteristics in Redis Streams and NATS JetStream
 
-Research by Victor Bona. This repository contains the article, supplementary proofs and diagnostics, recorded homelab measurements, experiment source, and reproducible analysis. It retains the original 11-point LaTeX template, 1.1-inch margins, author block, and section structure.
+Research by Victor Bona. This repository contains one complete article with proofs and diagnostics in appendices, recorded homelab measurements, experiment source, and reproducible analysis. It retains the original 11-point LaTeX template, 1.1-inch margins, author block, and original section order.
 
-**Artifact version 1.2.0.** The study compares recovery policies, consumer concurrency, and publication/acknowledgment costs. It distinguishes append synchronization from consumer-progress persistence. The extension adds current releases, fresh broker processes and stores for every trial, matched publication durations, live recovery controls, CPU sensitivity, synchronization traces, and compression-policy diagnostics. Original evidence remains unchanged.
+**Artifact version 1.3.0.** The study compares recovery policies, consumer concurrency, and publication/acknowledgment costs. It distinguishes append synchronization from consumer-progress persistence. The extension adds current releases, fresh broker processes and stores for every trial, matched publication durations, live recovery controls, CPU sensitivity, synchronization traces, and compression-policy diagnostics. Original and follow-up evidence remain unchanged. Version 1.3.0 integrates the former supplement into the article and adds explicit reporting of retained timeouts, long requests, and version contrasts.
 
 The original paper and research material use CC-BY-4.0; original code and formalization use MIT. See [LICENSE.md](LICENSE.md), [CITATION.cff](CITATION.cff), and the [release guide](release/README.md). GitHub access is public. No Zenodo deposit, DOI assignment, external replication, journal acceptance, or implementation-verification claim is made.
 
 ## Read and inspect
 
-- [Main article](output/pdf/redis-jetstream-reliability.pdf) and [supplement](output/pdf/redis-jetstream-reliability-supplement.pdf).
+- [Complete article, including appendices](output/pdf/redis-jetstream-reliability.pdf): 43 pages, with all proofs, detailed results and diagnostics.
 - [Current validation](docs/FINAL_REVISION_VALIDATION.md), [prospective follow-up protocol](docs/FOLLOWUP_PROTOCOL.md), and [development/validation record](docs/FOLLOWUP_VALIDATION.md).
 - [Pinned source and literature review](docs/FOLLOWUP_SOURCE_REVIEW.md) and [historical source corrections](docs/SOURCE_REVALIDATION.md).
 - Original results: `data/derived/statistics.json` and `aggregate.csv`.
 - Follow-up results: `followup/derived/statistics.json`, `trials.csv`, and `report.json`.
+- Publication failures, request maxima and version contrasts: `data/derived/operational-report.json`; regenerate with `make report-operational`.
 - [Artifact version map](docs/ARTIFACT_MAP.md) and [GitHub provenance](docs/GITHUB_PUBLICATION.md).
 
-The current validation record is `docs/FINAL_REVISION_VALIDATION.md`. Successful-build receipts, PDF content checks, and visual-review records under `data/derived/` bind both documents to their exact source and rendered pages. Earlier validation records describe the historical documents identified in the artifact map.
+The current validation record is `docs/FINAL_REVISION_VALIDATION.md`. Successful-build receipts, PDF content checks, and visual-review records under `data/derived/` bind the complete article to its exact source and rendered pages. Earlier validation records describe the historical documents identified in the artifact map.
 
 ## Experimental scope
 
@@ -47,7 +48,7 @@ uv pip install --python .venv/bin/python -r requirements-analysis.txt
 make verify-revision
 ```
 
-`make verify-revision` checks original evidence, independently recalculates follow-up condition/paired summaries, binds sixty displayed numbers to the verified report, verifies source-bound proof receipts, and checks the exact delivered PDFs and retained renderings. It runs no brokers. See the release guide for detached archive verification and the distinction between GitHub source archives and the named sealed artifact.
+`make verify-revision` checks original evidence, independently recalculates follow-up condition/paired summaries, binds 73 displayed numbers to the verified reports, reconstructs the new operational summaries from retained traces, checks integration against the archived documents, verifies source-bound proof receipts, and checks the exact delivered PDF and retained renderings. It runs no brokers. See the release guide for detached archive verification and the distinction between GitHub source archives and the named sealed artifact.
 
 ## Reanalyze and rebuild in a working copy
 
@@ -62,7 +63,7 @@ Original analysis reconstructs every retained timing record, ID set, percentile,
 
 The PDF build uses `latexmk`, pdfLaTeX, BibTeX and `plainurl.bst`. A rebuilt PDF can differ across TeX environments and needs its own honest rendering/visual review before the provenance gate can pass. The supplied visual receipt covers only the shipped PDF. Keep the sealed distribution unchanged and perform reanalysis in a working copy.
 
-The selected Lean model is `formal/DeliveryModel.lean`. Its original and subsequent homelab compilation receipts are retained, including this revision's `revisions/20260924-followup/lean-recheck.json`. Compilation checks ten abstract declarations; it does not verify broker implementations, the harness, stable storage, or statistical coverage.
+The selected Lean model is `formal/DeliveryModel.lean`. Its original and subsequent homelab compilation receipts are retained, including the version 1.2.0 receipt `revisions/20260924-followup/lean-recheck.json`. Compilation checks ten abstract declarations; it does not verify broker implementations, the harness, stable storage, or statistical coverage.
 
 ## Run a new follow-up campaign in the homelab
 
@@ -81,6 +82,6 @@ Publication-error recording covers returned errors and caught panics after worke
 
 ## Version and publication boundaries
 
-Version 1.1.0 preserves the preceding 30-page manuscript and evidence. Version 1.2.0 adds a separately identified experimental campaign and revised article/supplement. Existing sealed distributions are never overwritten. Input snapshots and manifests identify pre-Git observations without inventing a retrospective Git history.
+Version 1.1.0 preserves the preceding 30-page manuscript and evidence. Version 1.2.0 added a separately identified experimental campaign and separate article/supplement. Version 1.3.0 combines those documents into one article with appendices and adds descriptive reporting against the unchanged evidence. Existing sealed distributions are never overwritten. Input snapshots and manifests identify pre-Git observations without inventing a retrospective Git history.
 
 `SHA256SUMS` covers delivered source, raw/derived evidence, documents and QA, excluding caches and duplicate distributions under `releases/`. The release builder verifies a fresh extraction and refuses an existing version. These checks establish content consistency, not independent certification of collection time, complete fault coverage, or scientific peer review. The manuscript and software were developed with AI assistance, disclosed in the article.
