@@ -1,0 +1,182 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "redis-old",
+        "namespace": "msgrel-fup-pilot01",
+        "labels": {
+          "app": "redis-old"
+        }
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "automountServiceAccountToken": false,
+        "tolerations": [
+          {
+            "key": "node-role.kubernetes.io/control-plane",
+            "operator": "Exists",
+            "effect": "NoSchedule"
+          }
+        ],
+        "terminationGracePeriodSeconds": 15,
+        "containers": [
+          {
+            "name": "work",
+            "image": "docker.io/library/redis@sha256:02419de7eddf55aa5bcf49efb74e88fa8d931b4d77c07eff8a6b2144472b6952",
+            "command": [
+              "sh",
+              "-c",
+              "while [ ! -x /tools/followup ]; do sleep 1; done; exec /tools/followup control redis"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "2",
+                "memory": "1Gi"
+              }
+            },
+            "volumeMounts": [
+              {
+                "name": "tools",
+                "mountPath": "/tools"
+              },
+              {
+                "name": "data",
+                "mountPath": "/data"
+              },
+              {
+                "name": "work",
+                "mountPath": "/work"
+              }
+            ],
+            "securityContext": {
+              "capabilities": {
+                "add": [
+                  "SYS_PTRACE"
+                ]
+              },
+              "seccompProfile": {
+                "type": "Unconfined"
+              }
+            }
+          }
+        ],
+        "volumes": [
+          {
+            "name": "tools",
+            "emptyDir": {}
+          },
+          {
+            "name": "data",
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            }
+          },
+          {
+            "name": "work",
+            "emptyDir": {
+              "sizeLimit": "8Gi"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "nats-old",
+        "namespace": "msgrel-fup-pilot01",
+        "labels": {
+          "app": "nats-old"
+        }
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "automountServiceAccountToken": false,
+        "tolerations": [
+          {
+            "key": "node-role.kubernetes.io/control-plane",
+            "operator": "Exists",
+            "effect": "NoSchedule"
+          }
+        ],
+        "terminationGracePeriodSeconds": 15,
+        "containers": [
+          {
+            "name": "work",
+            "image": "docker.io/library/nats@sha256:fd981e2ab99000964bd15286054e61fcc445732fd907db039f260fc0b824b314",
+            "command": [
+              "sh",
+              "-c",
+              "while [ ! -x /tools/followup ]; do sleep 1; done; exec /tools/followup control nats"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "2",
+                "memory": "1Gi"
+              }
+            },
+            "volumeMounts": [
+              {
+                "name": "tools",
+                "mountPath": "/tools"
+              },
+              {
+                "name": "data",
+                "mountPath": "/data"
+              },
+              {
+                "name": "work",
+                "mountPath": "/work"
+              }
+            ],
+            "securityContext": {
+              "capabilities": {
+                "add": [
+                  "SYS_PTRACE"
+                ]
+              },
+              "seccompProfile": {
+                "type": "Unconfined"
+              }
+            }
+          }
+        ],
+        "volumes": [
+          {
+            "name": "tools",
+            "emptyDir": {}
+          },
+          {
+            "name": "data",
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            }
+          },
+          {
+            "name": "work",
+            "emptyDir": {
+              "sizeLimit": "8Gi"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

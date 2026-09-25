@@ -1,0 +1,964 @@
+{
+  "campaigns": [
+    {
+      "campaign": "pilot06",
+      "planned": 10,
+      "raw_files": 60,
+      "plan_sha256": "2f9b5ccd3f1a89e795a554965e141c57a82a8cc850a6ebb2fdfa9f294473f7d8",
+      "raw_manifest_sha256": "dc462ce336ca048279ae6a317fab643ccb611888e3e8761c7f40f23aa3fc278f"
+    }
+  ],
+  "outcomes": {
+    "complete": 8,
+    "failed": 2
+  },
+  "kinds": {
+    "drain": 6,
+    "trace": 2,
+    "publication": 2
+  },
+  "verified_event_records": 398119,
+  "scope": "Separate deployments on shared hardware; ranges of campaign means, no asserted population interval coverage.",
+  "analysis_sha256": "5a2675bdb6c0cab844a3bae0e1f3c749e57f219028b8cefc65e37dbae4e9dfa7",
+  "paired_contrasts": {
+    "periodic_memory": {
+      "kind": "publication",
+      "factor": "profile",
+      "numerator": "periodic",
+      "denominator": "memory",
+      "metric": "throughput_mps",
+      "estimand": "ratio of paired condition means",
+      "per_campaign": []
+    },
+    "always_memory": {
+      "kind": "publication",
+      "factor": "profile",
+      "numerator": "always",
+      "denominator": "memory",
+      "metric": "throughput_mps",
+      "estimand": "ratio of paired condition means",
+      "per_campaign": [
+        {
+          "campaign": "pilot06",
+          "engine": "nats",
+          "version": "2.15.0",
+          "publishers": 1,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": "F0010",
+              "denominator_trial": null,
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        },
+        {
+          "campaign": "pilot06",
+          "engine": "redis",
+          "version": "8.10.2",
+          "publishers": 1,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": "F0005",
+              "denominator_trial": null,
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        }
+      ]
+    },
+    "publishers_16_1": {
+      "kind": "publication",
+      "factor": "publishers",
+      "numerator": 16,
+      "denominator": 1,
+      "metric": "throughput_mps",
+      "estimand": "ratio of paired condition means",
+      "per_campaign": [
+        {
+          "campaign": "pilot06",
+          "engine": "nats",
+          "version": "2.15.0",
+          "profile": "always",
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": null,
+              "denominator_trial": "F0010",
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        },
+        {
+          "campaign": "pilot06",
+          "engine": "redis",
+          "version": "8.10.2",
+          "profile": "always",
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": null,
+              "denominator_trial": "F0005",
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        }
+      ]
+    },
+    "redis_current_historical": {
+      "kind": "publication",
+      "factor": "version",
+      "numerator": "8.10.2",
+      "denominator": "7.4.2",
+      "metric": "throughput_mps",
+      "estimand": "ratio of paired condition means",
+      "per_campaign": [
+        {
+          "campaign": "pilot06",
+          "engine": "redis",
+          "profile": "always",
+          "publishers": 1,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": "F0005",
+              "denominator_trial": null,
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        }
+      ]
+    },
+    "nats_current_historical": {
+      "kind": "publication",
+      "factor": "version",
+      "numerator": "2.15.0",
+      "denominator": "2.10.24",
+      "metric": "throughput_mps",
+      "estimand": "ratio of paired condition means",
+      "per_campaign": [
+        {
+          "campaign": "pilot06",
+          "engine": "nats",
+          "profile": "always",
+          "publishers": 1,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": "F0010",
+              "denominator_trial": null,
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        }
+      ]
+    },
+    "consumers_16_1": {
+      "kind": "drain",
+      "factor": "consumers",
+      "numerator": 16,
+      "denominator": 1,
+      "metric": "throughput_mps",
+      "estimand": "ratio of paired condition means",
+      "per_campaign": [
+        {
+          "campaign": "pilot06",
+          "engine": "nats",
+          "version": "2.15.0",
+          "profile": "memory",
+          "cpus": 2,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": null,
+              "denominator_trial": "F0006",
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        },
+        {
+          "campaign": "pilot06",
+          "engine": "nats",
+          "version": "2.15.0",
+          "profile": "memory",
+          "cpus": 4,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": "F0007",
+              "denominator_trial": null,
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        },
+        {
+          "campaign": "pilot06",
+          "engine": "nats",
+          "version": "2.15.0",
+          "profile": "periodic",
+          "cpus": 2,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": "F0008",
+              "denominator_trial": null,
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        },
+        {
+          "campaign": "pilot06",
+          "engine": "redis",
+          "version": "8.10.2",
+          "profile": "memory",
+          "cpus": 2,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": null,
+              "denominator_trial": "F0001",
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        },
+        {
+          "campaign": "pilot06",
+          "engine": "redis",
+          "version": "8.10.2",
+          "profile": "memory",
+          "cpus": 4,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": "F0002",
+              "denominator_trial": null,
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        },
+        {
+          "campaign": "pilot06",
+          "engine": "redis",
+          "version": "8.10.2",
+          "profile": "periodic",
+          "cpus": 2,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": "F0003",
+              "denominator_trial": null,
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        }
+      ]
+    },
+    "driver_cpus_4_2": {
+      "kind": "drain",
+      "factor": "cpus",
+      "numerator": 4,
+      "denominator": 2,
+      "metric": "throughput_mps",
+      "estimand": "ratio of paired condition means",
+      "per_campaign": [
+        {
+          "campaign": "pilot06",
+          "engine": "nats",
+          "version": "2.15.0",
+          "profile": "memory",
+          "consumers": 1,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": null,
+              "denominator_trial": "F0006",
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        },
+        {
+          "campaign": "pilot06",
+          "engine": "nats",
+          "version": "2.15.0",
+          "profile": "memory",
+          "consumers": 16,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": "F0007",
+              "denominator_trial": null,
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        },
+        {
+          "campaign": "pilot06",
+          "engine": "nats",
+          "version": "2.15.0",
+          "profile": "periodic",
+          "consumers": 16,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": null,
+              "denominator_trial": "F0008",
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        },
+        {
+          "campaign": "pilot06",
+          "engine": "redis",
+          "version": "8.10.2",
+          "profile": "memory",
+          "consumers": 1,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": null,
+              "denominator_trial": "F0001",
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        },
+        {
+          "campaign": "pilot06",
+          "engine": "redis",
+          "version": "8.10.2",
+          "profile": "memory",
+          "consumers": 16,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": "F0002",
+              "denominator_trial": null,
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        },
+        {
+          "campaign": "pilot06",
+          "engine": "redis",
+          "version": "8.10.2",
+          "profile": "periodic",
+          "consumers": 16,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": null,
+              "denominator_trial": "F0003",
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        }
+      ]
+    },
+    "trace_untraced": {
+      "kind": "trace",
+      "factor": "trace",
+      "numerator": true,
+      "denominator": false,
+      "metric": "throughput_mps",
+      "estimand": "ratio of paired condition means",
+      "per_campaign": [
+        {
+          "campaign": "pilot06",
+          "engine": "nats",
+          "version": "2.15.0",
+          "profile": "always",
+          "publishers": 16,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": "F0009",
+              "denominator_trial": null,
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        },
+        {
+          "campaign": "pilot06",
+          "engine": "redis",
+          "version": "8.10.2",
+          "profile": "always",
+          "publishers": 16,
+          "planned_pairs": 1,
+          "complete_pairs": 0,
+          "unavailable_pairs": 1,
+          "estimate": null,
+          "pairs": [
+            {
+              "block": 0,
+              "numerator_trial": "F0004",
+              "denominator_trial": null,
+              "complete": false,
+              "numerator": null,
+              "denominator": null
+            }
+          ]
+        }
+      ]
+    },
+    "compression_off_inherited": {
+      "kind": "compression",
+      "factor": "compression",
+      "numerator": "off",
+      "denominator": "inherited",
+      "metric": "throughput_mps",
+      "estimand": "ratio of paired condition means",
+      "per_campaign": []
+    },
+    "random_compressible": {
+      "kind": "compression",
+      "factor": "payload",
+      "numerator": "random",
+      "denominator": "compressible",
+      "metric": "throughput_mps",
+      "estimand": "ratio of paired condition means",
+      "per_campaign": []
+    }
+  },
+  "publication": {
+    "outcome_counts": [
+      {
+        "campaign": "pilot06",
+        "engine": "nats",
+        "version": "2.15.0",
+        "profile": "always",
+        "publishers": 1,
+        "consumers": 0,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "planned": 1,
+        "completed": 0,
+        "failed": 1
+      },
+      {
+        "campaign": "pilot06",
+        "engine": "redis",
+        "version": "8.10.2",
+        "profile": "always",
+        "publishers": 1,
+        "consumers": 0,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "planned": 1,
+        "completed": 0,
+        "failed": 1
+      }
+    ],
+    "per_campaign": [],
+    "across_campaign_means": []
+  },
+  "drain": {
+    "outcome_counts": [
+      {
+        "campaign": "pilot06",
+        "engine": "nats",
+        "version": "2.15.0",
+        "profile": "memory",
+        "publishers": 16,
+        "consumers": 1,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "planned": 1,
+        "completed": 1,
+        "failed": 0
+      },
+      {
+        "campaign": "pilot06",
+        "engine": "nats",
+        "version": "2.15.0",
+        "profile": "memory",
+        "publishers": 16,
+        "consumers": 16,
+        "cpus": 4,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "planned": 1,
+        "completed": 1,
+        "failed": 0
+      },
+      {
+        "campaign": "pilot06",
+        "engine": "nats",
+        "version": "2.15.0",
+        "profile": "periodic",
+        "publishers": 16,
+        "consumers": 16,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "planned": 1,
+        "completed": 1,
+        "failed": 0
+      },
+      {
+        "campaign": "pilot06",
+        "engine": "redis",
+        "version": "8.10.2",
+        "profile": "memory",
+        "publishers": 16,
+        "consumers": 1,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "planned": 1,
+        "completed": 1,
+        "failed": 0
+      },
+      {
+        "campaign": "pilot06",
+        "engine": "redis",
+        "version": "8.10.2",
+        "profile": "memory",
+        "publishers": 16,
+        "consumers": 16,
+        "cpus": 4,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "planned": 1,
+        "completed": 1,
+        "failed": 0
+      },
+      {
+        "campaign": "pilot06",
+        "engine": "redis",
+        "version": "8.10.2",
+        "profile": "periodic",
+        "publishers": 16,
+        "consumers": 16,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "planned": 1,
+        "completed": 1,
+        "failed": 0
+      }
+    ],
+    "per_campaign": [
+      {
+        "campaign": "pilot06",
+        "engine": "nats",
+        "version": "2.15.0",
+        "profile": "memory",
+        "publishers": 16,
+        "consumers": 1,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "count": 1,
+        "mean": 2309.180107279149,
+        "median": 2309.180107279149,
+        "min": 2309.180107279149,
+        "max": 2309.180107279149
+      },
+      {
+        "campaign": "pilot06",
+        "engine": "nats",
+        "version": "2.15.0",
+        "profile": "memory",
+        "publishers": 16,
+        "consumers": 16,
+        "cpus": 4,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "count": 1,
+        "mean": 32742.259345393028,
+        "median": 32742.259345393028,
+        "min": 32742.259345393028,
+        "max": 32742.259345393028
+      },
+      {
+        "campaign": "pilot06",
+        "engine": "nats",
+        "version": "2.15.0",
+        "profile": "periodic",
+        "publishers": 16,
+        "consumers": 16,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "count": 1,
+        "mean": 28958.67103186464,
+        "median": 28958.67103186464,
+        "min": 28958.67103186464,
+        "max": 28958.67103186464
+      },
+      {
+        "campaign": "pilot06",
+        "engine": "redis",
+        "version": "8.10.2",
+        "profile": "memory",
+        "publishers": 16,
+        "consumers": 1,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "count": 1,
+        "mean": 2468.8577226033512,
+        "median": 2468.8577226033512,
+        "min": 2468.8577226033512,
+        "max": 2468.8577226033512
+      },
+      {
+        "campaign": "pilot06",
+        "engine": "redis",
+        "version": "8.10.2",
+        "profile": "memory",
+        "publishers": 16,
+        "consumers": 16,
+        "cpus": 4,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "count": 1,
+        "mean": 36269.14335565193,
+        "median": 36269.14335565193,
+        "min": 36269.14335565193,
+        "max": 36269.14335565193
+      },
+      {
+        "campaign": "pilot06",
+        "engine": "redis",
+        "version": "8.10.2",
+        "profile": "periodic",
+        "publishers": 16,
+        "consumers": 16,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "count": 1,
+        "mean": 28788.169477856645,
+        "median": 28788.169477856645,
+        "min": 28788.169477856645,
+        "max": 28788.169477856645
+      }
+    ],
+    "across_campaign_means": [
+      {
+        "engine": "nats",
+        "version": "2.15.0",
+        "profile": "memory",
+        "publishers": 16,
+        "consumers": 1,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "count": 1,
+        "mean": 2309.180107279149,
+        "min": 2309.180107279149,
+        "max": 2309.180107279149
+      },
+      {
+        "engine": "nats",
+        "version": "2.15.0",
+        "profile": "memory",
+        "publishers": 16,
+        "consumers": 16,
+        "cpus": 4,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "count": 1,
+        "mean": 32742.259345393028,
+        "min": 32742.259345393028,
+        "max": 32742.259345393028
+      },
+      {
+        "engine": "nats",
+        "version": "2.15.0",
+        "profile": "periodic",
+        "publishers": 16,
+        "consumers": 16,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "count": 1,
+        "mean": 28958.67103186464,
+        "min": 28958.67103186464,
+        "max": 28958.67103186464
+      },
+      {
+        "engine": "redis",
+        "version": "8.10.2",
+        "profile": "memory",
+        "publishers": 16,
+        "consumers": 1,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "count": 1,
+        "mean": 2468.8577226033512,
+        "min": 2468.8577226033512,
+        "max": 2468.8577226033512
+      },
+      {
+        "engine": "redis",
+        "version": "8.10.2",
+        "profile": "memory",
+        "publishers": 16,
+        "consumers": 16,
+        "cpus": 4,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "count": 1,
+        "mean": 36269.14335565193,
+        "min": 36269.14335565193,
+        "max": 36269.14335565193
+      },
+      {
+        "engine": "redis",
+        "version": "8.10.2",
+        "profile": "periodic",
+        "publishers": 16,
+        "consumers": 16,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": false,
+        "count": 1,
+        "mean": 28788.169477856645,
+        "min": 28788.169477856645,
+        "max": 28788.169477856645
+      }
+    ]
+  },
+  "trace": {
+    "outcome_counts": [
+      {
+        "campaign": "pilot06",
+        "engine": "nats",
+        "version": "2.15.0",
+        "profile": "always",
+        "publishers": 16,
+        "consumers": 0,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": true,
+        "planned": 1,
+        "completed": 1,
+        "failed": 0
+      },
+      {
+        "campaign": "pilot06",
+        "engine": "redis",
+        "version": "8.10.2",
+        "profile": "always",
+        "publishers": 16,
+        "consumers": 0,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": true,
+        "planned": 1,
+        "completed": 1,
+        "failed": 0
+      }
+    ],
+    "per_campaign": [
+      {
+        "campaign": "pilot06",
+        "engine": "nats",
+        "version": "2.15.0",
+        "profile": "always",
+        "publishers": 16,
+        "consumers": 0,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": true,
+        "count": 1,
+        "mean": 597.7146230967645,
+        "median": 597.7146230967645,
+        "min": 597.7146230967645,
+        "max": 597.7146230967645
+      },
+      {
+        "campaign": "pilot06",
+        "engine": "redis",
+        "version": "8.10.2",
+        "profile": "always",
+        "publishers": 16,
+        "consumers": 0,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": true,
+        "count": 1,
+        "mean": 4264.781356360363,
+        "median": 4264.781356360363,
+        "min": 4264.781356360363,
+        "max": 4264.781356360363
+      }
+    ],
+    "across_campaign_means": [
+      {
+        "engine": "nats",
+        "version": "2.15.0",
+        "profile": "always",
+        "publishers": 16,
+        "consumers": 0,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": true,
+        "count": 1,
+        "mean": 597.7146230967645,
+        "min": 597.7146230967645,
+        "max": 597.7146230967645
+      },
+      {
+        "engine": "redis",
+        "version": "8.10.2",
+        "profile": "always",
+        "publishers": 16,
+        "consumers": 0,
+        "cpus": 2,
+        "payload": "compressible",
+        "compression": "inherited",
+        "trace": true,
+        "count": 1,
+        "mean": 4264.781356360363,
+        "min": 4264.781356360363,
+        "max": 4264.781356360363
+      }
+    ]
+  }
+}

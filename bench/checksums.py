@@ -10,7 +10,7 @@ def included(rel):
     if any(x in omit for x in rel.parts) or rel.name in {"SHA256SUMS", ".DS_Store"}:
         return False
     return not (rel.parts[0]=="paper" and rel.suffix in suffixes
-                and rel.as_posix() not in {"paper/main.log", "paper/main.bbl"})
+                and rel.as_posix() not in {"paper/main.log", "paper/main.bbl", "paper/supplement.log", "paper/supplement.bbl"})
 
 
 def paths(root):

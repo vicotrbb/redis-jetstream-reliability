@@ -1,6 +1,12 @@
 # Conditional delivery-model formalization
 
-## Verification status
+## Current verification status
+
+The unchanged model was freshly compiled on the homelab at 2026-09-25T00:16:26.539308+00:00 for version 1.2.0, after all follow-up benchmark namespaces were cleaned up. All ten declarations passed with warnings treated as errors, using the same source, compiler binary and transitive logical dependencies as the original check. The receipt is `../revisions/20260924-followup/lean-recheck.json`; its log and cleanup receipt are alongside it.
+
+The first disposable runner was temporarily unschedulable because its designated node requires a control-plane scheduling toleration. The first readiness wait expired before that correction. Its launch source, failure log, additive pod patch and separately identified continuation are retained. No compiler invocation began before the corrected pod became ready. The correction changed no proof or experimental observation, and the namespace was deleted after successful compilation.
+
+## Historical initial verification
 
 **Verified on the homelab with Lean 4.24.0**, at 2026-09-23T23:25:50Z, after benchmark collection ended. The command ran in namespace `msgrel-20260923`, pod `runner`, and exited zero with warnings treated as errors. See `verification.log` and `verification.json` for the version, container provenance, command, source and compiler hashes, and all ten transitive axiom reports. The exact checked source SHA-256 is `169fa4a50504ba59b34a3159bcdc0c1a1d89139c28a323856e4be40805928d03`. No Lean executable or broker workload was run on the workstation.
 
@@ -9,6 +15,8 @@ The first homelab check failed only because an unused hypothesis name triggered 
 The checked target is **Lean 4.24.0**, pinned in `lean-toolchain`. The sole import is `Std`, shipped with Lean; there is no mathlib, Lake dependency, package download, external solver, or native-evaluation proof path. The file contains complete checked proof terms/scripts rather than placeholders. The target release is historical, not a latest-release claim. Its [official release record](https://lean-lang.org/doc/reference/latest/releases/v4.24.0/) identifies release date 2025-10-14.
 
 ## What is formalized
+
+In version 1.2.0, the main article presents the short analytical model without numbered theorems. The labels in the mapping below refer to the complete hand proofs in `paper/supplement-model.tex`, compiled into the supplementary PDF. The main article's residual and occupancy equations retain the corresponding assumptions and scope.
 
 | Declaration in `DeliveryModel.lean` | Mathematical statement | Manuscript mapping |
 |---|---|---|
@@ -50,6 +58,6 @@ Preserve the version output, stdout/stderr, exit status, compiler/container prov
 - [Official Lean 4.24.0 release record](https://lean-lang.org/doc/reference/latest/releases/v4.24.0/) and [tagged release](https://github.com/leanprover/lean4/releases/tag/v4.24.0). BibTeX key: `lean424release`.
 - [Official Lean reference: axioms and transitive dependency inspection](https://lean-lang.org/doc/reference/latest/Axioms/). This mutable reference explains the checking/audit concepts; the executable version remains pinned above.
 
-## Independent revision check
+## Separate revision check
 
-The unchanged source was independently recompiled in the homelab on 2026-09-24 in namespace `msgrel-rev20260924-a002`, using the same checksum-verified Lean 4.24.0 archive. All ten declarations passed with warnings treated as errors. The transitive axiom lists match the original receipt. See `../revisions/20260924/lean-recheck.json` and its log. No Lean execution occurred on the workstation. The historical reproduction command above names the original, deleted measurement namespace; for a fresh check, use a separately created homelab validation runner and its actual namespace.
+The unchanged source was separately recompiled in the homelab on 2026-09-24 in namespace `msgrel-rev20260924-a002`, using the same checksum-verified Lean 4.24.0 archive. All ten declarations passed with warnings treated as errors. The transitive axiom lists match the original receipt. See `../revisions/20260924/lean-recheck.json` and its log. No Lean execution occurred on the workstation. The historical reproduction command above names the original, deleted measurement namespace; for a fresh check, use a separately created homelab validation runner and its actual namespace.

@@ -1,0 +1,41 @@
+{
+  "scope": "Premeasurement initialization, separate from planned trial outcomes. Prior initializer cause and logs are unavailable after namespace cleanup.",
+  "environment_check": {
+    "trace_tools": {
+      "redis-current": {
+        "version": "6.13",
+        "binary_sha256": "d0c11875c7be6980c088721bdae11a8d82dceb0ca10d87274ed2818463734fdf"
+      },
+      "nats-current": {
+        "version": "6.13",
+        "binary_sha256": "d0c11875c7be6980c088721bdae11a8d82dceb0ca10d87274ed2818463734fdf"
+      }
+    },
+    "setup_initializers": [
+      {
+        "pod": "redis-current",
+        "name": "trace-tools",
+        "restart_count_before_measurement": 1,
+        "completed": {
+          "containerID": "containerd://339a21c50d2218d32e8ff7c3edc03c4b174d292e3bd0377b1df8541b88823162",
+          "exitCode": 0,
+          "finishedAt": "2026-09-24T21:55:01Z",
+          "reason": "Completed",
+          "startedAt": "2026-09-24T21:54:12Z"
+        }
+      },
+      {
+        "pod": "nats-current",
+        "name": "trace-tools",
+        "restart_count_before_measurement": 0,
+        "completed": {
+          "containerID": "containerd://a131dce2dfba615372b4d5e54a6190d7686ab4b674d8c811c8e8f85bd29861ab",
+          "exitCode": 0,
+          "finishedAt": "2026-09-24T21:53:17Z",
+          "reason": "Completed",
+          "startedAt": "2026-09-24T21:53:16Z"
+        }
+      }
+    ]
+  }
+}

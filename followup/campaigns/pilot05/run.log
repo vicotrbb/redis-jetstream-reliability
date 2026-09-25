@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/Users/victorbona/Code/Research/redis-jetstream-reliability/bench/followup/run.py", line 332, in <module>
+    main()
+    ~~~~^^
+  File "/Users/victorbona/Code/Research/redis-jetstream-reliability/bench/followup/run.py", line 325, in main
+    run(folder, ns)
+    ~~~^^^^^^^^^^^^
+  File "/Users/victorbona/Code/Research/redis-jetstream-reliability/bench/followup/run.py", line 248, in run
+    health = execute(["exec", "-n", ns, "runner-2", "--", "python3", "-c", readiness], capture_output=True, text=True)
+  File "/Users/victorbona/Code/Research/redis-jetstream-reliability/bench/followup/run.py", line 34, in execute
+    return subprocess.run(K + args, check=True, **kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['kubectl', '--context', 'homelab', 'exec', '-n', 'msgrel-fup-pilot05', 'runner-2', '--', 'python3', '-c', "import json,time,urllib.request\nfor name in ('redis-old','redis-current','nats-old','nats-current'):\n    deadline=time.monotonic()+45\n    while True:\n        try:\n            result=json.load(urllib.request.urlopen('http://'+name+':8088/health',timeout=2))\n            assert not result['active'],(name,result)\n            print(json.dumps({'controller':name,'health':result}),flush=True)\n            break\n        except Exception:\n            if time.monotonic()>deadline: raise\n            time.sleep(.25)\n"]' returned non-zero exit status 1.

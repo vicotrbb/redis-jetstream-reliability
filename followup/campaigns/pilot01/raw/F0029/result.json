@@ -1,0 +1,115 @@
+{
+  "broker_start": {
+    "detail": {
+      "command": [
+        "/tools/strace",
+        "-ff",
+        "-ttt",
+        "-T",
+        "-yy",
+        "-e",
+        "trace=fsync,fdatasync",
+        "-o",
+        "/data/F0029/sync.trace",
+        "nats-server",
+        "-c",
+        "/data/F0029/server.conf"
+      ],
+      "configuration": "port: 4222\nhttp_port: 8222\njetstream {\nstore_dir: /data/F0029/store\nmax_memory_store: 512MB\nmax_file_store: 2GB\nsync_interval: always\n}\n",
+      "directory_flags": 0,
+      "mountinfo": "11377 10441 0:1900 / / rw,relatime master:3735 - overlay overlay rw,lowerdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125060/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125058/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125056/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125046/fs,upperdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125063/fs,workdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125063/work,uuid=on\n11378 11377 0:1902 / /proc rw,nosuid,nodev,noexec,relatime - proc proc rw\n11379 11377 0:1903 / /dev rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n11381 11379 0:1904 / /dev/pts rw,nosuid,noexec,relatime - devpts devpts rw,gid=5,mode=620,ptmxmode=666\n11382 11379 0:1890 / /dev/mqueue rw,nosuid,nodev,noexec,relatime - mqueue mqueue rw\n11384 11377 0:1894 / /sys ro,nosuid,nodev,noexec,relatime - sysfs sysfs ro\n11385 11384 0:33 / /sys/fs/cgroup ro,nosuid,nodev,noexec,relatime - cgroup2 cgroup rw\n11387 11377 0:29 /rootfs/var/lib/kubelet/pods/0521ed8a-24e1-4267-972d-527e3a276f2d/volumes/kubernetes.io~empty-dir/tools /tools rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11388 11377 0:29 /rootfs/var/lib/kubelet/pods/0521ed8a-24e1-4267-972d-527e3a276f2d/volumes/kubernetes.io~empty-dir/data /data rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11389 11377 0:29 /rootfs/var/lib/kubelet/pods/0521ed8a-24e1-4267-972d-527e3a276f2d/volumes/kubernetes.io~empty-dir/work /work rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11390 11377 0:29 /rootfs/var/lib/kubelet/pods/0521ed8a-24e1-4267-972d-527e3a276f2d/etc-hosts /etc/hosts rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11391 11379 0:29 /rootfs/var/lib/kubelet/pods/0521ed8a-24e1-4267-972d-527e3a276f2d/containers/work/579dac5a /dev/termination-log rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11392 11377 0:29 /rootfs/var/lib/rancher/k3s/agent/containerd/io.containerd.grpc.v1.cri/sandboxes/b229adfc90b160d05e7f2d7c82fa92ba1368c24a88d4283d230427dbcbed67fb/hostname /etc/hostname rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11393 11377 0:29 /rootfs/var/lib/rancher/k3s/agent/containerd/io.containerd.grpc.v1.cri/sandboxes/b229adfc90b160d05e7f2d7c82fa92ba1368c24a88d4283d230427dbcbed67fb/resolv.conf /etc/resolv.conf rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11394 11379 0:1777 / /dev/shm rw,nosuid,nodev,noexec,relatime - tmpfs shm rw,size=65536k\n10442 11378 0:1902 /bus /proc/bus ro,nosuid,nodev,noexec,relatime - proc proc rw\n10443 11378 0:1902 /fs /proc/fs ro,nosuid,nodev,noexec,relatime - proc proc rw\n10444 11378 0:1902 /irq /proc/irq ro,nosuid,nodev,noexec,relatime - proc proc rw\n10445 11378 0:1902 /sys /proc/sys ro,nosuid,nodev,noexec,relatime - proc proc rw\n10446 11378 0:1902 /sysrq-trigger /proc/sysrq-trigger ro,nosuid,nodev,noexec,relatime - proc proc rw\n10447 11378 0:1905 / /proc/asound ro,relatime - tmpfs tmpfs ro\n10448 11378 0:1906 / /proc/acpi ro,relatime - tmpfs tmpfs ro\n10449 11378 0:1903 /null /proc/kcore rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n10450 11378 0:1903 /null /proc/keys rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n10451 11378 0:1903 /null /proc/timer_list rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n10452 11378 0:1907 / /proc/scsi ro,relatime - tmpfs tmpfs ro\n10453 11384 0:1908 / /sys/firmware ro,relatime - tmpfs tmpfs ro\n10454 11384 0:1909 / /sys/devices/virtual/powercap ro,relatime - tmpfs tmpfs ro\n",
+      "pid": 482,
+      "start_ns": 18293423417256410
+    },
+    "error": "broker not ready within 30 seconds: Error loading shared library libdw.so.1: No such file or directory (needed by /tools/strace)\nError relocating /tools/strace: dwfl_linux_proc_find_elf: symbol not found\nError relocating /tools/strace: dwfl_standard_find_debuginfo: symbol not found\nError relocating /tools/strace: dwfl_frame_thread: symbol not found\nError relocating /tools/strace: dwfl_thread_dwfl: symbol not found\nError relocating /tools/strace: dwfl_module_getsrc: symbol not found\nError relocating /tools/strace: dwfl_report_end: symbol not found\nError relocating /tools/strace: dwfl_frame_pc: symbol not found\nError relocating /tools/strace: dwfl_errmsg: symbol not found\nError relocating /tools/strace: dwfl_linux_proc_report: symbol not found\nError relocating /tools/strace: dwfl_lineinfo: symbol not found\nError relocating /tools/strace: dwfl_begin: symbol not found\nError relocating /tools/strace: dwfl_module_info: symbol not found\nError relocating /tools/strace: dwfl_module_addrinfo: symbol not found\nError relocating /tools/strace: dwfl_addrmodule: symbol not found\nError relocating /tools/strace: dwfl_linux_proc_attach: symbol not found\nError relocating /tools/strace: dwfl_getthread_frames: symbol not found\nError relocating /tools/strace: dwfl_end: symbol not found\nError relocating /tools/strace: dwfl_module_relocate_address: symbol not found\n"
+  },
+  "broker_stop": {
+    "cleanup_end_ns": 18293453428758868,
+    "cleanup_error": "\u003cnil\u003e",
+    "cleanup_start_ns": 18293453428580290,
+    "exit": "exit status 127",
+    "final_sample": {
+      "cpu": {
+        "burst_usec": 0,
+        "core_sched.force_idle_usec": 0,
+        "nr_bursts": 0,
+        "nr_periods": 826,
+        "nr_throttled": 0,
+        "system_usec": 2861637,
+        "throttled_usec": 0,
+        "usage_usec": 4746149,
+        "user_usec": 1884511
+      },
+      "cpu_pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=50739\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=50360\n",
+      "end_ns": 18293453428281532,
+      "io_pressure": "some avg10=0.00 avg60=0.10 avg300=0.07 total=284525\nfull avg10=0.00 avg60=0.10 avg300=0.07 total=284274\n",
+      "io_stat": "259:0 rbytes=667648 wbytes=141262848 rios=10 wios=13089 dbytes=0 dios=0\n",
+      "memory_current": "23441408\n",
+      "start_ns": 18293453428146476,
+      "wall_ns": 1790284483219352800
+    },
+    "stop_end_ns": 18293453428304596,
+    "stop_start_ns": 18293453428145296,
+    "storage_inventory": [
+      {
+        "bytes": 52,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "drwxr-xr-x",
+        "path": "."
+      },
+      {
+        "bytes": 136,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "-rw-r--r--",
+        "path": "server.conf"
+      },
+      {
+        "bytes": 1328,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "-rw-r--r--",
+        "path": "server.log"
+      },
+      {
+        "bytes": 0,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "drwxr-xr-x",
+        "path": "store"
+      }
+    ]
+  },
+  "driver_kernel": "Linux version 6.6.68 (nixbld@localhost) (gcc (GCC) 13.2.0, GNU ld (GNU Binutils) 2.41) #1-NixOS SMP PREEMPT_DYNAMIC Fri Dec 27 12:58:58 UTC 2024\n",
+  "error": "control start: map[detail:map[command:[/tools/strace -ff -ttt -T -yy -e trace=fsync,fdatasync -o /data/F0029/sync.trace nats-server -c /data/F0029/server.conf] configuration:port: 4222\nhttp_port: 8222\njetstream {\nstore_dir: /data/F0029/store\nmax_memory_store: 512MB\nmax_file_store: 2GB\nsync_interval: always\n}\n directory_flags:0 mountinfo:11377 10441 0:1900 / / rw,relatime master:3735 - overlay overlay rw,lowerdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125060/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125058/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125056/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125046/fs,upperdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125063/fs,workdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125063/work,uuid=on\n11378 11377 0:1902 / /proc rw,nosuid,nodev,noexec,relatime - proc proc rw\n11379 11377 0:1903 / /dev rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n11381 11379 0:1904 / /dev/pts rw,nosuid,noexec,relatime - devpts devpts rw,gid=5,mode=620,ptmxmode=666\n11382 11379 0:1890 / /dev/mqueue rw,nosuid,nodev,noexec,relatime - mqueue mqueue rw\n11384 11377 0:1894 / /sys ro,nosuid,nodev,noexec,relatime - sysfs sysfs ro\n11385 11384 0:33 / /sys/fs/cgroup ro,nosuid,nodev,noexec,relatime - cgroup2 cgroup rw\n11387 11377 0:29 /rootfs/var/lib/kubelet/pods/0521ed8a-24e1-4267-972d-527e3a276f2d/volumes/kubernetes.io~empty-dir/tools /tools rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11388 11377 0:29 /rootfs/var/lib/kubelet/pods/0521ed8a-24e1-4267-972d-527e3a276f2d/volumes/kubernetes.io~empty-dir/data /data rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11389 11377 0:29 /rootfs/var/lib/kubelet/pods/0521ed8a-24e1-4267-972d-527e3a276f2d/volumes/kubernetes.io~empty-dir/work /work rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11390 11377 0:29 /rootfs/var/lib/kubelet/pods/0521ed8a-24e1-4267-972d-527e3a276f2d/etc-hosts /etc/hosts rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11391 11379 0:29 /rootfs/var/lib/kubelet/pods/0521ed8a-24e1-4267-972d-527e3a276f2d/containers/work/579dac5a /dev/termination-log rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11392 11377 0:29 /rootfs/var/lib/rancher/k3s/agent/containerd/io.containerd.grpc.v1.cri/sandboxes/b229adfc90b160d05e7f2d7c82fa92ba1368c24a88d4283d230427dbcbed67fb/hostname /etc/hostname rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11393 11377 0:29 /rootfs/var/lib/rancher/k3s/agent/containerd/io.containerd.grpc.v1.cri/sandboxes/b229adfc90b160d05e7f2d7c82fa92ba1368c24a88d4283d230427dbcbed67fb/resolv.conf /etc/resolv.conf rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11394 11379 0:1777 / /dev/shm rw,nosuid,nodev,noexec,relatime - tmpfs shm rw,size=65536k\n10442 11378 0:1902 /bus /proc/bus ro,nosuid,nodev,noexec,relatime - proc proc rw\n10443 11378 0:1902 /fs /proc/fs ro,nosuid,nodev,noexec,relatime - proc proc rw\n10444 11378 0:1902 /irq /proc/irq ro,nosuid,nodev,noexec,relatime - proc proc rw\n10445 11378 0:1902 /sys /proc/sys ro,nosuid,nodev,noexec,relatime - proc proc rw\n10446 11378 0:1902 /sysrq-trigger /proc/sysrq-trigger ro,nosuid,nodev,noexec,relatime - proc proc rw\n10447 11378 0:1905 / /proc/asound ro,relatime - tmpfs tmpfs ro\n10448 11378 0:1906 / /proc/acpi ro,relatime - tmpfs tmpfs ro\n10449 11378 0:1903 /null /proc/kcore rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n10450 11378 0:1903 /null /proc/keys rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n10451 11378 0:1903 /null /proc/timer_list rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n10452 11378 0:1907 / /proc/scsi ro,relatime - tmpfs tmpfs ro\n10453 11384 0:1908 / /sys/firmware ro,relatime - tmpfs tmpfs ro\n10454 11384 0:1909 / /sys/devices/virtual/powercap ro,relatime - tmpfs tmpfs ro\n pid:482 start_ns:1.829342341725641e+16] error:broker not ready within 30 seconds: Error loading shared library libdw.so.1: No such file or directory (needed by /tools/strace)\nError relocating /tools/strace: dwfl_linux_proc_find_elf: symbol not found\nError relocating /tools/strace: dwfl_standard_find_debuginfo: symbol not found\nError relocating /tools/strace: dwfl_frame_thread: symbol not found\nError relocating /tools/strace: dwfl_thread_dwfl: symbol not found\nError relocating /tools/strace: dwfl_module_getsrc: symbol not found\nError relocating /tools/strace: dwfl_report_end: symbol not found\nError relocating /tools/strace: dwfl_frame_pc: symbol not found\nError relocating /tools/strace: dwfl_errmsg: symbol not found\nError relocating /tools/strace: dwfl_linux_proc_report: symbol not found\nError relocating /tools/strace: dwfl_lineinfo: symbol not found\nError relocating /tools/strace: dwfl_begin: symbol not found\nError relocating /tools/strace: dwfl_module_info: symbol not found\nError relocating /tools/strace: dwfl_module_addrinfo: symbol not found\nError relocating /tools/strace: dwfl_addrmodule: symbol not found\nError relocating /tools/strace: dwfl_linux_proc_attach: symbol not found\nError relocating /tools/strace: dwfl_getthread_frames: symbol not found\nError relocating /tools/strace: dwfl_end: symbol not found\nError relocating /tools/strace: dwfl_module_relocate_address: symbol not found\n]",
+  "gomaxprocs": 2,
+  "stage": "prepare",
+  "status": "failed",
+  "trial": {
+    "id": "F0029",
+    "campaign": "pilot01",
+    "block": 0,
+    "kind": "trace",
+    "engine": "nats",
+    "version": "2.15.0",
+    "profile": "always",
+    "host": "nats-current",
+    "publishers": 16,
+    "consumers": 0,
+    "cpus": 2,
+    "seconds": 1,
+    "count": 65536,
+    "payload": "compressible",
+    "compression": "inherited",
+    "trace": true,
+    "recovery": "",
+    "delta_ms": 250,
+    "age": 0.1,
+    "kill": true,
+    "seed": 20260953,
+    "pilot": true
+  },
+  "utc_end": "2026-09-24T21:14:43.218265113Z",
+  "utc_start": "2026-09-24T21:14:13.199293276Z"
+}

@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/Users/victorbona/Code/Research/redis-jetstream-reliability/bench/followup/verify_formal.py", line 98, in <module>
+    if __name__ == '__main__': main()
+                               ~~~~^^
+  File "/Users/victorbona/Code/Research/redis-jetstream-reliability/bench/followup/verify_formal.py", line 54, in main
+    run(['wait','--for=condition=Ready','pod/proof','-n',NAMESPACE,'--timeout=180s'])
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/victorbona/Code/Research/redis-jetstream-reliability/bench/followup/verify_formal.py", line 30, in run
+    return subprocess.run(K+args, check=True, capture_output=True, **kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['kubectl', '--context', 'homelab', 'wait', '--for=condition=Ready', 'pod/proof', '-n', 'msgrel-fup-proof20260924', '--timeout=180s']' returned non-zero exit status 1.

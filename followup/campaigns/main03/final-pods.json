@@ -1,0 +1,1181 @@
+{
+  "apiVersion": "v1",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "annotations": {
+          "cni.projectcalico.org/containerID": "9f3fb2309ecce29ec00ae8746905b162b86f971838bfd3d08d6c5920a0367760",
+          "cni.projectcalico.org/podIP": "10.42.248.230/32",
+          "cni.projectcalico.org/podIPs": "10.42.248.230/32"
+        },
+        "creationTimestamp": "2026-09-24T23:23:59Z",
+        "labels": {
+          "app": "nats-current"
+        },
+        "name": "nats-current",
+        "namespace": "msgrel-fup-main03",
+        "resourceVersion": "116819480",
+        "uid": "38c666ab-723a-48d1-a650-6d4683c6adea"
+      },
+      "spec": {
+        "automountServiceAccountToken": false,
+        "containers": [
+          {
+            "command": [
+              "sh",
+              "-c",
+              "while [ ! -x /tools/followup ]; do sleep 1; done; exec /tools/followup control nats"
+            ],
+            "image": "docker.io/library/nats@sha256:ac8f88a6494bffc2c2a5289a0ca61cb28a9145c11ba5677cf24265d07f46d8d4",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "work",
+            "resources": {
+              "limits": {
+                "cpu": "2",
+                "memory": "4Gi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            },
+            "securityContext": {
+              "capabilities": {
+                "add": [
+                  "SYS_PTRACE"
+                ]
+              },
+              "seccompProfile": {
+                "type": "Unconfined"
+              }
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/tools",
+                "name": "tools"
+              },
+              {
+                "mountPath": "/data",
+                "name": "data"
+              },
+              {
+                "mountPath": "/work",
+                "name": "work"
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "initContainers": [
+          {
+            "command": [
+              "sh",
+              "-c",
+              "for attempt in 1 2 3 4 5; do apk add --no-cache strace && break; sleep 2; done; test -x /usr/bin/strace && mkdir -p /tools/lib && cp -L /usr/lib/lib*.so* /tools/lib/ && cp -L /lib/lib*.so* /tools/lib/ && cp /usr/bin/strace /tools/strace && strace -V > /tools/strace-version.txt && sha256sum /tools/strace >> /tools/strace-version.txt"
+            ],
+            "image": "docker.io/library/alpine@sha256:5291449c3df73caf6ed85e649dec1b9e818b39a5d8c871e97afc13e9cd5e8fa8",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "trace-tools",
+            "resources": {},
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/tools",
+                "name": "tools"
+              }
+            ]
+          }
+        ],
+        "nodeName": "homelab-01",
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 1000,
+        "priorityClassName": "homelab-low",
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 15,
+        "tolerations": [
+          {
+            "effect": "NoSchedule",
+            "key": "node-role.kubernetes.io/control-plane",
+            "operator": "Exists"
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          }
+        ],
+        "volumes": [
+          {
+            "emptyDir": {},
+            "name": "tools"
+          },
+          {
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            },
+            "name": "data"
+          },
+          {
+            "emptyDir": {
+              "sizeLimit": "8Gi"
+            },
+            "name": "work"
+          }
+        ]
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:01Z",
+            "status": "True",
+            "type": "PodReadyToStartContainers"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:47Z",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:48Z",
+            "status": "True",
+            "type": "Ready"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:48Z",
+            "status": "True",
+            "type": "ContainersReady"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:23:59Z",
+            "status": "True",
+            "type": "PodScheduled"
+          }
+        ],
+        "containerStatuses": [
+          {
+            "containerID": "containerd://59b3597b6898492da9a0b3f666f63fe44e65773b76874fbce7ca96cd08014b1b",
+            "image": "docker.io/library/nats:2.15.0-alpine",
+            "imageID": "docker.io/library/nats@sha256:ac8f88a6494bffc2c2a5289a0ca61cb28a9145c11ba5677cf24265d07f46d8d4",
+            "lastState": {},
+            "name": "work",
+            "ready": true,
+            "restartCount": 0,
+            "started": true,
+            "state": {
+              "running": {
+                "startedAt": "2026-09-24T23:24:47Z"
+              }
+            }
+          }
+        ],
+        "hostIP": "192.168.50.132",
+        "hostIPs": [
+          {
+            "ip": "192.168.50.132"
+          }
+        ],
+        "initContainerStatuses": [
+          {
+            "containerID": "containerd://0c17b854d9355f1125b9f99b6c8c927b3e8f488230403b199a5b98ae3ab65669",
+            "image": "docker.io/library/alpine:3.22",
+            "imageID": "docker.io/library/alpine@sha256:5291449c3df73caf6ed85e649dec1b9e818b39a5d8c871e97afc13e9cd5e8fa8",
+            "lastState": {},
+            "name": "trace-tools",
+            "ready": true,
+            "restartCount": 0,
+            "started": false,
+            "state": {
+              "terminated": {
+                "containerID": "containerd://0c17b854d9355f1125b9f99b6c8c927b3e8f488230403b199a5b98ae3ab65669",
+                "exitCode": 0,
+                "finishedAt": "2026-09-24T23:24:45Z",
+                "reason": "Completed",
+                "startedAt": "2026-09-24T23:24:01Z"
+              }
+            }
+          }
+        ],
+        "phase": "Running",
+        "podIP": "10.42.248.230",
+        "podIPs": [
+          {
+            "ip": "10.42.248.230"
+          }
+        ],
+        "qosClass": "Burstable",
+        "startTime": "2026-09-24T23:23:59Z"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "annotations": {
+          "cni.projectcalico.org/containerID": "bcd6c92fde801d853f2ae9dc21dcb0e3c7c56deca29744e16b736999e5a417dc",
+          "cni.projectcalico.org/podIP": "10.42.248.234/32",
+          "cni.projectcalico.org/podIPs": "10.42.248.234/32"
+        },
+        "creationTimestamp": "2026-09-24T23:23:59Z",
+        "labels": {
+          "app": "nats-old"
+        },
+        "name": "nats-old",
+        "namespace": "msgrel-fup-main03",
+        "resourceVersion": "116819140",
+        "uid": "7f384570-04a3-4bfa-ab3b-758f0fb7262a"
+      },
+      "spec": {
+        "automountServiceAccountToken": false,
+        "containers": [
+          {
+            "command": [
+              "sh",
+              "-c",
+              "while [ ! -x /tools/followup ]; do sleep 1; done; exec /tools/followup control nats"
+            ],
+            "image": "docker.io/library/nats@sha256:fd981e2ab99000964bd15286054e61fcc445732fd907db039f260fc0b824b314",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "work",
+            "resources": {
+              "limits": {
+                "cpu": "2",
+                "memory": "4Gi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/tools",
+                "name": "tools"
+              },
+              {
+                "mountPath": "/data",
+                "name": "data"
+              },
+              {
+                "mountPath": "/work",
+                "name": "work"
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "nodeName": "homelab-01",
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 1000,
+        "priorityClassName": "homelab-low",
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 15,
+        "tolerations": [
+          {
+            "effect": "NoSchedule",
+            "key": "node-role.kubernetes.io/control-plane",
+            "operator": "Exists"
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          }
+        ],
+        "volumes": [
+          {
+            "emptyDir": {},
+            "name": "tools"
+          },
+          {
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            },
+            "name": "data"
+          },
+          {
+            "emptyDir": {
+              "sizeLimit": "8Gi"
+            },
+            "name": "work"
+          }
+        ]
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:01Z",
+            "status": "True",
+            "type": "PodReadyToStartContainers"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:23:59Z",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:01Z",
+            "status": "True",
+            "type": "Ready"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:01Z",
+            "status": "True",
+            "type": "ContainersReady"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:23:59Z",
+            "status": "True",
+            "type": "PodScheduled"
+          }
+        ],
+        "containerStatuses": [
+          {
+            "containerID": "containerd://d7b6046ee1dff2dedeeeee463ade33e468bbda81e50055c35976128cf4b6becc",
+            "image": "docker.io/library/nats:2.10.24-alpine",
+            "imageID": "docker.io/library/nats@sha256:fd981e2ab99000964bd15286054e61fcc445732fd907db039f260fc0b824b314",
+            "lastState": {},
+            "name": "work",
+            "ready": true,
+            "restartCount": 0,
+            "started": true,
+            "state": {
+              "running": {
+                "startedAt": "2026-09-24T23:24:01Z"
+              }
+            }
+          }
+        ],
+        "hostIP": "192.168.50.132",
+        "hostIPs": [
+          {
+            "ip": "192.168.50.132"
+          }
+        ],
+        "phase": "Running",
+        "podIP": "10.42.248.234",
+        "podIPs": [
+          {
+            "ip": "10.42.248.234"
+          }
+        ],
+        "qosClass": "Burstable",
+        "startTime": "2026-09-24T23:23:59Z"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "annotations": {
+          "cni.projectcalico.org/containerID": "ec023bd6c19d7a038ad6a790d21e134e6924b10e6f3757ff799d2029c084b57f",
+          "cni.projectcalico.org/podIP": "10.42.248.225/32",
+          "cni.projectcalico.org/podIPs": "10.42.248.225/32"
+        },
+        "creationTimestamp": "2026-09-24T23:23:59Z",
+        "labels": {
+          "app": "redis-current"
+        },
+        "name": "redis-current",
+        "namespace": "msgrel-fup-main03",
+        "resourceVersion": "116819203",
+        "uid": "51cf53c1-0be4-4dcc-822d-f643a18811ac"
+      },
+      "spec": {
+        "automountServiceAccountToken": false,
+        "containers": [
+          {
+            "command": [
+              "sh",
+              "-c",
+              "while [ ! -x /tools/followup ]; do sleep 1; done; exec /tools/followup control redis"
+            ],
+            "image": "docker.io/library/redis@sha256:72cedd9603038893af961e90ac5e1a1a0d8377d5e338dbdad8fe284ea25de18f",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "work",
+            "resources": {
+              "limits": {
+                "cpu": "2",
+                "memory": "4Gi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            },
+            "securityContext": {
+              "capabilities": {
+                "add": [
+                  "SYS_PTRACE"
+                ]
+              },
+              "seccompProfile": {
+                "type": "Unconfined"
+              }
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/tools",
+                "name": "tools"
+              },
+              {
+                "mountPath": "/data",
+                "name": "data"
+              },
+              {
+                "mountPath": "/work",
+                "name": "work"
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "initContainers": [
+          {
+            "command": [
+              "sh",
+              "-c",
+              "for attempt in 1 2 3 4 5; do apk add --no-cache strace && break; sleep 2; done; test -x /usr/bin/strace && mkdir -p /tools/lib && cp -L /usr/lib/lib*.so* /tools/lib/ && cp -L /lib/lib*.so* /tools/lib/ && cp /usr/bin/strace /tools/strace && strace -V > /tools/strace-version.txt && sha256sum /tools/strace >> /tools/strace-version.txt"
+            ],
+            "image": "docker.io/library/alpine@sha256:5291449c3df73caf6ed85e649dec1b9e818b39a5d8c871e97afc13e9cd5e8fa8",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "trace-tools",
+            "resources": {},
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/tools",
+                "name": "tools"
+              }
+            ]
+          }
+        ],
+        "nodeName": "homelab-01",
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 1000,
+        "priorityClassName": "homelab-low",
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 15,
+        "tolerations": [
+          {
+            "effect": "NoSchedule",
+            "key": "node-role.kubernetes.io/control-plane",
+            "operator": "Exists"
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          }
+        ],
+        "volumes": [
+          {
+            "emptyDir": {},
+            "name": "tools"
+          },
+          {
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            },
+            "name": "data"
+          },
+          {
+            "emptyDir": {
+              "sizeLimit": "8Gi"
+            },
+            "name": "work"
+          }
+        ]
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:01Z",
+            "status": "True",
+            "type": "PodReadyToStartContainers"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:03Z",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:04Z",
+            "status": "True",
+            "type": "Ready"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:04Z",
+            "status": "True",
+            "type": "ContainersReady"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:23:59Z",
+            "status": "True",
+            "type": "PodScheduled"
+          }
+        ],
+        "containerStatuses": [
+          {
+            "containerID": "containerd://cfbe2c4614f9ed3763b143cafd7883aa6d3618c6a8596e536e939b65c54c9946",
+            "image": "docker.io/library/redis:8.10.2-alpine",
+            "imageID": "docker.io/library/redis@sha256:72cedd9603038893af961e90ac5e1a1a0d8377d5e338dbdad8fe284ea25de18f",
+            "lastState": {},
+            "name": "work",
+            "ready": true,
+            "restartCount": 0,
+            "started": true,
+            "state": {
+              "running": {
+                "startedAt": "2026-09-24T23:24:04Z"
+              }
+            }
+          }
+        ],
+        "hostIP": "192.168.50.132",
+        "hostIPs": [
+          {
+            "ip": "192.168.50.132"
+          }
+        ],
+        "initContainerStatuses": [
+          {
+            "containerID": "containerd://7d08d27ec1022f8265f7dae3fb5be32baf246a36902674844a262b65ed568728",
+            "image": "docker.io/library/alpine:3.22",
+            "imageID": "docker.io/library/alpine@sha256:5291449c3df73caf6ed85e649dec1b9e818b39a5d8c871e97afc13e9cd5e8fa8",
+            "lastState": {},
+            "name": "trace-tools",
+            "ready": true,
+            "restartCount": 0,
+            "started": false,
+            "state": {
+              "terminated": {
+                "containerID": "containerd://7d08d27ec1022f8265f7dae3fb5be32baf246a36902674844a262b65ed568728",
+                "exitCode": 0,
+                "finishedAt": "2026-09-24T23:24:01Z",
+                "reason": "Completed",
+                "startedAt": "2026-09-24T23:24:01Z"
+              }
+            }
+          }
+        ],
+        "phase": "Running",
+        "podIP": "10.42.248.225",
+        "podIPs": [
+          {
+            "ip": "10.42.248.225"
+          }
+        ],
+        "qosClass": "Burstable",
+        "startTime": "2026-09-24T23:23:59Z"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "annotations": {
+          "cni.projectcalico.org/containerID": "66564f3012e9d2dbd4f2f10616e6645b46199ee66e5acb0a571688a4a144305c",
+          "cni.projectcalico.org/podIP": "10.42.248.228/32",
+          "cni.projectcalico.org/podIPs": "10.42.248.228/32"
+        },
+        "creationTimestamp": "2026-09-24T23:23:59Z",
+        "labels": {
+          "app": "redis-old"
+        },
+        "name": "redis-old",
+        "namespace": "msgrel-fup-main03",
+        "resourceVersion": "116819149",
+        "uid": "5b2d5aa3-f1ec-4f22-9318-a231f5ce6b1f"
+      },
+      "spec": {
+        "automountServiceAccountToken": false,
+        "containers": [
+          {
+            "command": [
+              "sh",
+              "-c",
+              "while [ ! -x /tools/followup ]; do sleep 1; done; exec /tools/followup control redis"
+            ],
+            "image": "docker.io/library/redis@sha256:02419de7eddf55aa5bcf49efb74e88fa8d931b4d77c07eff8a6b2144472b6952",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "work",
+            "resources": {
+              "limits": {
+                "cpu": "2",
+                "memory": "4Gi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/tools",
+                "name": "tools"
+              },
+              {
+                "mountPath": "/data",
+                "name": "data"
+              },
+              {
+                "mountPath": "/work",
+                "name": "work"
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "nodeName": "homelab-01",
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 1000,
+        "priorityClassName": "homelab-low",
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 15,
+        "tolerations": [
+          {
+            "effect": "NoSchedule",
+            "key": "node-role.kubernetes.io/control-plane",
+            "operator": "Exists"
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          }
+        ],
+        "volumes": [
+          {
+            "emptyDir": {},
+            "name": "tools"
+          },
+          {
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            },
+            "name": "data"
+          },
+          {
+            "emptyDir": {
+              "sizeLimit": "8Gi"
+            },
+            "name": "work"
+          }
+        ]
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:01Z",
+            "status": "True",
+            "type": "PodReadyToStartContainers"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:23:59Z",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:01Z",
+            "status": "True",
+            "type": "Ready"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:01Z",
+            "status": "True",
+            "type": "ContainersReady"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:23:59Z",
+            "status": "True",
+            "type": "PodScheduled"
+          }
+        ],
+        "containerStatuses": [
+          {
+            "containerID": "containerd://6f01df5497502b4d8555c6dddddd0a71ab3fb352ab1be2738adb01f46651f859",
+            "image": "docker.io/library/redis:7.4.2-alpine",
+            "imageID": "docker.io/library/redis@sha256:02419de7eddf55aa5bcf49efb74e88fa8d931b4d77c07eff8a6b2144472b6952",
+            "lastState": {},
+            "name": "work",
+            "ready": true,
+            "restartCount": 0,
+            "started": true,
+            "state": {
+              "running": {
+                "startedAt": "2026-09-24T23:24:00Z"
+              }
+            }
+          }
+        ],
+        "hostIP": "192.168.50.132",
+        "hostIPs": [
+          {
+            "ip": "192.168.50.132"
+          }
+        ],
+        "phase": "Running",
+        "podIP": "10.42.248.228",
+        "podIPs": [
+          {
+            "ip": "10.42.248.228"
+          }
+        ],
+        "qosClass": "Burstable",
+        "startTime": "2026-09-24T23:23:59Z"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "annotations": {
+          "cni.projectcalico.org/containerID": "72dcd6a2385402d15b64c5b280e1daa29f09e9e6620a77f75253a9a936eb04f8",
+          "cni.projectcalico.org/podIP": "10.42.134.2/32",
+          "cni.projectcalico.org/podIPs": "10.42.134.2/32"
+        },
+        "creationTimestamp": "2026-09-24T23:23:59Z",
+        "labels": {
+          "app": "runner-2"
+        },
+        "name": "runner-2",
+        "namespace": "msgrel-fup-main03",
+        "resourceVersion": "116819121",
+        "uid": "6396889a-e94e-491f-a950-800af6c468f8"
+      },
+      "spec": {
+        "automountServiceAccountToken": false,
+        "containers": [
+          {
+            "command": [
+              "sh",
+              "-c",
+              "sleep 86400"
+            ],
+            "image": "docker.io/library/golang@sha256:10f549dc8489597aa7ed2b62008199bb96717f52a8e8434ea035d5b44368f8a6",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "work",
+            "resources": {
+              "limits": {
+                "cpu": "2",
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/tools",
+                "name": "tools"
+              },
+              {
+                "mountPath": "/data",
+                "name": "data"
+              },
+              {
+                "mountPath": "/work",
+                "name": "work"
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "nodeName": "homelab-02",
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-02"
+        },
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 1000,
+        "priorityClassName": "homelab-low",
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 15,
+        "tolerations": [
+          {
+            "effect": "NoSchedule",
+            "key": "node-role.kubernetes.io/control-plane",
+            "operator": "Exists"
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          }
+        ],
+        "volumes": [
+          {
+            "emptyDir": {},
+            "name": "tools"
+          },
+          {
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            },
+            "name": "data"
+          },
+          {
+            "emptyDir": {
+              "sizeLimit": "8Gi"
+            },
+            "name": "work"
+          }
+        ]
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:00Z",
+            "status": "True",
+            "type": "PodReadyToStartContainers"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:23:59Z",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:00Z",
+            "status": "True",
+            "type": "Ready"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:00Z",
+            "status": "True",
+            "type": "ContainersReady"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:23:59Z",
+            "status": "True",
+            "type": "PodScheduled"
+          }
+        ],
+        "containerStatuses": [
+          {
+            "containerID": "containerd://9adb2e8456e57b99ec1b9bab254d4d9ff8d4d1c585e567a05e6bd91eec798a37",
+            "image": "docker.io/library/golang:1.24.4-bookworm",
+            "imageID": "docker.io/library/golang@sha256:10f549dc8489597aa7ed2b62008199bb96717f52a8e8434ea035d5b44368f8a6",
+            "lastState": {},
+            "name": "work",
+            "ready": true,
+            "restartCount": 0,
+            "started": true,
+            "state": {
+              "running": {
+                "startedAt": "2026-09-24T23:24:00Z"
+              }
+            }
+          }
+        ],
+        "hostIP": "192.168.50.133",
+        "hostIPs": [
+          {
+            "ip": "192.168.50.133"
+          }
+        ],
+        "phase": "Running",
+        "podIP": "10.42.134.2",
+        "podIPs": [
+          {
+            "ip": "10.42.134.2"
+          }
+        ],
+        "qosClass": "Burstable",
+        "startTime": "2026-09-24T23:23:59Z"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "annotations": {
+          "cni.projectcalico.org/containerID": "b02e2458d4ca6e0786272942a2c2d8b6b0017ff4a0229ba8cccb89b75d69919f",
+          "cni.projectcalico.org/podIP": "10.42.134.28/32",
+          "cni.projectcalico.org/podIPs": "10.42.134.28/32"
+        },
+        "creationTimestamp": "2026-09-24T23:23:59Z",
+        "labels": {
+          "app": "runner-4"
+        },
+        "name": "runner-4",
+        "namespace": "msgrel-fup-main03",
+        "resourceVersion": "116819123",
+        "uid": "a8dbf7a5-c8ae-4701-8a36-0024331e30a0"
+      },
+      "spec": {
+        "automountServiceAccountToken": false,
+        "containers": [
+          {
+            "command": [
+              "sh",
+              "-c",
+              "sleep 86400"
+            ],
+            "image": "docker.io/library/golang@sha256:10f549dc8489597aa7ed2b62008199bb96717f52a8e8434ea035d5b44368f8a6",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "work",
+            "resources": {
+              "limits": {
+                "cpu": "4",
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/tools",
+                "name": "tools"
+              },
+              {
+                "mountPath": "/data",
+                "name": "data"
+              },
+              {
+                "mountPath": "/work",
+                "name": "work"
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "nodeName": "homelab-02",
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-02"
+        },
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 1000,
+        "priorityClassName": "homelab-low",
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 15,
+        "tolerations": [
+          {
+            "effect": "NoSchedule",
+            "key": "node-role.kubernetes.io/control-plane",
+            "operator": "Exists"
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          }
+        ],
+        "volumes": [
+          {
+            "emptyDir": {},
+            "name": "tools"
+          },
+          {
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            },
+            "name": "data"
+          },
+          {
+            "emptyDir": {
+              "sizeLimit": "8Gi"
+            },
+            "name": "work"
+          }
+        ]
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:00Z",
+            "status": "True",
+            "type": "PodReadyToStartContainers"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:23:59Z",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:00Z",
+            "status": "True",
+            "type": "Ready"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:24:00Z",
+            "status": "True",
+            "type": "ContainersReady"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-09-24T23:23:59Z",
+            "status": "True",
+            "type": "PodScheduled"
+          }
+        ],
+        "containerStatuses": [
+          {
+            "containerID": "containerd://186f978599f5f25128d795987e0509f9e1007947c41857b86d69c4123c0e9f9f",
+            "image": "docker.io/library/golang:1.24.4-bookworm",
+            "imageID": "docker.io/library/golang@sha256:10f549dc8489597aa7ed2b62008199bb96717f52a8e8434ea035d5b44368f8a6",
+            "lastState": {},
+            "name": "work",
+            "ready": true,
+            "restartCount": 0,
+            "started": true,
+            "state": {
+              "running": {
+                "startedAt": "2026-09-24T23:24:00Z"
+              }
+            }
+          }
+        ],
+        "hostIP": "192.168.50.133",
+        "hostIPs": [
+          {
+            "ip": "192.168.50.133"
+          }
+        ],
+        "phase": "Running",
+        "podIP": "10.42.134.28",
+        "podIPs": [
+          {
+            "ip": "10.42.134.28"
+          }
+        ],
+        "qosClass": "Burstable",
+        "startTime": "2026-09-24T23:23:59Z"
+      }
+    }
+  ],
+  "kind": "List",
+  "metadata": {
+    "resourceVersion": ""
+  }
+}

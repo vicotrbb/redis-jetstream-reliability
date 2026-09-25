@@ -1,0 +1,102 @@
+\section{System model and formal results}\label{sec:model}
+
+\subsection{Events, failure scope, and assumptions}
+
+An application assigns each message a unique identifier. We distinguish publication invocation $p$, publication confirmation $q$, broker delivery $d$, client receipt $\widehat d$, consumer failure $f$, redelivery receipt $\widehat r$, and acknowledgment completion $a$. All request and recovery event intervals use a common Linux monotonic clock on the driver node. Broker telemetry uses the broker node's clock and is never subtracted from driver timestamps. The broker's internal delivery timestamp $d$ is not directly observed; replacing it with $\widehat d$ without qualification would misstate the timer origin.
+
+The fault model is a fail-stop consumer process killed with \code{SIGKILL} while its message is unacknowledged. In the follow-up's matched live controls, $f$ instead denotes the scheduled reference event while the victim remains alive without acknowledging; the same residual algebra applies without requiring a death. The broker, network, retained payload, group/consumer state, and surviving consumer remain available. There is no message expiry, trimming, competing claim, negative acknowledgment, acknowledgment extension, or backoff change during the recovery episode. The timeout threshold is $\Delta>0$ and failure occurs at age $h=f-d$, with $0\leq h<\Delta$. These are assumptions of the isolated formal model; they do not characterize every production execution. The controller sets age relative to client receipt, so exact broker age is unobserved. Idealized eligibility also abstracts from timer quantization and assumes no relevant broker-clock discontinuity.
+
+For a bounded redelivery theorem, additional timing assumptions are required. Let $P$ bound the time from eligibility until a reclaimer or expiry mechanism selects the entry, and let $B$ bound subsequent scheduling, demand availability, transport, and client observation. Redis command execution time and scheduler delay must be included in $P$; its configured sleep alone is not such a bound. JetStream also requires pull demand, so $B$ cannot silently be set to zero.
+
+\begin{theorem}[Residual timeout and conditional recovery bound]\label{thm:recovery}
+Under the preceding assumptions, let selection be forbidden before $d+\Delta$, occur at some $s\in[d+\Delta,d+\Delta+P]$, and be observed after an additional delay $b\in[0,B]$. Then
+\[
+\Delta-h\ \leq\ \widehat r-f\ \leq\ \Delta-h+P+B.
+\]
+If the corresponding upper-bound premise is removed and admissible selection or observation delays are unbounded, no finite uniform upper bound on redelivery latency follows.
+\end{theorem}
+\begin{proof}
+By definition, $\widehat r=s+b$ and $f=d+h$. Hence
+\[
+\widehat r-f=\Delta-h+\bigl(s-(d+\Delta)\bigr)+b.
+\]
+The two final terms lie in $[0,P]$ and $[0,B]$, respectively, proving both inequalities. If either delay is unbounded, for any proposed finite upper bound choose an admissible delay exceeding it. The corresponding execution violates that proposed bound without violating eligibility or retention.
+\end{proof}
+
+\begin{corollary}[Why client-observed timer excess can be negative]\label{cor:observed}
+Write $\widehat d=d+u$, where $u\geq0$ is the initial delivery-to-receipt delay, and let $w=s-(d+\Delta)$. Then
+\[
+(\widehat r-\widehat d)-\Delta=w+b-u.
+\]
+Thus a measured receipt-to-redelivery interval slightly below $\Delta$ does not alone refute server-side timeout eligibility.
+\end{corollary}
+\begin{proof}
+Substitute $\widehat r=d+\Delta+w+b$ and $\widehat d=d+u$, and cancel $d$.
+\end{proof}
+
+\begin{proposition}[No autonomous Redis reassignment from new-message reads]\label{prop:no-reclaim}
+In the stated Redis new-message-read-only model, there exists an infinite execution with an available broker and surviving consumer, a retained message pending for a failed consumer, and no redelivery, if the survivor performs only new-message reads and no reclamation or pending-history recovery.
+\end{proposition}
+\begin{proof}
+Deliver the only message to the consumer that subsequently fails, thereby placing it in that consumer's PEL history. Repeat \code{XREADGROUP} with \code{>} and no CLAIM option from the survivor. Each read considers previously undelivered entries, while the retained entry remains pending for the failed consumer. With no further publication or state-changing recovery operation, every repetition preserves this state. The infinite repetition witnesses the claim.
+\end{proof}
+
+The proposition is a liveness counterexample, not a defect claim. A Redis application supplies the missing recovery operation. Likewise, a JetStream pull consumer without future pull demand has no unconditional delivery-time guarantee. The experimental contrast concerns who initiates eligibility/reassignment and the timing of the configured client policy.
+
+\subsection{Concurrency and finite-window throughput}
+
+\begin{definition}
+For $N>0$ completed messages, an integer $C\geq1$ of consumers, and a drain interval of duration $T>0$, let $X=N/T$ be acknowledged throughput. Message $i$ occupies one consumer during a nonoverlapping-on-that-consumer interval $[r_i,a_i]$, from its successful receive-request invocation to acknowledgment completion. Write $R_i=a_i-r_i$ and $\overline R=N^{-1}\sum_i R_i$.
+\end{definition}
+
+\begin{theorem}[Consumer occupancy bound]\label{thm:concurrency}
+If every interval lies within the measured drain window and each of $C$ consumers has at most one such interval active at a time, then
+\[
+X\overline R\leq C.
+\]
+More precisely, with $U=(CT)^{-1}\sum_iR_i\in[0,1]$, one has $X=C U/\overline R$ whenever $N>0$ and $\overline R>0$.
+\end{theorem}
+\begin{proof}
+For consumer $j$, its intervals have disjoint interiors and are contained in a window of length $T$, so their lengths sum to at most $T$. Summing over all $C$ consumers gives $\sum_iR_i\leq CT$. Since $X\overline R=(N/T)(\sum_iR_i/N)=\sum_iR_i/T$, the inequality follows. Substituting the definition of $U$ yields the identity.
+\end{proof}
+
+For two individual trials with positive mean cycle times, this gives the exact explanatory decomposition:
+\[
+\frac{X(C_2)}{X(C_1)}=
+\frac{C_2}{C_1}\frac{U(C_2)}{U(C_1)}
+\frac{\overline R(C_1)}{\overline R(C_2)}.
+\]
+The identity does not generally survive separately averaging throughput, occupancy, and cycle time across trials. Reported ratios of condition-mean throughputs are distinct summaries. Approximately stable cycle cost and occupancy are sufficient for approximately linear scaling within this model. More generally, linear scaling requires $U(C)/\overline R(C)$ to remain approximately constant; increasing $C$ alone does not prove it. For example, admissible conditions with $U=1$, $C_1=1$, $\overline R(C_1)=1$, $C_2=2$, and $\overline R(C_2)=3$ give throughputs $1$ and $2/3$. This counterexample rules out a universal monotonicity claim under unrestricted contention. Our analysis checks the occupancy inequality directly against every retained concurrency-trial event interval.
+
+\subsection{Acknowledgment, storage, and application effects}
+
+\begin{proposition}[Conditional stable-storage implication]\label{prop:storage}
+Assume (i) a successful synchronization makes the message and all metadata required for its recovery stable, (ii) subsequent failures preserve that stable state, (iii) recovery interprets it correctly, and (iv) confirmation occurs only after that synchronization completes successfully. Then every confirmed message is recoverable after such a failure. If confirmation is instead permitted before stabilization, confirmation alone does not imply recoverability.
+\end{proposition}
+\begin{proof}
+Under (iv), every confirmed message has already undergone the successful synchronization of (i). Its recovery state survives by (ii), and (iii) recovers it. For the second claim, choose an allowed execution in which confirmation precedes synchronization and a failure occurs strictly between them. Let the failure discard all unstable state. The message was confirmed but is not recoverable, providing a counterexample.
+\end{proof}
+
+This is a theorem about a storage contract, not a formal verification of either product. In particular, the historical NATS 2.10.24 append path invokes synchronization without checking its returned error in that path, whereas Redis 7.4.2 treats an always-mode synchronization error as fatal~\cite{nats21024filestore,redis742aof}. NATS 2.15.0 checks and propagates the corresponding append synchronization error~\cite{nats2150filestore}. The historical error-handling statement must not be generalized to that current release. The experiment injects no I/O faults and does not establish assumptions (i)--(iv) for every implementation execution. The source distinction prevents us from treating a mode name as an unconditional proof of identical fault handling.
+
+Consider an interval containing $F\geq1$ complete, nonoverlapping synchronization operations. If each occupies at least $f_{\min}>0$ time, every counted confirmation is assigned to one completed operation, and at most an integer $b\geq1$ of confirmations are assigned to each operation, those operations can confirm at most $bF$ messages while occupying at least $Ff_{\min}$ time. Their service rate is therefore at most $b/f_{\min}$. This bound applies to the explicitly serialized synchronization stage; overlapping stages and the rest of the pipeline require a different model. It explains why group commit and outstanding-publication count can affect cost without asserting a fixed number of hardware synchronization calls per message.
+
+\begin{proposition}[The application-effect/acknowledgment gap]\label{prop:effects}
+For a non-idempotent external effect and a broker acknowledgment that are separate operations, changing only their order cannot guarantee exactly one completed effect under arbitrary fail-stop interruption and eventual redelivery of unacknowledged work.
+\end{proposition}
+\begin{proof}
+If the effect precedes acknowledgment, interrupt after the effect and before acknowledgment. The retained unacknowledged message may be redelivered and its effect repeated. If acknowledgment precedes the effect, interrupt after acknowledgment and before the effect; the broker has no remaining obligation to redeliver, so the effect can be absent. Either order admits a counterexample. An atomic transaction, durable application deduplication, or an idempotent effect adds an assumption not present in this model.
+\end{proof}
+
+\subsection{What zero observed failures establishes}
+
+For $n\geq1$ independent identically distributed Bernoulli trials with failure probability $p$, observing zero failures has probability $(1-p)^n$. For $0<\alpha<1$, setting this to $\alpha$ gives the one-sided exact upper confidence limit
+\[
+p_\mathrm{upper}=1-\alpha^{1/n}.
+\]
+At $n=10$ and $\alpha=0.05$, this is approximately $0.259$, not zero~\cite{clopper1934}. Our heterogeneous configurations and temporally adjacent messages are not automatically independent Bernoulli draws from one population. We therefore report exact observed counts and do not turn millions of message completions into a misleading claim of extremely small universal failure probability.
+
+\subsection{Machine-checked subset and proof boundary}\label{sec:lean}
+
+Ten declarations in the artifact's Lean 4.24.0 model check integer-time residual and receipt-offset identities, a division-free consumer-capacity lemma, and finite effect/acknowledgment crash witnesses~\cite{demoura2021lean4,lean424release}. The retained homelab compiler receipts identify the source, compiler, exit status, and transitive logical dependencies. No admitted proof, custom axiom, or native-evaluation shortcut is used. The capacity lemma assumes each consumer's busy-time bound; the interval argument deriving that premise remains the hand proof above. This checks selected abstract statements, not broker implementations, measurement software, storage survival, or statistical coverage.
+

@@ -1,0 +1,38 @@
+strace -- version 6.13
+Copyright (c) 1991-2025 The strace developers <https://strace.io>.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Optional features enabled: stack-trace=libdw stack-demangle no-m32-mpers no-mx32-mpers
+d0c11875c7be6980c088721bdae11a8d82dceb0ca10d87274ed2818463734fdf  /tools/strace
+Linux version 6.6.68 (nixbld@localhost) (gcc (GCC) 13.2.0, GNU ld (GNU Binutils) 2.41) #1-NixOS SMP PREEMPT_DYNAMIC Fri Dec 27 12:58:58 UTC 2024
+Filesystem           Type       1K-blocks      Used Available Use% Mounted on
+/dev/nvme0n1p2       btrfs      1000072192 165769928 822128760  17% /tools
+12009 11225 0:1993 / / rw,relatime master:3919 - overlay overlay rw,lowerdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125066/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125065/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125064/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125062/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125061/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125059/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125057/fs,upperdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125084/fs,workdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125084/work,uuid=on
+12010 12009 0:2006 / /proc rw,nosuid,nodev,noexec,relatime - proc proc rw
+12011 12009 0:2007 / /dev rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755
+12012 12011 0:2008 / /dev/pts rw,nosuid,noexec,relatime - devpts devpts rw,gid=5,mode=620,ptmxmode=666
+12013 12011 0:1958 / /dev/mqueue rw,nosuid,nodev,noexec,relatime - mqueue mqueue rw
+12014 12009 0:1966 / /sys ro,nosuid,nodev,noexec,relatime - sysfs sysfs ro
+12015 12014 0:33 / /sys/fs/cgroup ro,nosuid,nodev,noexec,relatime - cgroup2 cgroup rw
+12028 12009 0:29 /rootfs/var/lib/kubelet/pods/7c625e39-5e38-4e67-b618-3b3e05049898/volumes/kubernetes.io~empty-dir/tools /tools rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs
+12029 12009 0:29 /rootfs/var/lib/kubelet/pods/7c625e39-5e38-4e67-b618-3b3e05049898/volumes/kubernetes.io~empty-dir/data /data rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs
+12030 12009 0:29 /rootfs/var/lib/kubelet/pods/7c625e39-5e38-4e67-b618-3b3e05049898/volumes/kubernetes.io~empty-dir/work /work rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs
+12031 12009 0:29 /rootfs/var/lib/kubelet/pods/7c625e39-5e38-4e67-b618-3b3e05049898/etc-hosts /etc/hosts rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs
+12032 12011 0:29 /rootfs/var/lib/kubelet/pods/7c625e39-5e38-4e67-b618-3b3e05049898/containers/work/bffcb491 /dev/termination-log rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs
+12033 12009 0:29 /rootfs/var/lib/rancher/k3s/agent/containerd/io.containerd.grpc.v1.cri/sandboxes/c6df874d3480fa0fde00b918492f22e7f0999638c7bec9dc16308e6d32a263e3/hostname /etc/hostname rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs
+12034 12009 0:29 /rootfs/var/lib/rancher/k3s/agent/containerd/io.containerd.grpc.v1.cri/sandboxes/c6df874d3480fa0fde00b918492f22e7f0999638c7bec9dc16308e6d32a263e3/resolv.conf /etc/resolv.conf rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs
+12035 12011 0:1941 / /dev/shm rw,nosuid,nodev,noexec,relatime - tmpfs shm rw,size=65536k
+11226 12010 0:2006 /bus /proc/bus ro,nosuid,nodev,noexec,relatime - proc proc rw
+11227 12010 0:2006 /fs /proc/fs ro,nosuid,nodev,noexec,relatime - proc proc rw
+11228 12010 0:2006 /irq /proc/irq ro,nosuid,nodev,noexec,relatime - proc proc rw
+11229 12010 0:2006 /sys /proc/sys ro,nosuid,nodev,noexec,relatime - proc proc rw
+11230 12010 0:2006 /sysrq-trigger /proc/sysrq-trigger ro,nosuid,nodev,noexec,relatime - proc proc rw
+11231 12010 0:2009 / /proc/asound ro,relatime - tmpfs tmpfs ro
+11233 12010 0:2010 / /proc/acpi ro,relatime - tmpfs tmpfs ro
+11234 12010 0:2007 /null /proc/kcore rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755
+11236 12010 0:2007 /null /proc/keys rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755
+11239 12010 0:2007 /null /proc/timer_list rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755
+11240 12010 0:2011 / /proc/scsi ro,relatime - tmpfs tmpfs ro
+11241 12014 0:2012 / /sys/firmware ro,relatime - tmpfs tmpfs ro
+11242 12014 0:2013 / /sys/devices/virtual/powercap ro,relatime - tmpfs tmpfs ro

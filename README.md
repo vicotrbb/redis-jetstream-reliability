@@ -1,111 +1,86 @@
 # An Empirical Evaluation of Message Delivery Reliability and Recovery Characteristics in Redis Streams and NATS JetStream
 
-This folder contains the manuscript, experiment implementation, raw homelab evidence, deterministic statistical analysis, and generated figures. The article follows the LaTeX typography of `bfs-avoidance-frontier`: an 11-point single-column article, 1.1-inch margins, the same author block, numbered mathematical results, and a linked bibliography.
+Research by Victor Bona. This repository contains the article, supplementary proofs and diagnostics, recorded homelab measurements, experiment source, and reproducible analysis. It retains the original 11-point LaTeX template, 1.1-inch margins, author block, and section structure.
 
-**Artifact version 1.1.0, prepared 24 September 2026.** The contribution is an auditable, computationally reproducible comparison of specific recovery policies, concurrency behavior, and acknowledgment costs under documented conditions in one homelab deployment. It is a descriptive case study. The original paper and research material use CC-BY-4.0; original code and formalization use MIT. See [LICENSE.md](LICENSE.md), [CITATION.cff](CITATION.cff), and [release/README.md](release/README.md).
+**Artifact version 1.2.0.** The study compares recovery policies, consumer concurrency, and publication/acknowledgment costs. It distinguishes append synchronization from consumer-progress persistence. The extension adds current releases, fresh broker processes and stores for every trial, matched publication durations, live recovery controls, CPU sensitivity, synchronization traces, and compression-policy diagnostics. Original evidence remains unchanged.
 
-The versioned release archive has a detached SHA-256 checksum and an internal file manifest. `release/manifest.json` identifies its exact manuscript, evidence lock, and primary statistics. The release builder refuses to overwrite an existing version. Zenodo deposit, DOI assignment, and journal submission have not occurred.
+The original paper and research material use CC-BY-4.0; original code and formalization use MIT. See [LICENSE.md](LICENSE.md), [CITATION.cff](CITATION.cff), and the [release guide](release/README.md). GitHub access is public. No Zenodo deposit, DOI assignment, external replication, journal acceptance, or implementation-verification claim is made.
 
-## GitHub repository and frozen release
+## Read and inspect
 
-[Repository](https://github.com/vicotrbb/redis-jetstream-reliability) · [Version 1.1.0 and downloadable paper/artifact](https://github.com/vicotrbb/redis-jetstream-reliability/releases/tag/v1.1.0)
+- [Main article](output/pdf/redis-jetstream-reliability.pdf) and [supplement](output/pdf/redis-jetstream-reliability-supplement.pdf).
+- [Current validation](docs/FINAL_REVISION_VALIDATION.md), [prospective follow-up protocol](docs/FOLLOWUP_PROTOCOL.md), and [development/validation record](docs/FOLLOWUP_VALIDATION.md).
+- [Pinned source and literature review](docs/FOLLOWUP_SOURCE_REVIEW.md) and [historical source corrections](docs/SOURCE_REVALIDATION.md).
+- Original results: `data/derived/statistics.json` and `aggregate.csv`.
+- Follow-up results: `followup/derived/statistics.json`, `trials.csv`, and `report.json`.
+- [Artifact version map](docs/ARTIFACT_MAP.md) and [GitHub provenance](docs/GITHUB_PUBLICATION.md).
 
-Tag `v1.1.0` imports the exact validated artifact snapshot. The `main` branch adds repository setup, this publication guide, and a refreshed manifest for the current checkout. The sealed version 1.1.0 archive, paper, and evidence remain unchanged. The archive and its detached checksum are GitHub Release assets; local copies under `releases/` are excluded from Git. The repository itself retains the source, raw data, figures, PDFs, compiler evidence, and validation records.
-
-See [docs/GITHUB_PUBLICATION.md](docs/GITHUB_PUBLICATION.md) for tag provenance, exact release downloads, and verification. Statements in the frozen release about publication state describe its preparation checkpoint. GitHub hosting supplies public access; it does not constitute a Zenodo deposit, DOI assignment, independent replication, or journal peer review.
-
-## Read the paper
-
-- `output/pdf/redis-jetstream-reliability.pdf`: final reader-facing PDF.
-- `paper/main.tex`: editable source; `abstract.tex`, `results.tex`, and `conclusion.tex` contain the corresponding prose.
-- `data/derived/statistics.json`: numerical results and integrity receipts.
-- `data/derived/aggregate.csv`: machine-readable estimates and confidence intervals.
-- `formal/DeliveryModel.lean` and `formal/verification.json`: ten conditional model declarations checked with Lean 4.24.0 on the homelab.
-- `docs/PRIMARY_SOURCES.md`: verified official documentation, pinned source-code references, and literature boundaries.
-- `docs/MANUSCRIPT_REVIEW.md`: internal AI-assisted methods/proof/source review, not external peer review.
-- `docs/FINAL_REVISION_VALIDATION.md`: current revision coverage, validation, and scientific limits.
-- `data/derived/visual-review.json`: current document QA, bound to the PDF hash and retained page renderings.
-- `docs/ARTIFACT_MAP.md`: historical measured sources, later validation snapshots, and current deliverables.
+The current validation record is `docs/FINAL_REVISION_VALIDATION.md`. Successful-build receipts, PDF content checks, and visual-review records under `data/derived/` bind both documents to their exact source and rendered pages. Earlier validation records describe the historical documents identified in the artifact map.
 
 ## Experimental scope
 
-The only broker/test environment is `kubectl --context homelab`. The original measurement namespace was `msgrel-20260923`; later validation uses separate namespaces. The workstation performs authoring, raw-data verification, statistical analysis, and LaTeX compilation only.
+All broker workloads, runtime Go tests, tracing, and Lean compilation use **only `kubectl --context homelab`**. The workstation performs authoring, offline data checks, analysis, and PDF compilation. Brokers run on the Ryzen-based `homelab-01`; drivers run on the Intel N100 `homelab-02`. Other services share the hosts. The broker storage is Btrfs/NVMe with zstd compression enabled by default.
 
-Redis 7.4.2 and NATS Server 2.10.24, one replica each, run on `homelab-01`. The Go 1.24.4 driver runs on `homelab-02`. The broker volume is Btrfs/NVMe with `compress=zstd:3`; payloads contain an eight-byte ID and repeated `x` bytes, so they are highly compressible. Six persistence profiles, one shared consumer group/durable consumer, 512-byte application payloads, explicit confirmed acknowledgment, and independent TCP connections are used.
+The original campaign evaluates Redis 7.4.2 and NATS 2.10.24 with 550 planned outcomes: 300 drain trials, 60 publication trials, 60 serial trials, 120 killed-consumer recoveries, and ten plain-read controls. Its 419 completed timing trials contain 17,411,288 message records. D038's failed publication has no reconstructible client timing/count trace; it stays a failed outcome. Its accidental replay remains excluded. Exact historical censor endpoints also remain unavailable.
 
-- RQ1: 120 consumer SIGKILL/recovery trials plus 10 Redis no-reclaimer controls. Timeout 250/1000 ms, kill age 10%/75%, Redis reclaim sleeps 10/100 ms.
-- RQ2: 300 completed fixed-backlog trials, 16384 messages each, C=1/2/4/8/16, ten randomized complete blocks.
-- RQ3: 60 planned five-second closed-loop publication trials, 16 outstanding publishers (one retained Redis-always timeout and 59 completed planned trials); a separate 60-trial one-publisher sensitivity uses 1024 messages.
-- Two 12-trial pilot datasets are excluded from the reported main estimates.
+The follow-up preserves those releases and adds Redis 8.10.2 and NATS 2.15.0. Three separately provisioned deployments, `main01` through `main03`, each have 204 prospective cells, totaling 612:
 
-The fixed-backlog and closed-loop latencies are not open-loop production SLA estimates. Consumer death is not a power-loss test. Model theorems are conditional mathematical results, not formal verification of the vendor implementations or a universal empirical ranking. All runtime incidents and protocol changes are retained in `docs/DEVIATIONS.md` and `data/environment/`.
+- 216 publication trials: four engine/version combinations, three profiles, 1/16 publishers, three blocks per deployment, and a matched 15-second admission budget.
+- 96 drain trials: current releases, memory/periodic profiles, 1/16 consumers, 2/4 driver CPUs, two blocks, and 65536 messages.
+- 240 active recovery episodes and 12 plain-read controls: historical/current XAUTOCLAIM, current Redis CLAIM, historical/current JetStream, killed/live-unacknowledging consumers, two thresholds and two receipt ages.
+- 24 synchronization-trace trials and 24 compression-policy/payload diagnostics: current always profiles, one observation per diagnostic condition per deployment.
 
-## Delivered validation
+Each follow-up trial starts a fresh broker process and store, with a common separate-stream warm-up. Successful publication and drain trials read back all stored IDs and 512 payload bytes outside timing. Failed outcomes remain represented; successful-run rates and paired comparisons report their completion counts. The six development pilots are excluded and retained separately.
 
-All 550 planned experimental outcomes are accounted for: 300 completed drain trials, 59 completed primary publication trials plus one retained timeout, 60 completed serial trials, 120 recovered consumer kills, and ten nominal-budget negative controls. Raw timings and adjudication records remain available. The current validation record is `docs/FINAL_REVISION_VALIDATION.md`; current document QA is `data/derived/visual-review.json`, identified by the reviewed PDF hash. `docs/EXECUTION_RECEIPT.md` concerns the historical 25-page version, and `docs/REVISION_VALIDATION.md` concerns the subsequent 27-page version. The immediately preceding 29-page document is preserved in `revisions/20260924-submission/previous-source-and-paper.tar.gz`. Those historical counts and hashes must not be attributed to the current PDF.
+All 612 planned outcomes were collected: 601 completed procedures and eleven publication failures, comprising four warm-up and seven timed failures. Full analysis reconstructed 80,263,171 timed event records. A completed plain-read control means that its observation procedure ended with the message still pending, not that redelivery succeeded.
 
-The temporary namespace was removed after data and proof collection. `data/environment/cleanup.json` records the successful delete and the subsequent Kubernetes `NotFound` confirmation. Reanalysis requires no live broker.
+The follow-up reports deployment means and their observed ranges, not confidence intervals with asserted population coverage. The deployments share hardware and are not independent-host replications. Consumer kills do not test power-loss durability. Fresh stores remove known file accumulation without resetting host caches or unrelated device activity. The mathematical results remain conditional abstract identities, bounds, and counterexamples.
 
-## Reanalyze the existing measurements
+## Verify the delivered artifact
 
-The pinned analysis dependencies are in `requirements-analysis.txt`. For example:
+Start with an unchanged release or checkout, before reanalysis or rebuilding:
 
 ```sh
-uv venv .venv
-uv pip install --python .venv/bin/python -r requirements-analysis.txt
 python3 bench/verify_release.py --directory .
+uv venv .venv --python 3.13
+uv pip install --python .venv/bin/python -r requirements-analysis.txt
+make verify-revision
+```
+
+`make verify-revision` checks original evidence, independently recalculates follow-up condition/paired summaries, binds sixty displayed numbers to the verified report, verifies source-bound proof receipts, and checks the exact delivered PDFs and retained renderings. It runs no brokers. See the release guide for detached archive verification and the distinction between GitHub source archives and the named sealed artifact.
+
+## Reanalyze and rebuild in a working copy
+
+```sh
 make analyze
-.venv/bin/python bench/check_revision.py
+make analyze-followup
 make paper
 .venv/bin/python bench/check_paper.py
 ```
 
-Python 3.13 was used for analysis. LaTeX requires `latexmk`, pdfLaTeX, BibTeX, the packages declared in `paper/main.tex`, and `plainurl.bst`. Verify the distributed files before rebuilding, and keep the sealed archive unchanged. Reanalysis and compilation write to the extracted working copy. A new PDF needs its own rendered-page inspection and visual-review receipt before `make verify-revision` can pass; the distributed receipt only covers the shipped PDF. `make verify` checks existing data and the compiled paper; it does not start a broker or execute a performance experiment on the workstation. The release guide separates verification of the delivered document from rebuilding it.
+Original analysis reconstructs every retained timing record, ID set, percentile, throughput and occupancy value. Follow-up analysis also checks every planned invocation, input seal, image/binary receipt, raw-file manifest, stored-payload outcome, CPU bracket and inventoried syscall trace. Paired comparisons use jointly completed blocks and retain unavailable pairs. Neither analyzer imputes throughput for failed workloads or combines original and follow-up measurements.
 
-`bench/analyze.py` verifies every retained main/durability/serial raw CSV against its summary: IDs, ordering, percentiles, means, throughput, worker counts, and finite-window occupancy bounds. It reconstructs recovery intervals from the recorded monotonic timestamps. It then generates tables, figures, 10000-resample bootstrap intervals, and paired block ratios. Publication metrics condition on completed planned trials; the failed D038 outcome is retained in a separate adjudication ledger, its accidental replay is excluded, and comparisons use common completed blocks. No failure is assigned a made-up throughput or latency. A p99 interval describes uncertainty in the mean of run-level p99 values, not a pooled-message percentile or a distribution-free prediction interval.
+The PDF build uses `latexmk`, pdfLaTeX, BibTeX and `plainurl.bst`. A rebuilt PDF can differ across TeX environments and needs its own honest rendering/visual review before the provenance gate can pass. The supplied visual receipt covers only the shipped PDF. Keep the sealed distribution unchanged and perform reanalysis in a working copy.
 
-## Run new experiments, only in the homelab
+The selected Lean model is `formal/DeliveryModel.lean`. Its original and subsequent homelab compilation receipts are retained, including this revision's `revisions/20260924-followup/lean-recheck.json`. Compilation checks ten abstract declarations; it does not verify broker implementations, the harness, stable storage, or statistical coverage.
 
-The paper's original campaign is frozen. New collection requires explicit campaign and attempt IDs, a fresh namespace, and a fresh attempt directory. It never writes to `data/raw`, `data/environment`, or the original adjudication ledger.
+## Run a new follow-up campaign in the homelab
 
-```sh
-make experiment CAMPAIGN=study20260924 ATTEMPT=a001
-make collect CAMPAIGN=study20260924 ATTEMPT=a001
-make clean-homelab CAMPAIGN=study20260924 ATTEMPT=a001
-```
-
-Use new IDs for each attempt. IDs contain 1-20 lowercase DNS characters. The namespace is `msgrel-<campaign>-<attempt>`. A namespace ownership token is checked before collection or cleanup. Existing attempt and series destinations are rejected. Failed attempts stop and remain inspectable; there is no automatic replay or resume. Only the dedicated namespace is created or removed.
-
-Inputs, their content seal, and execution records reside in `campaigns/<campaign>/attempts/<attempt>/`. Each collection receives a new timestamped directory containing raw records, logs, environment observations, and an identity-bound hash manifest. Structured observations, failure ledgers, and runtime records carry campaign and attempt IDs. A mismatch fails validation. A content seal records an artifact snapshot, not a successful scientific outcome. New data require a separate analysis and outcome adjudication; they cannot be substituted into the publication's fixed historical analyzer.
-
-The runner compiles and executes the Go program in the homelab using locked modules and pinned images. It snapshots the selected source before execution. The original measured implementation is retained in `revisions/20260924/original-source-and-paper.tar.gz` and the earlier harness snapshots. The revised collection harness adds failure capture and campaign identities; new measurements would constitute a separately identified campaign with that revision.
-
-The publication path records attempted IDs, successful confirmations, and unknown outcomes after returned errors or caught worker panics. Buffered partial observations are serialized and synchronized before inventory and cleanup. Cleanup errors are recorded separately. Abrupt process or host loss before serialization can still lose buffered observations. This correction cannot recover the original D038 timings or confirmation count.
-
-Redis publication and acknowledgment use five-second default socket read and write timeouts, not an absolute whole-call deadline. Positive blocking `XREADGROUP` calls use a socket read timeout of `BLOCK + 10 seconds`: 10.1 seconds for ordinary 100 ms reads and 15 seconds for the victim's five-second read. NATS publication and acknowledgment use five-second response waits; Fetch receives its explicit 100 ms or five-second wait. Administrative Redis socket settings and NATS response waits are 30 seconds. See `docs/SOURCE_REVALIDATION.md` for pinned sources.
-
-For a bounded functional validation of the revised harness, including ambiguous publication errors, use a separate attempt:
+Choose a new campaign name; existing names, directories and invocation destinations cannot be reused. The following commands execute the current follow-up protocol, not the frozen historical campaign:
 
 ```sh
-make validate-homelab CAMPAIGN=validation20260924 ATTEMPT=a001
+python3 bench/followup/run.py prepare --campaign newstudy01 --seed 2026092501
+python3 bench/followup/run.py bootstrap --campaign newstudy01
+python3 bench/followup/run.py run --campaign newstudy01
+python3 bench/followup/run.py cleanup --campaign newstudy01
 ```
 
-These functional checks are excluded from the paper's performance dataset. They cover successful and ambiguous publication in memory profiles, active recovery in both periodic profiles, and a Redis no-reclaimer control. The workstation performs data analysis and document compilation; Go tests and broker execution run only in the homelab.
+Read `python3 bench/followup/run.py --help` and the protocol before starting. The runner pins the homelab context, snapshots inputs, provisions only its owned namespace, builds/tests remotely, and verifies deployed bytes. A failed timed outcome can proceed to the next planned cell only after verified broker shutdown and store cleanup. An incomplete invocation or infrastructure/reset failure pauses without automatic replay. Preserve the attempt and investigate instead of overwriting it.
 
-Future recovery records distinguish the nominal budget origin/deadline, observation of the timer notification, completion of survivor work and controller waiting, and reconciliation start/end. A timer timestamp is null when its branch was not taken; a receipt returned during shutdown is retained separately. The loop-completion timestamp is taken immediately before sending its terminal result. These fields measure the observation procedure, not an exact kernel timer-firing instant or an upper bound on broker response time. They do not exist in the frozen historical records, whose exact censor endpoints remain unavailable.
+Publication-error recording covers returned errors and caught panics after workers join. Abrupt driver/host loss before serialization remains outside that guarantee. New measurements require their own analysis and must not replace historical observations. The older `bench/run_homelab.py` campaign/attempt workflow remains available for reproducing the earlier functional-validation harness; it is not the collector used for the new study.
 
-## Evidence layout
+## Version and publication boundaries
 
-`data/raw/{main,durability,serial}` contains JSONL summaries and one gzip-compressed CSV per measured trial. Main/serial event columns are application ID, publication invocation, publication confirmation, receive-request invocation, client receipt, consumer-acknowledgment completion, and worker. Times are integer Linux monotonic nanoseconds from the driver node. The durability files contain publication events only; their broker-side integrity check reconciles stored count, not all payload identities. `data/raw/recovery/summary.jsonl` records receipt, kill-call start, process-exit observation, redelivery, configuration, identity checks, and censoring. Pilot directories are not inputs to inference.
+Version 1.1.0 preserves the preceding 30-page manuscript and evidence. Version 1.2.0 adds a separately identified experimental campaign and revised article/supplement. Existing sealed distributions are never overwritten. Input snapshots and manifests identify pre-Git observations without inventing a retrospective Git history.
 
-`data/environment` records hardware, exact image digests, effective server configuration, initial and resumed driver details, source revisions, retained error logs, and periodic cgroup/resource telemetry. The failed setup attempt remains in the original raw main summary. A later failed warm-up/cleanup is preserved in its original panic log and the deviation ledger, rather than reconstructed as a successful timing sample. `SHA256SUMS` covers delivered source, evidence, and final artifacts, excluding caches and LaTeX intermediates.
-
-The delivered analyzer requires `data/environment/outcome-manifest.json` and the failure ledger, so a missing ledger cannot silently promote the diagnostic replay into a planned success. The original raw and environment file set is additionally bound to a frozen hash inventory, checked before analysis. New campaign records and their content seals remain under `campaigns/` and cannot be classified with the old failure ledger.
-
-The dataset is synthetic and was collected locally in the homelab. The manuscript and software were developed with AI assistance. The repository and versioned release provide public GitHub access. No DOI-bearing archival deposit, external artifact evaluation, scientific peer review, or journal acceptance is claimed.
-
-## Revision validation
-
-The 2026-09-24 revisions add storage-history disclosure, influence and execution-order diagnostics, deadline/source corrections, and safe future collection. `data/derived/robustness.json` retains all leave-one-out and paired-block diagnostics plus interruption segment memberships. The final pass also provides all 59 publication sample counts and p99 ranks in `data/derived/publication-tail-samples.csv` and a 556-record retrospective inventory in `data/derived/attempt-outcomes.{json,csv}`. The inventory comprises 550 planned outcomes and six additional documented attempts, excludes pilots and infrastructure provisioning, and does not invent unavailable stage durations. These post-observation diagnostics do not replace primary observations or establish confidence-interval coverage.
-
-`revisions/20260924/baseline-manifest.json` and `original-evidence-lock.json` preserve original provenance. `revisions/20260924-final/baseline-manifest.json` identifies the previously audited 816-file delivery. `bench/check_revision.py` independently checks the unchanged primary numerical results, original evidence, template, sensitivity summaries, sealed collections, and source-bound Lean receipts. `bench/check_document_provenance.py` rejects stale document QA. Run `make verify-revision` after analysis, paper compilation, and visual review of that exact PDF. A new PDF build needs a corresponding new visual-review receipt. The current resolution and scientific limits are recorded in `docs/FINAL_REVISION_VALIDATION.md`.
+`SHA256SUMS` covers delivered source, raw/derived evidence, documents and QA, excluding caches and duplicate distributions under `releases/`. The release builder verifies a fresh extraction and refuses an existing version. These checks establish content consistency, not independent certification of collection time, complete fault coverage, or scientific peer review. The manuscript and software were developed with AI assistance, disclosed in the article.

@@ -25,6 +25,9 @@ def main():
         raise FileExistsError(f'Release {version} already exists; prepare a new version')
     review=json.loads((ROOT/'data/derived/visual-review.json').read_text())
     validate_review(review)
+    supplement_pdf=ROOT/'output/pdf/redis-jetstream-reliability-supplement.pdf'
+    supplement_review=json.loads((ROOT/'data/derived/supplement-visual-review.json').read_text())
+    validate_review(supplement_review,supplement_pdf)
     build=json.loads((ROOT/'data/derived/build-receipt.json').read_text())
     check=json.loads((ROOT/'data/derived/paper-check.json').read_text())
     if not (build['status']=='pass' and build['compiler_exit_code']==0
@@ -32,6 +35,12 @@ def main():
             and build['source_sha256']==check['source_sha256']==source_hashes()
             and build['latex_log_sha256']==sha256(ROOT/'paper/main.log')):
         raise ValueError('Build, content, source, and visual review do not agree')
+    supplement_build=json.loads((ROOT/'data/derived/supplement-build-receipt.json').read_text())
+    if not (supplement_build['status']=='pass' and supplement_build['compiler_exit_code']==0
+            and supplement_build['source_sha256']==source_hashes()
+            and supplement_build['pdf_sha256']==supplement_review['pdf_sha256']==check['documents']['supplement']['pdf_sha256']
+            and supplement_build['latex_log_sha256']==sha256(ROOT/'paper/supplement.log')):
+        raise ValueError('Supplement build, content, source, and visual review do not agree')
     core=['output/pdf/redis-jetstream-reliability.pdf','paper/abstract.tex',
           'paper/main.tex','paper/results.tex','paper/conclusion.tex','paper/references.bib',
           'data/derived/statistics.json','data/derived/aggregate.csv',
@@ -40,6 +49,14 @@ def main():
           'formal/verification.json','revisions/20260924/lean-recheck.json',
           'revisions/20260924/original-evidence-lock.json',
           'LICENSE.md','LICENSES/CC-BY-4.0.txt','LICENSES/MIT.txt','CITATION.cff']
+    core += ['output/pdf/redis-jetstream-reliability-supplement.pdf',
+             'paper/supplement.tex','paper/supplement-model.tex','paper/followup-results.tex',
+             'followup/derived/statistics.json','followup/derived/trials.csv','followup/derived/report.json',
+             'data/derived/supplement-build-receipt.json','data/derived/supplement-visual-review.json',
+             'revisions/20260924-followup/followup-check.json','revisions/20260924-followup/lean-recheck.json',
+             'docs/FOLLOWUP_PROTOCOL.md','docs/FOLLOWUP_VALIDATION.md']
+    for campaign in ('main01','main02','main03'):
+        core += [f'followup/campaigns/{campaign}/{name}' for name in ('identity.json','plan.json','inputs/SHA256.json','RAW_SHA256.json')]
     manifest={'schema_version':1,'version':version,'prepared_date':metadata['prepared_date'],
               'archive_name':f'redis-jetstream-reliability-v{version}.tar.gz',
               'package_root':f'redis-jetstream-reliability-v{version}',
@@ -75,7 +92,7 @@ def main():
             with tarfile.open(archive,'r:gz') as tf:tf.extractall(extracted,filter='data')
             copy_root=extracted/manifest['package_root']
             verify_directory(copy_root)
-            for script in ('check_paper.py','check_revision.py','check_document_provenance.py'):
+            for script in ('check_paper.py','check_revision.py','check_followup.py','check_manuscript_numbers.py','check_document_provenance.py'):
                 run=subprocess.run([sys.executable,str(copy_root/'bench'/script)],
                                    cwd=copy_root,text=True,capture_output=True)
                 outputs.append(f'$ python bench/{script}\n{run.stdout}{run.stderr}')
@@ -87,10 +104,12 @@ def main():
         validation_log.write_text('\n'.join(outputs))
         pdf=staging/f'redis-jetstream-reliability-v{version}.pdf'
         shutil.copyfile(ROOT/'output/pdf/redis-jetstream-reliability.pdf',pdf)
+        supplement=staging/f'redis-jetstream-reliability-supplement-v{version}.pdf'
+        shutil.copyfile(supplement_pdf,supplement)
         receipt={'status':'pass','version':version,'prepared_at_utc':dt.datetime.now(dt.timezone.utc).isoformat(),
                  'public_deposit_status':'not_deposited','doi':None,
                  'verified_internal_files':verified['files_verified'],
-                 'files':{p.name:{'sha256':sha256(p),'bytes':p.stat().st_size} for p in (archive,pdf,validation_log)},
+                 'files':{p.name:{'sha256':sha256(p),'bytes':p.stat().st_size} for p in (archive,pdf,supplement,validation_log)},
                  'fresh_extraction_checks':fresh_checks,
                  'extracted_files_unchanged_after_checks':True,
                  'verification':'Every archived member matches the supplied internal manifest and working snapshot; core identities and document review agree.',

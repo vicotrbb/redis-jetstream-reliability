@@ -1,0 +1,73 @@
+\subsection{Follow-up outcomes and evidence quality}
+
+All 612 planned outcomes were collected: 601 procedures completed and eleven publication trials failed (Table~\ref{tab:followup-outcomes}). Four failures occurred during warm-up and seven during measurement. Ten concerned always profiles; one occurred in historical JetStream's periodic profile. The seven timed failures retain 14651 confirmed and 22 unknown request records, without a successful-workload rate imputed for their incomplete runs. Warm-up failures have no timed trace. The supplement lists every failure and distinguishes client confirmations from later, non-atomic broker inventories.
+
+Event reconstruction checked 80263171 timed records, including those unknown outcomes. All 349 completed publication, drain and diagnostic workloads passed stored-ID and full-payload comparison. These are recorded runtime checks and offline consistency checks, not independent experimental replication or a storage-fault test. No completed slow observation was removed, and no failed primary cell was replayed into success.
+
+\begin{table}[htbp]
+\centering\small
+\input{../data/derived/followup-outcomes.tex}
+\caption{All planned follow-up outcomes across three deployments. A complete negative control means that the observation procedure completed with the message still pending. Failed trials remain outcomes and do not receive invented successful-workload metrics.}
+\label{tab:followup-outcomes}
+\end{table}
+
+\subsection{RQ1: live controls and current reclamation policies}
+
+All 120 killed-victim and 120 live-unacknowledging episodes redelivered the original identifier and cleared pending state. At every fixed policy, threshold, victim state and deployment, the later reference age had a shorter mean reference-to-redelivery interval. No receipt preceded the reference event; the largest kill-invocation-to-exit bracket was 2.23 ms. Live redelivery confirms that consumer death is not a necessary trigger in these configurations.
+
+Figure~\ref{fig:followup-recovery} separates the timeout from receipt-based excess. Across deployment-specific condition means, XAUTOCLAIM excess ranged from 0.98 to 10.70 ms and JetStream excess from 1.62 to 9.80 ms. Current Redis CLAIM ranged from 20.52 to 87.83 ms under its 100 ms blocking-read policy. Its paired killed-minus-live differences ranged from $-26.91$ to 14.64 ms, precluding an equivalence claim from close overall averages. These are joint broker/client policy observations, not an intrinsic recovery-speed ranking or directly observed server-timer delays.
+
+All twelve plain-read controls retained pending state without redelivery. Their recorded reference-to-survivor-completion times ranged from 0.503 to 0.699 s for a nominal 0.500 s budget. The follow-up therefore reports actual endpoints, while the original controls retain only their nominal-budget interpretation.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{figures/followup-recovery.pdf}
+\caption{Every active follow-up recovery episode, showing receipt-to-receipt time minus the configured eligibility threshold. Blue circles are live, deliberately unacknowledging victims; orange squares are killed victims. Horizontal offsets separate deployments and do not encode time. R7/R8 denote Redis 7.4.2/8.10.2; auto denotes XAUTOCLAIM with a 10 ms sleep; J denotes JetStream. Zero is a client-receipt reference, not a verified broker-side lower bound.}
+\label{fig:followup-recovery}
+\end{figure}
+
+\subsection{RQ2: consumer scaling and driver capacity}
+
+All 96 follow-up drains completed. Across deployment-specific paired comparisons, sixteen consumers raised mean throughput by 10.43--14.49 times relative to one consumer in the current memory/periodic profiles. Mean trial cycle p99 increased in all eight engine/profile/driver-quota conditions. The 65536-message drains lasted 1.77--30.11 s, extending the shortest high-concurrency observations beyond the original subsecond runs while remaining finite workloads.
+
+At sixteen consumers, changing the driver from two to four CPUs, with matching GOMAXPROCS, produced mean paired throughput ratios of 1.031/1.026 for Redis memory/periodic and 1.107/1.102 for JetStream. Redis-periodic deployment ratios ranged from 0.993 to 1.048, so the direction was not uniform. No driver or broker cgroup throttling was recorded within the 96 bracketing drain samples. The increased rates and changed cycle tails nevertheless show that absence of throttling alone cannot establish that driver configuration is irrelevant. Table~\ref{tab:followup-drain} reports the corresponding CPU use; these observations concern the combined client, protocol and broker path.
+
+\begin{table}[htbp]
+\centering\small\setlength{\tabcolsep}{3pt}
+\input{../data/derived/followup-drain.tex}
+\caption{Current-release drain results. CPU is the driver's configured quota; $X_1$ and $X_{16}$ are throughput in kmsg/s. Point values equally weight campaign means. The speedup column gives the mean and range of campaign-specific paired ratios. Driver/Broker are mean CPU cores used during the bracketing samples at $C=16$, not percentages. M/P denote memory/periodic.}
+\label{tab:followup-drain}
+\end{table}
+
+\subsection{RQ3: confirmed publication from fresh stores}
+
+At sixteen publishers, equal-weight deployment means for Redis 8.10.2 were 73.26, 60.49 and 4.35 kmsg/s in memory, periodic and always profiles. JetStream 2.15.0 yielded 60.62, 49.75 and 0.565 kmsg/s. Each condition completed all nine planned trials except JetStream always, with eight completions. The paired periodic/memory ratios averaged 0.8257 for Redis and 0.8207 for JetStream, with deployment ranges 0.8082--0.8397 and 0.8091--0.8296; all nine pairs were available in each comparison. These are configured confirmation costs from the specified starting procedure.
+
+The latency trade-off remains visible. For memory, periodic and always profiles, respectively, mean trial p99 at sixteen publishers was 0.470, 0.563 and 16.98 ms for current Redis, and 0.639, 0.796 and 295.64 ms for current JetStream. A retained JetStream-always trial, main03/F0039, contained 976 confirmations and a 1968.6 ms p99, with nine higher order-statistic positions. Its tail remains part of the result. The supplement reports every condition's completion and sample counts; these empirical tails do not establish stable production percentiles.
+
+Matched publication durations clarify the concurrency comparison that the original serial sensitivity could not isolate. For current Redis always mode, the mean paired sixteen/one-publisher ratio was 9.41, ranging from 6.06 to 13.67 across deployments, using six of nine planned pairs. Current JetStream's corresponding mean was 1.55, ranging from 0.73 to 2.46, using seven pairs. More publishers therefore did not improve every deployment's always-mode mean. Historical-release arms and version contrasts remain in the complete results; neither current release nor fresh storage removes all observed stalls.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{figures/followup-publication.pdf}
+\caption{Fresh-store publication with matched 15-second admission budgets. Each point is one deployment's mean over completed planned trials of that condition. Horizontal offsets separate deployments; they have no quantitative meaning. The vertical scale is logarithmic. Failure counts and all per-deployment values accompany the results in the supplement.}
+\label{fig:followup-publication}
+\end{figure}
+
+\subsection{Synchronization and compression diagnostics}
+
+All 24 trace-family and 24 compression-family trials completed. In the twelve instrumented trials, the broker-side phase brackets contained no synchronization-call errors or boundary-overlapping calls. The synchronization-call/confirmation ratio was 1.000 for current Redis with one publisher and approximately 0.120 with sixteen. Current JetStream's ratio was 1.000 at both publisher counts. Together with the pinned append paths, these counts support sharing synchronization across concurrent Redis publications in this workload. They neither measure physical device flushes nor decompose the entire cross-system performance gap.
+
+Tracing reduced throughput. Mean traced/plain ratios at one and sixteen publishers were 0.943 and 0.815 for Redis, and 0.920 and 0.934 for JetStream, respectively. Within-trace call p99 values ranged from 2.00 to 2.76 ms. These separate diagnostics did not capture the untraced primary stalls, including main03/F0039's much larger request tail.
+
+Disabling inherited compression produced mean off/inherited ratios of 1.036/0.995 for Redis filler/template payloads and 1.021/0.988 for JetStream. All twelve deployment-specific ratios lay between 0.935 and 1.063, with both directions represented. The complete table is in the supplement. This sensitivity does not support attributing the large always-mode gap to compression alone; it does not establish that compression or Btrfs is irrelevant under other conditions.
+
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\input{../data/derived/followup-trace.tex}
+\caption{Current always-profile synchronization diagnostics. Entries give the mean and range of available deployment estimates; $n_t/n_p$ counts complete traces/paired comparisons, each out of three. Call p99 is a within-trace order statistic. Traced/plain is the paired throughput ratio. Counts combine fsync and fdatasync inside the broker's phase brackets; they are not physical device-flush counts.}
+\label{tab:followup-trace}
+\end{table}
+
+
+\FloatBarrier

@@ -1,0 +1,168 @@
+{
+  "actual_receipt_age_ms": 188.286961,
+  "attempts": 3,
+  "broker_start": {
+    "command": [
+      "redis-server",
+      "/data/F0132/server.conf"
+    ],
+    "configuration": "bind 0.0.0.0\nprotected-mode no\nport 6379\nsave \"\"\ndir /data/F0132/store\nmaxmemory 2gb\nmaxmemory-policy noeviction\nauto-aof-rewrite-percentage 0\nno-appendfsync-on-rewrite no\nappendonly yes\nappendfsync everysec\n",
+    "directory_flags": 0,
+    "mountinfo": "11350 9873 0:1851 / / rw,relatime master:3695 - overlay overlay rw,lowerdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125066/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125065/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125064/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125062/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125061/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125059/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125057/fs,upperdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125159/fs,workdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125159/work,uuid=on\n11351 11350 0:1853 / /proc rw,nosuid,nodev,noexec,relatime - proc proc rw\n11352 11350 0:1854 / /dev rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n11353 11352 0:1880 / /dev/pts rw,nosuid,noexec,relatime - devpts devpts rw,gid=5,mode=620,ptmxmode=666\n11354 11352 0:949 / /dev/mqueue rw,nosuid,nodev,noexec,relatime - mqueue mqueue rw\n11355 11350 0:1203 / /sys ro,nosuid,nodev,noexec,relatime - sysfs sysfs ro\n11356 11355 0:33 / /sys/fs/cgroup ro,nosuid,nodev,noexec,relatime - cgroup2 cgroup rw\n11357 11350 0:29 /rootfs/var/lib/kubelet/pods/51cf53c1-0be4-4dcc-822d-f643a18811ac/volumes/kubernetes.io~empty-dir/tools /tools rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11358 11350 0:29 /rootfs/var/lib/kubelet/pods/51cf53c1-0be4-4dcc-822d-f643a18811ac/volumes/kubernetes.io~empty-dir/data /data rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11359 11350 0:29 /rootfs/var/lib/kubelet/pods/51cf53c1-0be4-4dcc-822d-f643a18811ac/volumes/kubernetes.io~empty-dir/work /work rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11360 11350 0:29 /rootfs/var/lib/kubelet/pods/51cf53c1-0be4-4dcc-822d-f643a18811ac/etc-hosts /etc/hosts rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11361 11352 0:29 /rootfs/var/lib/kubelet/pods/51cf53c1-0be4-4dcc-822d-f643a18811ac/containers/work/e0b478ce /dev/termination-log rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11362 11350 0:29 /rootfs/var/lib/rancher/k3s/agent/containerd/io.containerd.grpc.v1.cri/sandboxes/ec023bd6c19d7a038ad6a790d21e134e6924b10e6f3757ff799d2029c084b57f/hostname /etc/hostname rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11363 11350 0:29 /rootfs/var/lib/rancher/k3s/agent/containerd/io.containerd.grpc.v1.cri/sandboxes/ec023bd6c19d7a038ad6a790d21e134e6924b10e6f3757ff799d2029c084b57f/resolv.conf /etc/resolv.conf rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11364 11352 0:324 / /dev/shm rw,nosuid,nodev,noexec,relatime - tmpfs shm rw,size=65536k\n9874 11351 0:1853 /bus /proc/bus ro,nosuid,nodev,noexec,relatime - proc proc rw\n9875 11351 0:1853 /fs /proc/fs ro,nosuid,nodev,noexec,relatime - proc proc rw\n9876 11351 0:1853 /irq /proc/irq ro,nosuid,nodev,noexec,relatime - proc proc rw\n9877 11351 0:1853 /sys /proc/sys ro,nosuid,nodev,noexec,relatime - proc proc rw\n9878 11351 0:1853 /sysrq-trigger /proc/sysrq-trigger ro,nosuid,nodev,noexec,relatime - proc proc rw\n9879 11351 0:1881 / /proc/asound ro,relatime - tmpfs tmpfs ro\n9916 11351 0:1882 / /proc/acpi ro,relatime - tmpfs tmpfs ro\n10139 11351 0:1854 /null /proc/kcore rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n10149 11351 0:1854 /null /proc/keys rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n10152 11351 0:1854 /null /proc/timer_list rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n10167 11351 0:1883 / /proc/scsi ro,relatime - tmpfs tmpfs ro\n10180 11355 0:1884 / /sys/firmware ro,relatime - tmpfs tmpfs ro\n10181 11355 0:1885 / /sys/devices/virtual/powercap ro,relatime - tmpfs tmpfs ro\n",
+    "pid": 508,
+    "ready_ns": 18303527349108067,
+    "start_ns": 18303527323315388
+  },
+  "broker_stop": {
+    "broker_port_closed": true,
+    "cleanup_end_ns": 18303528946937991,
+    "cleanup_error": "\u003cnil\u003e",
+    "cleanup_start_ns": 18303528946694047,
+    "exit": "\u003cnil\u003e",
+    "final_sample": {
+      "cpu": {
+        "burst_usec": 0,
+        "core_sched.force_idle_usec": 0,
+        "nr_bursts": 0,
+        "nr_periods": 6287,
+        "nr_throttled": 0,
+        "system_usec": 89049460,
+        "throttled_usec": 0,
+        "usage_usec": 118393164,
+        "user_usec": 29343703
+      },
+      "cpu_pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=810941\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=810488\n",
+      "end_ns": 18303528840408059,
+      "host_cpu_stat": "cpu  1113837387 496230 596613102 27030482651 171402052 103397982 112748547 0 0 0\ncpu0 62324420 26768 38383635 1682943309 11219418 8225734 16225600 0 0 0\ncpu1 33453010 7424 19013189 1753437302 6340633 4288394 7956389 0 0 0\ncpu2 51569796 18848 36455548 1699959097 9248120 9373462 14179927 0 0 0\ncpu3 30246948 5746 17796368 1764088477 5367565 4198072 3190975 0 0 0\ncpu4 65619773 24351 40180976 1685913533 11426416 7988454 6506250 0 0 0\ncpu5 42954478 11639 23348682 1741436537 7793818 4520863 3859235 0 0 0\ncpu6 59556411 21995 38121720 1696024142 10784526 8025716 6068411 0 0 0\ncpu7 37466729 9186 21310800 1750448841 7044884 4456700 3491676 0 0 0\ncpu8 73449625 28739 43352644 1672379135 12350832 8065076 6946127 0 0 0\ncpu9 49361594 15636 25995836 1730719386 8585487 4656659 4206181 0 0 0\ncpu10 85925584 37246 48563257 1651686417 13538979 8197195 7639395 0 0 0\ncpu11 57972520 22194 29316201 1717047394 9442371 4827302 4636210 0 0 0\ncpu12 132117853 74400 65095289 1584602641 16170828 8258881 8371011 0 0 0\ncpu13 99351200 57746 41991462 1658620182 12714894 5030853 5447961 0 0 0\ncpu14 134032056 76988 66146448 1581049513 16728284 8256281 8564965 0 0 0\ncpu15 98435381 57317 41541042 1660126737 12644990 5028335 5458227 0 0 0\nintr 89422379295 125 9 0 0 0 0 0 1 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 6342 0 0 0 0 0 0 0 0 7927521 0 66 0 0 0 0 0 0 0 213216437 87109888 156876015 72039952 209743792 119720395 190384322 102140543 246947972 142080002 309900173 171811025 694211349 438588467 716948257 433986278 0 0 0 0 0 2961237114 0 85 345 0 16023661 0 0 0 0 0 0 0 0 0 0 0 0 0 0 5 2233 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\nctxt 806920993617\nbtime 1771991029\nprocesses 678314618\nprocs_running 2\nprocs_blocked 0\nsoftirq 138609105259 107 1496796336 8708637 234181333 161297529 0 101961471 1841268070 57826 1620847774\n",
+      "host_loadavg": "0.67 1.06 1.37 3/4845 513\n",
+      "io_pressure": "some avg10=0.00 avg60=0.00 avg300=0.23 total=18715017\nfull avg10=0.00 avg60=0.00 avg300=0.23 total=18688224\n",
+      "io_stat": "259:0 rbytes=1015808 wbytes=3654791168 rios=239 wios=339534 dbytes=0 dios=0\n",
+      "memory_current": "24756224\n",
+      "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "start_ns": 18303528840138236,
+      "wall_ns": 1790294558631344700
+    },
+    "process_group_gone": true,
+    "stop_end_ns": 18303528946319526,
+    "stop_start_ns": 18303528840134128,
+    "storage_inventory": [
+      {
+        "bytes": 52,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "drwxr-xr-x",
+        "path": "."
+      },
+      {
+        "bytes": 208,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "-rw-r--r--",
+        "path": "server.conf"
+      },
+      {
+        "bytes": 1266,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "-rw-r--r--",
+        "path": "server.log"
+      },
+      {
+        "bytes": 26,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "drwxr-xr-x",
+        "path": "store"
+      },
+      {
+        "bytes": 146,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "drwxr-xr-x",
+        "path": "store/appendonlydir"
+      },
+      {
+        "bytes": 89,
+        "flags": 1024,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "-rw-r--r--",
+        "path": "store/appendonlydir/appendonly.aof.1.base.rdb"
+      },
+      {
+        "bytes": 247045,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "-rw-r--r--",
+        "path": "store/appendonlydir/appendonly.aof.1.incr.aof"
+      },
+      {
+        "bytes": 117,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "-rw-r--r--",
+        "path": "store/appendonlydir/appendonly.aof.manifest"
+      }
+    ]
+  },
+  "budget_start_ns": 18301531304046332,
+  "censored": false,
+  "controller_end_ns": 18301531437130588,
+  "deliveries": 0,
+  "driver_kernel": "Linux version 6.6.68 (nixbld@localhost) (gcc (GCC) 13.2.0, GNU ld (GNU Binutils) 2.41) #1-NixOS SMP PREEMPT_DYNAMIC Fri Dec 27 12:58:58 UTC 2024\n",
+  "gomaxprocs": 2,
+  "inventory": {
+    "info_error": "\u003cnil\u003e",
+    "pending": 0,
+    "persistence": "# Persistence\r\nloading:0\r\nasync_loading:0\r\ncurrent_cow_peak:0\r\ncurrent_cow_size:0\r\ncurrent_cow_size_age:0\r\ncurrent_fork_perc:0.00\r\ncurrent_save_keys_processed:0\r\ncurrent_save_keys_total:0\r\nrdb_changes_since_last_save:778\r\nrdb_bgsave_in_progress:0\r\nrdb_last_save_time:1790294557\r\nrdb_last_bgsave_status:ok\r\nrdb_last_bgsave_time_sec:-1\r\nrdb_current_bgsave_time_sec:-1\r\nrdb_saves:0\r\nrdb_saves_consecutive_failures:0\r\nrdb_last_cow_size:0\r\nrdb_last_load_keys_expired:0\r\nrdb_last_load_keys_loaded:0\r\naof_enabled:1\r\naof_rewrite_in_progress:0\r\naof_rewrite_scheduled:0\r\naof_last_rewrite_time_sec:-1\r\naof_current_rewrite_time_sec:-1\r\naof_last_bgrewrite_status:ok\r\naof_rewrites:0\r\naof_rewrites_consecutive_failures:0\r\naof_last_write_status:ok\r\naof_last_cow_size:0\r\nbackup_in_progress:0\r\nmodule_fork_in_progress:0\r\nmodule_fork_last_cow_size:0\r\naof_current_size:247045\r\naof_base_size:0\r\naof_pending_rewrite:0\r\naof_buffer_length:0\r\naof_pending_bio_fsync:0\r\naof_delayed_fsync:0\r\n",
+    "stored": 1
+  },
+  "nominal_deadline_ns": 18301534554046332,
+  "poll_phase_ns": 0,
+  "receipt_excess_ms": 72.29413899999997,
+  "receipt_ns": 18301531114814552,
+  "received_during_shutdown": false,
+  "reconciliation_end_ns": 18301531438499901,
+  "reconciliation_start_ns": 18301531437570328,
+  "redelivery_after_nominal_deadline": false,
+  "redelivery_before_reference": false,
+  "redelivery_ns": 18301531437108691,
+  "reference_end_ns": 18301531304044084,
+  "reference_start_ns": 18301531303101513,
+  "reference_to_redelivery_ms": 134.007178,
+  "stage": "complete",
+  "status": "complete",
+  "survivor_end_ns": 18301531437111699,
+  "survivor_error": "\u003cnil\u003e",
+  "survivor_first_request_ns": 18301531114938342,
+  "timer_branch_selected": false,
+  "trial": {
+    "id": "F0132",
+    "campaign": "main03",
+    "block": 0,
+    "kind": "recovery",
+    "engine": "redis",
+    "version": "8.10.2",
+    "profile": "periodic",
+    "host": "redis-current",
+    "publishers": 16,
+    "consumers": 0,
+    "cpus": 2,
+    "seconds": 15,
+    "count": 65536,
+    "payload": "compressible",
+    "compression": "inherited",
+    "trace": false,
+    "recovery": "claim",
+    "delta_ms": 250,
+    "age": 0.75,
+    "kill": true,
+    "seed": 2026092535,
+    "pilot": false
+  },
+  "utc_end": "2026-09-25T00:02:38.738067923Z",
+  "utc_start": "2026-09-25T00:02:37.108639863Z",
+  "victim_exit": "signal: killed",
+  "victim_stderr": "",
+  "warmup_end_ns": 18301531106150398,
+  "warmup_start_ns": 18301529951315028
+}

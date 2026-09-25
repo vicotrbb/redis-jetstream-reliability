@@ -1,0 +1,320 @@
+{
+  "admission_deadline_ns": 18292959137153092,
+  "attempted": 906349,
+  "broker_start": {
+    "command": [
+      "nats-server",
+      "-c",
+      "/data/F0008/server.conf"
+    ],
+    "configuration": "port: 4222\nhttp_port: 8222\njetstream {\nstore_dir: /data/F0008/store\nmax_memory_store: 2GB\nmax_file_store: 2GB\nsync_interval: 1s\n}\n",
+    "directory_flags": 0,
+    "mountinfo": "11497 10588 0:1922 / / rw,relatime master:3759 - overlay overlay rw,lowerdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125060/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125058/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125056/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125046/fs,upperdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125107/fs,workdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125107/work,uuid=on\n11498 11497 0:1932 / /proc rw,nosuid,nodev,noexec,relatime - proc proc rw\n11500 11497 0:1933 / /dev rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n11501 11500 0:1934 / /dev/pts rw,nosuid,noexec,relatime - devpts devpts rw,gid=5,mode=620,ptmxmode=666\n11502 11500 0:1902 / /dev/mqueue rw,nosuid,nodev,noexec,relatime - mqueue mqueue rw\n11503 11497 0:1909 / /sys ro,nosuid,nodev,noexec,relatime - sysfs sysfs ro\n11504 11503 0:33 / /sys/fs/cgroup ro,nosuid,nodev,noexec,relatime - cgroup2 cgroup rw\n11505 11497 0:29 /rootfs/var/lib/kubelet/pods/d4af90d7-9ca2-4228-97c2-1422ff30e881/volumes/kubernetes.io~empty-dir/tools /tools rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11506 11497 0:29 /rootfs/var/lib/kubelet/pods/d4af90d7-9ca2-4228-97c2-1422ff30e881/volumes/kubernetes.io~empty-dir/data /data rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11507 11497 0:29 /rootfs/var/lib/kubelet/pods/d4af90d7-9ca2-4228-97c2-1422ff30e881/volumes/kubernetes.io~empty-dir/work /work rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11532 11497 0:29 /rootfs/var/lib/kubelet/pods/d4af90d7-9ca2-4228-97c2-1422ff30e881/etc-hosts /etc/hosts rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11533 11500 0:29 /rootfs/var/lib/kubelet/pods/d4af90d7-9ca2-4228-97c2-1422ff30e881/containers/work/d01f29c5 /dev/termination-log rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11534 11497 0:29 /rootfs/var/lib/rancher/k3s/agent/containerd/io.containerd.grpc.v1.cri/sandboxes/6f28652003ba714634eb97943c7c82df15542e62596f91d975cc028af70f2ea3/hostname /etc/hostname rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11535 11497 0:29 /rootfs/var/lib/rancher/k3s/agent/containerd/io.containerd.grpc.v1.cri/sandboxes/6f28652003ba714634eb97943c7c82df15542e62596f91d975cc028af70f2ea3/resolv.conf /etc/resolv.conf rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n11536 11500 0:1777 / /dev/shm rw,nosuid,nodev,noexec,relatime - tmpfs shm rw,size=65536k\n10589 11498 0:1932 /bus /proc/bus ro,nosuid,nodev,noexec,relatime - proc proc rw\n10590 11498 0:1932 /fs /proc/fs ro,nosuid,nodev,noexec,relatime - proc proc rw\n10591 11498 0:1932 /irq /proc/irq ro,nosuid,nodev,noexec,relatime - proc proc rw\n10593 11498 0:1932 /sys /proc/sys ro,nosuid,nodev,noexec,relatime - proc proc rw\n10594 11498 0:1932 /sysrq-trigger /proc/sysrq-trigger ro,nosuid,nodev,noexec,relatime - proc proc rw\n10595 11498 0:1935 / /proc/asound ro,relatime - tmpfs tmpfs ro\n10596 11498 0:1936 / /proc/acpi ro,relatime - tmpfs tmpfs ro\n10597 11498 0:1933 /null /proc/kcore rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n10598 11498 0:1933 /null /proc/keys rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n10599 11498 0:1933 /null /proc/timer_list rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n10600 11498 0:1937 / /proc/scsi ro,relatime - tmpfs tmpfs ro\n10601 11503 0:1938 / /sys/firmware ro,relatime - tmpfs tmpfs ro\n10602 11503 0:1939 / /sys/devices/virtual/powercap ro,relatime - tmpfs tmpfs ro\n",
+    "pid": 160,
+    "ready_ns": 18294940317126769,
+    "start_ns": 18294940291436633
+  },
+  "broker_stop": {
+    "broker_port_closed": true,
+    "cleanup_end_ns": 18294963857815556,
+    "cleanup_error": "\u003cnil\u003e",
+    "cleanup_start_ns": 18294963857621167,
+    "exit": "\u003cnil\u003e",
+    "final_sample": {
+      "cpu": {
+        "burst_usec": 0,
+        "core_sched.force_idle_usec": 0,
+        "nr_bursts": 0,
+        "nr_periods": 335,
+        "nr_throttled": 0,
+        "system_usec": 10545950,
+        "throttled_usec": 0,
+        "usage_usec": 20568744,
+        "user_usec": 10022793
+      },
+      "cpu_pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=61890\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=61028\n",
+      "end_ns": 18294963740255505,
+      "host_cpu_stat": "cpu  1113318122 496230 596284303 27018195886 171139510 103338367 112559931 0 0 0\ncpu0 62297462 26768 38364092 1682169471 11201226 8221806 16215974 0 0 0\ncpu1 33441008 7424 19006901 1752613308 6334136 4286695 7952494 0 0 0\ncpu2 51550556 18848 36436313 1699263953 9231385 9357958 14096608 0 0 0\ncpu3 30233425 5746 17788277 1763265511 5362000 4196280 3188580 0 0 0\ncpu4 65590497 24351 40159153 1685141448 11407590 7984501 6500500 0 0 0\ncpu5 42938666 11639 23340029 1740619265 7785247 4519024 3857130 0 0 0\ncpu6 59530520 21995 38102836 1695243733 10766369 8021845 6063865 0 0 0\ncpu7 37453134 9186 21303442 1749626205 7037528 4454936 3490039 0 0 0\ncpu8 73416947 28739 43328871 1671617883 12327800 8061088 6939692 0 0 0\ncpu9 49342724 15636 25985235 1729908508 8576332 4654733 4203356 0 0 0\ncpu10 85885568 37246 48534542 1650942225 13513125 8193045 7631195 0 0 0\ncpu11 57949437 22194 29302175 1716247570 9431334 4825232 4631909 0 0 0\ncpu12 132048974 74400 65052867 1583913592 16139019 8254657 8356130 0 0 0\ncpu13 99294590 57746 41962822 1657881131 12698433 5028491 5436143 0 0 0\ncpu14 133962959 76988 66103795 1580360373 16697070 8252066 8549891 0 0 0\ncpu15 98381649 57317 41512947 1659381702 12630909 5026005 5446416 0 0 0\nintr 93379635890 125 9 0 0 0 0 0 1 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 6342 0 0 0 0 0 0 0 0 7923811 0 66 0 0 0 0 0 0 0 212687195 87026157 156453845 71970083 209247524 119591517 189944663 102036965 246378309 141918345 309201685 171614963 693322233 438264792 716049477 433699572 0 0 0 0 0 2910333674 0 85 345 0 16015880 0 0 0 0 0 0 0 0 0 0 0 0 0 0 5 2233 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\nctxt 806509069938\nbtime 1771991029\nprocesses 677699239\nprocs_running 3\nprocs_blocked 0\nsoftirq 138326247605 107 1488969353 6384813 14254592 161224860 0 101569963 1816738507 57826 1593061408\n",
+      "host_loadavg": "2.39 1.47 1.27 4/4897 167\n",
+      "io_pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=37\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=37\n",
+      "io_stat": "259:0 rbytes=49152 wbytes=7495680 rios=2 wios=93 dbytes=0 dios=0\n",
+      "memory_current": "1438715904\n",
+      "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "start_ns": 18294963739875373,
+      "wall_ns": 1790285993531081927
+    },
+    "process_group_gone": true,
+    "stop_end_ns": 18294963856622420,
+    "stop_start_ns": 18294963739863761,
+    "storage_inventory": [
+      {
+        "bytes": 52,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "drwxr-xr-x",
+        "path": "."
+      },
+      {
+        "bytes": 130,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "-rw-r--r--",
+        "path": "server.conf"
+      },
+      {
+        "bytes": 2300,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "-rw-r--r--",
+        "path": "server.log"
+      },
+      {
+        "bytes": 18,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "drwxr-xr-x",
+        "path": "store"
+      },
+      {
+        "bytes": 0,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "drwx------",
+        "path": "store/jetstream"
+      }
+    ]
+  },
+  "confirmed": 906349,
+  "driver_kernel": "Linux version 6.6.68 (nixbld@localhost) (gcc (GCC) 13.2.0, GNU ld (GNU Binutils) 2.41) #1-NixOS SMP PREEMPT_DYNAMIC Fri Dec 27 12:58:58 UTC 2024\n",
+  "end_ns": 18292959137413766,
+  "gomaxprocs": 2,
+  "inventory": {
+    "consumer_info": {
+      "stream_name": "F0008",
+      "name": "workers",
+      "created": "2026-09-24T21:39:31.30293066Z",
+      "config": {
+        "durable_name": "workers",
+        "name": "workers",
+        "deliver_policy": "all",
+        "ack_policy": "explicit",
+        "ack_wait": 30000000000,
+        "max_deliver": -1,
+        "replay_policy": "instant",
+        "max_waiting": 512,
+        "max_ack_pending": 131072,
+        "num_replicas": 0,
+        "metadata": {
+          "_nats.level": "5",
+          "_nats.req.level": "0",
+          "_nats.ver": "2.15.0"
+        }
+      },
+      "delivered": {
+        "consumer_seq": 0,
+        "stream_seq": 0
+      },
+      "ack_floor": {
+        "consumer_seq": 0,
+        "stream_seq": 0
+      },
+      "num_ack_pending": 0,
+      "num_redelivered": 0,
+      "num_waiting": 0,
+      "num_pending": 906349
+    },
+    "pending": 0,
+    "stored": 906349,
+    "stream_info": {
+      "config": {
+        "name": "F0008",
+        "subjects": [
+          "F0008"
+        ],
+        "retention": "limits",
+        "max_consumers": -1,
+        "max_msgs": -1,
+        "max_bytes": -1,
+        "discard": "old",
+        "max_age": 0,
+        "max_msgs_per_subject": -1,
+        "max_msg_size": -1,
+        "storage": "memory",
+        "num_replicas": 1,
+        "duplicate_window": 120000000000,
+        "compression": "none",
+        "allow_direct": false,
+        "mirror_direct": false,
+        "consumer_limits": {},
+        "metadata": {
+          "_nats.level": "5",
+          "_nats.req.level": "0",
+          "_nats.ver": "2.15.0"
+        }
+      },
+      "created": "2026-09-24T21:39:31.301828898Z",
+      "state": {
+        "messages": 906349,
+        "bytes": 483084017,
+        "first_seq": 1,
+        "first_ts": "2026-09-24T21:39:31.328400759Z",
+        "last_seq": 906349,
+        "last_ts": "2026-09-24T21:39:46.328198259Z",
+        "consumer_count": 2,
+        "deleted": null,
+        "num_deleted": 0,
+        "num_subjects": 1,
+        "subjects": null
+      },
+      "cluster": {
+        "leader": "NBLO4QVKGNYRF4H6UKU2X4H4ZIVFQNHXWKMUZ3N46VGI6KBQJKYX2SQS"
+      }
+    }
+  },
+  "joined_ns": 18292959137420445,
+  "latency_ms": {
+    "max": 10.666043,
+    "mean": 0.26338963809746957,
+    "p50": 0.24297,
+    "p99": 0.638975
+  },
+  "payload_verification": {
+    "all_512_bytes_equal": true,
+    "digest_scheme": "deterministic exact byte comparison",
+    "expected_ids": 906349,
+    "id_format": "big-endian uint64",
+    "readback_ids": 906349
+  },
+  "publication_broker_after": {
+    "cpu": {
+      "burst_usec": 0,
+      "core_sched.force_idle_usec": 0,
+      "nr_bursts": 0,
+      "nr_periods": 294,
+      "nr_throttled": 0,
+      "system_usec": 9915169,
+      "throttled_usec": 0,
+      "usage_usec": 17949334,
+      "user_usec": 8034165
+    },
+    "cpu_pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=54866\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=54105\n",
+    "end_ns": 18294956537975052,
+    "host_cpu_stat": "cpu  1113317510 496230 596283996 27018185599 171139490 103338278 112559799 0 0 0\ncpu0 62297425 26768 38364070 1682168829 11201224 8221802 16215965 0 0 0\ncpu1 33440994 7424 19006887 1752612630 6334134 4286693 7952488 0 0 0\ncpu2 51550535 18848 36436294 1699263386 9231385 9357911 14096551 0 0 0\ncpu3 30233399 5746 17788263 1763264839 5361998 4196277 3188577 0 0 0\ncpu4 65590463 24351 40159134 1685140795 11407590 7984497 6500496 0 0 0\ncpu5 42938637 11639 23340018 1740618592 7785246 4519022 3857128 0 0 0\ncpu6 59530489 21995 38102814 1695243080 10766367 8021842 6063860 0 0 0\ncpu7 37453111 9186 21303431 1749625529 7037525 4454934 3490036 0 0 0\ncpu8 73416906 28739 43328849 1671617244 12327798 8061084 6939686 0 0 0\ncpu9 49342694 15636 25985224 1729907842 8576331 4654731 4203352 0 0 0\ncpu10 85885515 37246 48534518 1650941598 13513124 8193041 7631190 0 0 0\ncpu11 57949398 22194 29302163 1716246911 9431333 4825229 4631906 0 0 0\ncpu12 132048911 74400 65052838 1583912982 16139017 8254654 8356124 0 0 0\ncpu13 99294532 57746 41962798 1657880498 12698433 5028489 5436139 0 0 0\ncpu14 133962885 76988 66103763 1580359781 16697068 8252062 8549883 0 0 0\ncpu15 98381608 57317 41512926 1659381055 12630909 5026003 5446411 0 0 0\nintr 93379258017 125 9 0 0 0 0 0 1 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 6342 0 0 0 0 0 0 0 0 7923798 0 66 0 0 0 0 0 0 0 212686788 87025961 156453670 71969914 209247371 119591386 189944543 102036912 246378129 141918223 309201400 171614827 693321894 438264676 716049052 433699511 0 0 0 0 0 2910180279 0 85 345 0 16015877 0 0 0 0 0 0 0 0 0 0 0 0 0 0 5 2233 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\nctxt 806508729015\nbtime 1771991029\nprocesses 677698229\nprocs_running 6\nprocs_blocked 1\nsoftirq 138325919047 107 1488960200 6348904 14025872 161224722 0 101569929 1816714706 57826 1593030605\n",
+    "host_loadavg": "2.64 1.49 1.27 4/4879 167\n",
+    "io_pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=37\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=37\n",
+    "io_stat": "259:0 rbytes=49152 wbytes=7495680 rios=2 wios=93 dbytes=0 dios=0\n",
+    "memory_current": "950804480\n",
+    "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+    "start_ns": 18294956537613706,
+    "wall_ns": 1790285986328821041
+  },
+  "publication_broker_before": {
+    "cpu": {
+      "burst_usec": 0,
+      "core_sched.force_idle_usec": 0,
+      "nr_bursts": 0,
+      "nr_periods": 144,
+      "nr_throttled": 0,
+      "system_usec": 130114,
+      "throttled_usec": 0,
+      "usage_usec": 185914,
+      "user_usec": 55800
+    },
+    "cpu_pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=1793\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=1792\n",
+    "end_ns": 18294941535935054,
+    "host_cpu_stat": "cpu  1113315884 496230 596282550 27018166299 171139458 103338141 112558356 0 0 0\ncpu0 62297328 26768 38363996 1682167563 11201218 8221794 16215920 0 0 0\ncpu1 33440964 7424 19006867 1752611207 6334133 4286688 7952470 0 0 0\ncpu2 51550509 18848 36436241 1699262668 9231384 9357876 14095897 0 0 0\ncpu3 30233341 5746 17788228 1763263459 5361997 4196273 3188559 0 0 0\ncpu4 65590366 24351 40159047 1685139543 11407586 7984489 6500451 0 0 0\ncpu5 42938586 11639 23339982 1740617208 7785245 4519018 3857111 0 0 0\ncpu6 59530396 21995 38102743 1695241795 10766363 8021834 6063828 0 0 0\ncpu7 37453077 9186 21303412 1749624095 7037524 4454930 3490029 0 0 0\ncpu8 73416786 28739 43328746 1671616040 12327794 8061075 6939630 0 0 0\ncpu9 49342633 15636 25985171 1729906491 8576331 4654727 4203326 0 0 0\ncpu10 85885367 37246 48534380 1650940479 13513122 8193032 7631111 0 0 0\ncpu11 57949306 22194 29302083 1716245638 9431330 4825224 4631859 0 0 0\ncpu12 132048721 74400 65052671 1583911942 16139015 8254644 8356028 0 0 0\ncpu13 99294377 57746 41962625 1657879418 12698433 5028482 5436040 0 0 0\ncpu14 133962689 76988 66103597 1580358750 16697066 8252053 8549781 0 0 0\ncpu15 98381429 57317 41512754 1659379996 12630908 5025996 5446310 0 0 0\nintr 93378237565 125 9 0 0 0 0 0 1 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 6342 0 0 0 0 0 0 0 0 7923798 0 66 0 0 0 0 0 0 0 212685895 87025811 156453160 71969711 209246828 119591216 189943750 102036770 246377343 141918104 309200869 171614749 693320863 438264081 716048648 433699452 0 0 0 0 0 2910130465 0 85 345 0 16015877 0 0 0 0 0 0 0 0 0 0 0 0 0 0 5 2233 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\nctxt 806507722014\nbtime 1771991029\nprocesses 677696065\nprocs_running 2\nprocs_blocked 0\nsoftirq 138324308526 107 1488940467 6348865 12571742 161224640 0 101569884 1816647794 57826 1592961025\n",
+    "host_loadavg": "2.82 1.46 1.26 3/4879 167\n",
+    "io_pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=37\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=37\n",
+    "io_stat": "259:0 rbytes=49152 wbytes=7495680 rios=2 wios=93 dbytes=0 dios=0\n",
+    "memory_current": "20783104\n",
+    "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+    "start_ns": 18294941535625405,
+    "wall_ns": 1790285971326832280
+  },
+  "publication_driver_after": {
+    "cpu": {
+      "burst_usec": 0,
+      "core_sched.force_idle_usec": 0,
+      "nr_bursts": 0,
+      "nr_periods": 1990,
+      "nr_throttled": 826,
+      "system_usec": 67363041,
+      "throttled_usec": 117759339,
+      "usage_usec": 278300599,
+      "user_usec": 210937557
+    },
+    "cpu_pressure": "some avg10=0.41 avg60=3.01 avg300=8.41 total=52328565\nfull avg10=0.11 avg60=1.87 avg300=5.76 total=36555830\n",
+    "end_ns": 18292959137693573,
+    "host_cpu_stat": "cpu  416533117 560 199129661 6488966013 29064821 49368247 49366955 0 0 0\ncpu0 104075494 160 50263147 1621136107 7349749 12416103 12847327 0 0 0\ncpu1 104202616 235 49607295 1622371556 7231699 12353878 12276407 0 0 0\ncpu2 104050320 101 49626894 1622486408 7247919 12344330 12353059 0 0 0\ncpu3 104204685 62 49632324 1622971940 7235453 12253934 11890160 0 0 0\nintr 31739741979 0 5 0 0 0 0 0 0 0 36 0 0 0 0 0 0 54 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 485 10180 480680576 478553648 477286378 478428743 0 0 48 63 2192042235 2237155740 2103674298 2557635778 226 63012137 429 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\nctxt 200112984332\nbtime 1771993027\nprocesses 49134629\nprocs_running 1\nprocs_blocked 0\nsoftirq 34909161872 300 302204476 9889071 3794041130 10187 0 116291581 2412357495 23885 2504539971\n",
+    "host_loadavg": "1.66 2.15 1.83 2/562 4711\n",
+    "io_pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=51767\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=49260\n",
+    "io_stat": "259:0 rbytes=0 wbytes=313155584 rios=0 wios=5800 dbytes=0 dios=0\n",
+    "memory_current": "692424704\n",
+    "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+    "start_ns": 18292959137437152,
+    "wall_ns": 1790285986328424178
+  },
+  "publication_driver_before": {
+    "cpu": {
+      "burst_usec": 0,
+      "core_sched.force_idle_usec": 0,
+      "nr_bursts": 0,
+      "nr_periods": 1840,
+      "nr_throttled": 826,
+      "system_usec": 56623814,
+      "throttled_usec": 117759339,
+      "usage_usec": 260616661,
+      "user_usec": 203992846
+    },
+    "cpu_pressure": "some avg10=0.94 avg60=3.83 avg300=8.86 total=52187902\nfull avg10=0.56 avg60=2.44 avg300=6.08 total=36457125\n",
+    "end_ns": 18292944137150579,
+    "host_cpu_stat": "cpu  416532206 560 199128461 6488963684 29064803 49368167 49365485 0 0 0\ncpu0 104075259 160 50262828 1621135558 7349745 12416083 12846946 0 0 0\ncpu1 104202425 235 49607015 1622370975 7231694 12353856 12275984 0 0 0\ncpu2 104050050 101 49626595 1622485766 7247915 12344312 12352801 0 0 0\ncpu3 104204471 62 49632021 1622971383 7235448 12253913 11889753 0 0 0\nintr 31738504118 0 5 0 0 0 0 0 0 0 36 0 0 0 0 0 0 54 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 485 10180 480680226 478553348 477286115 478428386 0 0 48 63 2191761104 2236878237 2103391780 2557363013 226 63012137 429 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\nctxt 200112705647\nbtime 1771993027\nprocesses 49134584\nprocs_running 2\nprocs_blocked 0\nsoftirq 34907250204 300 302199099 9888886 3792163018 10187 0 116291481 2412336166 23885 2504533406\n",
+    "host_loadavg": "1.57 2.15 1.82 3/561 4710\n",
+    "io_pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=51767\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=49260\n",
+    "io_stat": "259:0 rbytes=0 wbytes=313155584 rios=0 wios=5800 dbytes=0 dios=0\n",
+    "memory_current": "547606528\n",
+    "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+    "start_ns": 18292944136639523,
+    "wall_ns": 1790285971327627517
+  },
+  "reconciliation_end_ns": 18292966339813754,
+  "reconciliation_start_ns": 18292966338838357,
+  "stage": "complete",
+  "start_ns": 18292944137153092,
+  "status": "complete",
+  "throughput_mps": 60422.21663327342,
+  "trace": {
+    "path": "events.csv.gz",
+    "records": 906349,
+    "sha256": "e0cb9b985171254091394faa752611ee9b454735b29b811eebf3cb6861681503"
+  },
+  "trial": {
+    "id": "F0008",
+    "campaign": "pilot04",
+    "block": 0,
+    "kind": "publication",
+    "engine": "nats",
+    "version": "2.15.0",
+    "profile": "memory",
+    "host": "nats-current",
+    "publishers": 16,
+    "consumers": 0,
+    "cpus": 2,
+    "seconds": 15,
+    "count": 65536,
+    "payload": "compressible",
+    "compression": "inherited",
+    "trace": false,
+    "recovery": "",
+    "delta_ms": 250,
+    "age": 0.1,
+    "kill": true,
+    "seed": 20260941,
+    "pilot": true
+  },
+  "unknown": 0,
+  "utc_end": "2026-09-24T21:39:53.650276001Z",
+  "utc_start": "2026-09-24T21:39:30.075311608Z",
+  "warmup_end_ns": 18292944110448943,
+  "warmup_start_ns": 18292942921110161
+}

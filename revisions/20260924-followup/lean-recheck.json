@@ -1,0 +1,64 @@
+{
+  "compiler_version": "Lean 4.24.0",
+  "compiler_commit": "797c613eb9b6d4ec95db23e3e00af9ac6657f24b",
+  "compiler_binary_sha256": "8fadc3ed92cc9decb94c96ee9c0876e91e03a3a5e69138f32114f02789e2766c",
+  "toolchain_archive_sha256": "b14f5e5159219dd1a1956c3b806813319f5e94ccd5bdfd56f54520609a5bb5ec",
+  "imports": [
+    "Std"
+  ],
+  "status": "pass",
+  "exit_code": 0,
+  "checked_at_utc": "2026-09-25T00:16:26.539308+00:00",
+  "execution_context": "homelab",
+  "namespace": "msgrel-fup-proof20260924",
+  "pod": "proof",
+  "execution_after_benchmark_collection": true,
+  "source": "formal/DeliveryModel.lean",
+  "source_sha256": "169fa4a50504ba59b34a3159bcdc0c1a1d89139c28a323856e4be40805928d03",
+  "container_image": "docker.io/library/golang@sha256:10f549dc8489597aa7ed2b62008199bb96717f52a8e8434ea035d5b44368f8a6",
+  "command": [
+    "kubectl",
+    "--context",
+    "homelab",
+    "exec",
+    "-n",
+    "msgrel-fup-proof20260924",
+    "proof",
+    "--",
+    "sh",
+    "/work/formal/verify.sh"
+  ],
+  "logical_dependencies": {
+    "residual_decomposition": [
+      "propext",
+      "Quot.sound"
+    ],
+    "residual_timeout_bound": [
+      "propext",
+      "Quot.sound"
+    ],
+    "observed_receipt_offset": [
+      "propext",
+      "Quot.sound"
+    ],
+    "observed_excess_negative_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "busy_sum_le_capacity": [
+      "propext",
+      "Quot.sound"
+    ],
+    "consumer_capacity": [
+      "propext",
+      "Quot.sound"
+    ],
+    "uninterrupted_orders": [],
+    "effect_before_ack_crash": [],
+    "ack_before_effect_crash": [],
+    "each_order_has_counterexample": []
+  },
+  "log": "revisions/20260924-followup/lean-recheck.log",
+  "scope": "Fresh homelab kernel compilation of selected abstract statements, not broker implementation verification."
+}

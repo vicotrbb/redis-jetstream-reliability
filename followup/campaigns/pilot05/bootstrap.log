@@ -1,0 +1,37 @@
+namespace/msgrel-fup-pilot05 created
+pod/redis-old created
+service/redis-old created
+pod/redis-current created
+service/redis-current created
+pod/nats-old created
+service/nats-old created
+pod/nats-current created
+service/nats-current created
+pod/runner-2 created
+pod/runner-4 created
+networkpolicy.networking.k8s.io/namespace-only created
+pod/nats-current condition met
+pod/nats-old condition met
+pod/redis-current condition met
+pod/redis-old condition met
+pod/runner-2 condition met
+pod/runner-4 condition met
+tar: Removing leading `/' from member names
+command terminated with exit code 137
+Traceback (most recent call last):
+  File "/Users/victorbona/Code/Research/redis-jetstream-reliability/bench/followup/run.py", line 327, in <module>
+    execute(["delete", "namespace", ns, "--wait=true", "--timeout=120s"])
+    
+  File "/Users/victorbona/Code/Research/redis-jetstream-reliability/bench/followup/run.py", line 315, in main
+    print(folder)
+        ~^^^^^^^^
+  File "/Users/victorbona/Code/Research/redis-jetstream-reliability/bench/followup/run.py", line 210, in bootstrap
+    binary = folder / "followup-linux-amd64"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/victorbona/Code/Research/redis-jetstream-reliability/bench/followup/run.py", line 34, in execute
+    return subprocess.run(K + args, check=True, **kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['kubectl', '--context', 'homelab', 'cp', '/Users/victorbona/Code/Research/redis-jetstream-reliability/followup/campaigns/pilot05/followup-linux-amd64', 'msgrel-fup-pilot05/redis-old:/tools/followup']' returned non-zero exit status 137.

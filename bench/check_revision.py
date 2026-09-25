@@ -123,11 +123,11 @@ def check():
             'sensitivity_recomputed_independently':True,'sealed_collections_checked':checked,
             'publication_tail_samples_checked':59,'historical_outcome_records_checked':556,
             'planned_outcomes_checked':550,'additional_documented_attempts':6,
-            'unchanged_lean_declarations':10,'fresh_lean_compile_in_this_final_pass':False,
+            'unchanged_lean_declarations':10,'this_check_verifies_historical_lean_receipts_only':True,
             'validated_driver_source_files':len(driver_inputs),'homelab_validation_flows':len(flows),
             'homelab_go_tests_with_race_detector':5,'homelab_campaign_isolation_tests':9,
             'recovery_endpoint_flows_checked':len(endpoints)}
-    (ROOT/'revisions/20260924-final/revision-check.json').write_text(json.dumps(result,indent=2)+'\n')
+    (ROOT/'revisions/20260924-followup/legacy-evidence-check.json').write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps(result,indent=2))
 
 

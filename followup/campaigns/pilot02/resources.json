@@ -1,0 +1,654 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "name": "msgrel-fup-pilot02",
+        "labels": {
+          "purpose": "message-reliability-followup",
+          "study-owner": "msgrel-fup-pilot02"
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "redis-old",
+        "namespace": "msgrel-fup-pilot02",
+        "labels": {
+          "app": "redis-old"
+        }
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "automountServiceAccountToken": false,
+        "tolerations": [
+          {
+            "key": "node-role.kubernetes.io/control-plane",
+            "operator": "Exists",
+            "effect": "NoSchedule"
+          }
+        ],
+        "terminationGracePeriodSeconds": 15,
+        "containers": [
+          {
+            "name": "work",
+            "image": "docker.io/library/redis@sha256:02419de7eddf55aa5bcf49efb74e88fa8d931b4d77c07eff8a6b2144472b6952",
+            "command": [
+              "sh",
+              "-c",
+              "while [ ! -x /tools/followup ]; do sleep 1; done; exec /tools/followup control redis"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "2",
+                "memory": "1Gi"
+              }
+            },
+            "volumeMounts": [
+              {
+                "name": "tools",
+                "mountPath": "/tools"
+              },
+              {
+                "name": "data",
+                "mountPath": "/data"
+              },
+              {
+                "name": "work",
+                "mountPath": "/work"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "tools",
+            "emptyDir": {}
+          },
+          {
+            "name": "data",
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            }
+          },
+          {
+            "name": "work",
+            "emptyDir": {
+              "sizeLimit": "8Gi"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "redis-old",
+        "namespace": "msgrel-fup-pilot02"
+      },
+      "spec": {
+        "selector": {
+          "app": "redis-old"
+        },
+        "ports": [
+          {
+            "name": "control",
+            "port": 8088
+          },
+          {
+            "name": "broker",
+            "port": 6379
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "redis-current",
+        "namespace": "msgrel-fup-pilot02",
+        "labels": {
+          "app": "redis-current"
+        }
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "automountServiceAccountToken": false,
+        "tolerations": [
+          {
+            "key": "node-role.kubernetes.io/control-plane",
+            "operator": "Exists",
+            "effect": "NoSchedule"
+          }
+        ],
+        "terminationGracePeriodSeconds": 15,
+        "containers": [
+          {
+            "name": "work",
+            "image": "docker.io/library/redis@sha256:72cedd9603038893af961e90ac5e1a1a0d8377d5e338dbdad8fe284ea25de18f",
+            "command": [
+              "sh",
+              "-c",
+              "while [ ! -x /tools/followup ]; do sleep 1; done; exec /tools/followup control redis"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "2",
+                "memory": "1Gi"
+              }
+            },
+            "volumeMounts": [
+              {
+                "name": "tools",
+                "mountPath": "/tools"
+              },
+              {
+                "name": "data",
+                "mountPath": "/data"
+              },
+              {
+                "name": "work",
+                "mountPath": "/work"
+              }
+            ],
+            "securityContext": {
+              "capabilities": {
+                "add": [
+                  "SYS_PTRACE"
+                ]
+              },
+              "seccompProfile": {
+                "type": "Unconfined"
+              }
+            }
+          }
+        ],
+        "volumes": [
+          {
+            "name": "tools",
+            "emptyDir": {}
+          },
+          {
+            "name": "data",
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            }
+          },
+          {
+            "name": "work",
+            "emptyDir": {
+              "sizeLimit": "8Gi"
+            }
+          }
+        ],
+        "initContainers": [
+          {
+            "name": "trace-tools",
+            "image": "docker.io/library/alpine@sha256:5291449c3df73caf6ed85e649dec1b9e818b39a5d8c871e97afc13e9cd5e8fa8",
+            "command": [
+              "sh",
+              "-c",
+              "for attempt in 1 2 3 4 5; do apk add --no-cache strace && break; sleep 2; done; test -x /usr/bin/strace && mkdir -p /tools/lib && cp -L /usr/lib/lib*.so* /tools/lib/ && cp -L /lib/lib*.so* /tools/lib/ && cp /usr/bin/strace /tools/strace && strace -V > /tools/strace-version.txt && sha256sum /tools/strace >> /tools/strace-version.txt"
+            ],
+            "volumeMounts": [
+              {
+                "name": "tools",
+                "mountPath": "/tools"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "redis-current",
+        "namespace": "msgrel-fup-pilot02"
+      },
+      "spec": {
+        "selector": {
+          "app": "redis-current"
+        },
+        "ports": [
+          {
+            "name": "control",
+            "port": 8088
+          },
+          {
+            "name": "broker",
+            "port": 6379
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "nats-old",
+        "namespace": "msgrel-fup-pilot02",
+        "labels": {
+          "app": "nats-old"
+        }
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "automountServiceAccountToken": false,
+        "tolerations": [
+          {
+            "key": "node-role.kubernetes.io/control-plane",
+            "operator": "Exists",
+            "effect": "NoSchedule"
+          }
+        ],
+        "terminationGracePeriodSeconds": 15,
+        "containers": [
+          {
+            "name": "work",
+            "image": "docker.io/library/nats@sha256:fd981e2ab99000964bd15286054e61fcc445732fd907db039f260fc0b824b314",
+            "command": [
+              "sh",
+              "-c",
+              "while [ ! -x /tools/followup ]; do sleep 1; done; exec /tools/followup control nats"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "2",
+                "memory": "1Gi"
+              }
+            },
+            "volumeMounts": [
+              {
+                "name": "tools",
+                "mountPath": "/tools"
+              },
+              {
+                "name": "data",
+                "mountPath": "/data"
+              },
+              {
+                "name": "work",
+                "mountPath": "/work"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "tools",
+            "emptyDir": {}
+          },
+          {
+            "name": "data",
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            }
+          },
+          {
+            "name": "work",
+            "emptyDir": {
+              "sizeLimit": "8Gi"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "nats-old",
+        "namespace": "msgrel-fup-pilot02"
+      },
+      "spec": {
+        "selector": {
+          "app": "nats-old"
+        },
+        "ports": [
+          {
+            "name": "control",
+            "port": 8088
+          },
+          {
+            "name": "broker",
+            "port": 4222
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "nats-current",
+        "namespace": "msgrel-fup-pilot02",
+        "labels": {
+          "app": "nats-current"
+        }
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-01"
+        },
+        "automountServiceAccountToken": false,
+        "tolerations": [
+          {
+            "key": "node-role.kubernetes.io/control-plane",
+            "operator": "Exists",
+            "effect": "NoSchedule"
+          }
+        ],
+        "terminationGracePeriodSeconds": 15,
+        "containers": [
+          {
+            "name": "work",
+            "image": "docker.io/library/nats@sha256:ac8f88a6494bffc2c2a5289a0ca61cb28a9145c11ba5677cf24265d07f46d8d4",
+            "command": [
+              "sh",
+              "-c",
+              "while [ ! -x /tools/followup ]; do sleep 1; done; exec /tools/followup control nats"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "2",
+                "memory": "1Gi"
+              }
+            },
+            "volumeMounts": [
+              {
+                "name": "tools",
+                "mountPath": "/tools"
+              },
+              {
+                "name": "data",
+                "mountPath": "/data"
+              },
+              {
+                "name": "work",
+                "mountPath": "/work"
+              }
+            ],
+            "securityContext": {
+              "capabilities": {
+                "add": [
+                  "SYS_PTRACE"
+                ]
+              },
+              "seccompProfile": {
+                "type": "Unconfined"
+              }
+            }
+          }
+        ],
+        "volumes": [
+          {
+            "name": "tools",
+            "emptyDir": {}
+          },
+          {
+            "name": "data",
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            }
+          },
+          {
+            "name": "work",
+            "emptyDir": {
+              "sizeLimit": "8Gi"
+            }
+          }
+        ],
+        "initContainers": [
+          {
+            "name": "trace-tools",
+            "image": "docker.io/library/alpine@sha256:5291449c3df73caf6ed85e649dec1b9e818b39a5d8c871e97afc13e9cd5e8fa8",
+            "command": [
+              "sh",
+              "-c",
+              "for attempt in 1 2 3 4 5; do apk add --no-cache strace && break; sleep 2; done; test -x /usr/bin/strace && mkdir -p /tools/lib && cp -L /usr/lib/lib*.so* /tools/lib/ && cp -L /lib/lib*.so* /tools/lib/ && cp /usr/bin/strace /tools/strace && strace -V > /tools/strace-version.txt && sha256sum /tools/strace >> /tools/strace-version.txt"
+            ],
+            "volumeMounts": [
+              {
+                "name": "tools",
+                "mountPath": "/tools"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "nats-current",
+        "namespace": "msgrel-fup-pilot02"
+      },
+      "spec": {
+        "selector": {
+          "app": "nats-current"
+        },
+        "ports": [
+          {
+            "name": "control",
+            "port": 8088
+          },
+          {
+            "name": "broker",
+            "port": 4222
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "runner-2",
+        "namespace": "msgrel-fup-pilot02",
+        "labels": {
+          "app": "runner-2"
+        }
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-02"
+        },
+        "automountServiceAccountToken": false,
+        "tolerations": [
+          {
+            "key": "node-role.kubernetes.io/control-plane",
+            "operator": "Exists",
+            "effect": "NoSchedule"
+          }
+        ],
+        "terminationGracePeriodSeconds": 15,
+        "containers": [
+          {
+            "name": "work",
+            "image": "docker.io/library/golang@sha256:10f549dc8489597aa7ed2b62008199bb96717f52a8e8434ea035d5b44368f8a6",
+            "command": [
+              "sh",
+              "-c",
+              "sleep 86400"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "2",
+                "memory": "2Gi"
+              }
+            },
+            "volumeMounts": [
+              {
+                "name": "tools",
+                "mountPath": "/tools"
+              },
+              {
+                "name": "data",
+                "mountPath": "/data"
+              },
+              {
+                "name": "work",
+                "mountPath": "/work"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "tools",
+            "emptyDir": {}
+          },
+          {
+            "name": "data",
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            }
+          },
+          {
+            "name": "work",
+            "emptyDir": {
+              "sizeLimit": "8Gi"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "runner-4",
+        "namespace": "msgrel-fup-pilot02",
+        "labels": {
+          "app": "runner-4"
+        }
+      },
+      "spec": {
+        "nodeSelector": {
+          "kubernetes.io/hostname": "homelab-02"
+        },
+        "automountServiceAccountToken": false,
+        "tolerations": [
+          {
+            "key": "node-role.kubernetes.io/control-plane",
+            "operator": "Exists",
+            "effect": "NoSchedule"
+          }
+        ],
+        "terminationGracePeriodSeconds": 15,
+        "containers": [
+          {
+            "name": "work",
+            "image": "docker.io/library/golang@sha256:10f549dc8489597aa7ed2b62008199bb96717f52a8e8434ea035d5b44368f8a6",
+            "command": [
+              "sh",
+              "-c",
+              "sleep 86400"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "4",
+                "memory": "2Gi"
+              }
+            },
+            "volumeMounts": [
+              {
+                "name": "tools",
+                "mountPath": "/tools"
+              },
+              {
+                "name": "data",
+                "mountPath": "/data"
+              },
+              {
+                "name": "work",
+                "mountPath": "/work"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "tools",
+            "emptyDir": {}
+          },
+          {
+            "name": "data",
+            "emptyDir": {
+              "sizeLimit": "4Gi"
+            }
+          },
+          {
+            "name": "work",
+            "emptyDir": {
+              "sizeLimit": "8Gi"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "namespace-only",
+        "namespace": "msgrel-fup-pilot02"
+      },
+      "spec": {
+        "podSelector": {},
+        "policyTypes": [
+          "Ingress"
+        ],
+        "ingress": [
+          {
+            "from": [
+              {
+                "podSelector": {}
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

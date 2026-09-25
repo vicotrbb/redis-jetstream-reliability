@@ -1,0 +1,246 @@
+{
+  "admission_deadline_ns": 18291361244404650,
+  "attempted": 5138,
+  "broker_start": {
+    "command": [
+      "redis-server",
+      "/data/F0015/server.conf"
+    ],
+    "configuration": "bind 0.0.0.0\nprotected-mode no\nport 6379\nsave \"\"\ndir /data/F0015/store\nmaxmemory 768mb\nmaxmemory-policy noeviction\nauto-aof-rewrite-percentage 0\nno-appendfsync-on-rewrite no\nappendonly yes\nappendfsync always\n",
+    "directory_flags": 0,
+    "mountinfo": "12082 11520 0:1920 / / rw,relatime master:3751 - overlay overlay rw,lowerdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/97/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/96/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/95/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/93/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/92/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/91/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/87/fs:/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/80/fs,upperdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125074/fs,workdir=/var/lib/rancher/k3s/agent/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/125074/work,uuid=on\n12083 12082 0:1924 / /proc rw,nosuid,nodev,noexec,relatime - proc proc rw\n12086 12082 0:1926 / /dev rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n12087 12086 0:1927 / /dev/pts rw,nosuid,noexec,relatime - devpts devpts rw,gid=5,mode=620,ptmxmode=666\n12089 12086 0:1782 / /dev/mqueue rw,nosuid,nodev,noexec,relatime - mqueue mqueue rw\n12092 12082 0:1838 / /sys ro,nosuid,nodev,noexec,relatime - sysfs sysfs ro\n12093 12092 0:33 / /sys/fs/cgroup ro,nosuid,nodev,noexec,relatime - cgroup2 cgroup rw\n12101 12082 0:29 /rootfs/var/lib/kubelet/pods/0e3c3571-c675-493d-99c2-9f7dfdae0679/volumes/kubernetes.io~empty-dir/tools /tools rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n12103 12082 0:29 /rootfs/var/lib/kubelet/pods/0e3c3571-c675-493d-99c2-9f7dfdae0679/volumes/kubernetes.io~empty-dir/data /data rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n12106 12082 0:29 /rootfs/var/lib/kubelet/pods/0e3c3571-c675-493d-99c2-9f7dfdae0679/volumes/kubernetes.io~empty-dir/work /work rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n12107 12082 0:29 /rootfs/var/lib/kubelet/pods/0e3c3571-c675-493d-99c2-9f7dfdae0679/etc-hosts /etc/hosts rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n12108 12086 0:29 /rootfs/var/lib/kubelet/pods/0e3c3571-c675-493d-99c2-9f7dfdae0679/containers/work/b356731c /dev/termination-log rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n12109 12082 0:29 /rootfs/var/lib/rancher/k3s/agent/containerd/io.containerd.grpc.v1.cri/sandboxes/e2e8560de7f57ccf1985940a16b752c5b5d8befa0531798fe413c22ad149d1a0/hostname /etc/hostname rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n12110 12082 0:29 /rootfs/var/lib/rancher/k3s/agent/containerd/io.containerd.grpc.v1.cri/sandboxes/e2e8560de7f57ccf1985940a16b752c5b5d8befa0531798fe413c22ad149d1a0/resolv.conf /etc/resolv.conf rw,relatime - btrfs /dev/nvme0n1p2 rw,compress=zstd:3,ssd,discard=async,space_cache=v2,subvolid=259,subvol=/rootfs\n12111 12086 0:1774 / /dev/shm rw,nosuid,nodev,noexec,relatime - tmpfs shm rw,size=65536k\n10591 12083 0:1924 /bus /proc/bus ro,nosuid,nodev,noexec,relatime - proc proc rw\n10593 12083 0:1924 /fs /proc/fs ro,nosuid,nodev,noexec,relatime - proc proc rw\n10594 12083 0:1924 /irq /proc/irq ro,nosuid,nodev,noexec,relatime - proc proc rw\n10595 12083 0:1924 /sys /proc/sys ro,nosuid,nodev,noexec,relatime - proc proc rw\n10596 12083 0:1924 /sysrq-trigger /proc/sysrq-trigger ro,nosuid,nodev,noexec,relatime - proc proc rw\n10597 12083 0:1935 / /proc/asound ro,relatime - tmpfs tmpfs ro\n10598 12083 0:1936 / /proc/acpi ro,relatime - tmpfs tmpfs ro\n10599 12083 0:1926 /null /proc/kcore rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n10600 12083 0:1926 /null /proc/keys rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n10601 12083 0:1926 /null /proc/timer_list rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n10602 12083 0:1937 / /proc/scsi ro,relatime - tmpfs tmpfs ro\n10603 12092 0:1938 / /sys/firmware ro,relatime - tmpfs tmpfs ro\n10604 12092 0:1939 / /sys/devices/virtual/powercap ro,relatime - tmpfs tmpfs ro\n",
+    "pid": 315,
+    "ready_ns": 18293355369442696,
+    "start_ns": 18293355343371720
+  },
+  "broker_stop": {
+    "cleanup_end_ns": 18293358785064036,
+    "cleanup_error": "\u003cnil\u003e",
+    "cleanup_start_ns": 18293358783883732,
+    "exit": "\u003cnil\u003e",
+    "final_sample": {
+      "cpu": {
+        "burst_usec": 0,
+        "core_sched.force_idle_usec": 0,
+        "nr_bursts": 0,
+        "nr_periods": 346,
+        "nr_throttled": 0,
+        "system_usec": 690059,
+        "throttled_usec": 0,
+        "usage_usec": 818200,
+        "user_usec": 128141
+      },
+      "cpu_pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=8077\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=8058\n",
+      "end_ns": 18293358698503108,
+      "io_pressure": "some avg10=0.44 avg60=0.09 avg300=0.02 total=227820\nfull avg10=0.44 avg60=0.09 avg300=0.02 total=227770\n",
+      "io_stat": "259:0 rbytes=225280 wbytes=124182528 rios=12 wios=10777 dbytes=0 dios=0\n",
+      "memory_current": "31019008\n",
+      "start_ns": 18293358698357924,
+      "wall_ns": 1790284388489564400
+    },
+    "stop_end_ns": 18293358783377710,
+    "stop_start_ns": 18293358698356290,
+    "storage_inventory": [
+      {
+        "bytes": 52,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "drwxr-xr-x",
+        "path": "."
+      },
+      {
+        "bytes": 208,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "-rw-r--r--",
+        "path": "server.conf"
+      },
+      {
+        "bytes": 969,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "-rw-r--r--",
+        "path": "server.log"
+      },
+      {
+        "bytes": 26,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "drwxr-xr-x",
+        "path": "store"
+      },
+      {
+        "bytes": 146,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "drwxr-xr-x",
+        "path": "store/appendonlydir"
+      },
+      {
+        "bytes": 88,
+        "flags": 1024,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "-rw-r--r--",
+        "path": "store/appendonlydir/appendonly.aof.1.base.rdb"
+      },
+      {
+        "bytes": 3195837,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "-rw-r--r--",
+        "path": "store/appendonlydir/appendonly.aof.1.incr.aof"
+      },
+      {
+        "bytes": 88,
+        "flags": 0,
+        "flags_error": "\u003cnil\u003e",
+        "mode": "-rw-r--r--",
+        "path": "store/appendonlydir/appendonly.aof.manifest"
+      }
+    ]
+  },
+  "confirmed": 5138,
+  "driver_kernel": "Linux version 6.6.68 (nixbld@localhost) (gcc (GCC) 13.2.0, GNU ld (GNU Binutils) 2.41) #1-NixOS SMP PREEMPT_DYNAMIC Fri Dec 27 12:58:58 UTC 2024\n",
+  "end_ns": 18291361246433962,
+  "gomaxprocs": 2,
+  "inventory": {
+    "info_error": "\u003cnil\u003e",
+    "pending": 0,
+    "persistence": "# Persistence\r\nloading:0\r\nasync_loading:0\r\ncurrent_cow_peak:0\r\ncurrent_cow_size:0\r\ncurrent_cow_size_age:0\r\ncurrent_fork_perc:0.00\r\ncurrent_save_keys_processed:0\r\ncurrent_save_keys_total:0\r\nrdb_changes_since_last_save:5910\r\nrdb_bgsave_in_progress:0\r\nrdb_last_save_time:1790284385\r\nrdb_last_bgsave_status:ok\r\nrdb_last_bgsave_time_sec:-1\r\nrdb_current_bgsave_time_sec:-1\r\nrdb_saves:0\r\nrdb_last_cow_size:0\r\nrdb_last_load_keys_expired:0\r\nrdb_last_load_keys_loaded:0\r\naof_enabled:1\r\naof_rewrite_in_progress:0\r\naof_rewrite_scheduled:0\r\naof_last_rewrite_time_sec:-1\r\naof_current_rewrite_time_sec:-1\r\naof_last_bgrewrite_status:ok\r\naof_rewrites:0\r\naof_rewrites_consecutive_failures:0\r\naof_last_write_status:ok\r\naof_last_cow_size:0\r\nmodule_fork_in_progress:0\r\nmodule_fork_last_cow_size:0\r\naof_current_size:3195837\r\naof_base_size:0\r\naof_pending_rewrite:0\r\naof_buffer_length:0\r\naof_pending_bio_fsync:0\r\naof_delayed_fsync:0\r\n",
+    "stored": 5138
+  },
+  "joined_ns": 18291361246447565,
+  "latency_ms": {
+    "max": 7.160918,
+    "mean": 3.1131592849357754,
+    "p50": 3.081302,
+    "p99": 4.467238
+  },
+  "payload_verification": {
+    "all_512_bytes_equal": true,
+    "digest_scheme": "deterministic exact byte comparison",
+    "expected_ids": 5138,
+    "id_format": "big-endian uint64",
+    "readback_ids": 5138
+  },
+  "publication_broker_after": {
+    "cpu": {
+      "burst_usec": 0,
+      "core_sched.force_idle_usec": 0,
+      "nr_bursts": 0,
+      "nr_periods": 345,
+      "nr_throttled": 0,
+      "system_usec": 686783,
+      "throttled_usec": 0,
+      "usage_usec": 813861,
+      "user_usec": 127078
+    },
+    "cpu_pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=8021\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=8003\n",
+    "end_ns": 18293358650332356,
+    "io_pressure": "some avg10=0.44 avg60=0.09 avg300=0.02 total=227820\nfull avg10=0.44 avg60=0.09 avg300=0.02 total=227770\n",
+    "io_stat": "259:0 rbytes=225280 wbytes=124182528 rios=12 wios=10777 dbytes=0 dios=0\n",
+    "memory_current": "29921280\n",
+    "start_ns": 18293358650068040,
+    "wall_ns": 1790284388441275400
+  },
+  "publication_broker_before": {
+    "cpu": {
+      "burst_usec": 0,
+      "core_sched.force_idle_usec": 0,
+      "nr_bursts": 0,
+      "nr_periods": 335,
+      "nr_throttled": 0,
+      "system_usec": 489518,
+      "throttled_usec": 0,
+      "usage_usec": 595104,
+      "user_usec": 105586
+    },
+    "cpu_pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=6265\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=6246\n",
+    "end_ns": 18293357646483000,
+    "io_pressure": "some avg10=0.44 avg60=0.09 avg300=0.02 total=140635\nfull avg10=0.44 avg60=0.09 avg300=0.02 total=140585\n",
+    "io_stat": "259:0 rbytes=225280 wbytes=64684032 rios=12 wios=5538 dbytes=0 dios=0\n",
+    "memory_current": "22814720\n",
+    "start_ns": 18293357646313690,
+    "wall_ns": 1790284387437521000
+  },
+  "publication_driver_after": {
+    "cpu": {
+      "burst_usec": 0,
+      "core_sched.force_idle_usec": 0,
+      "nr_bursts": 0,
+      "nr_periods": 1382,
+      "nr_throttled": 847,
+      "system_usec": 25956704,
+      "throttled_usec": 99595256,
+      "usage_usec": 204196732,
+      "user_usec": 178240027
+    },
+    "cpu_pressure": "some avg10=0.41 avg60=1.38 avg300=7.29 total=53250889\nfull avg10=0.20 avg60=0.95 avg300=5.14 total=37852197\n",
+    "end_ns": 18291361246905261,
+    "io_pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=37948\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=35082\n",
+    "io_stat": "259:0 rbytes=1687552 wbytes=269627392 rios=44 wios=5911 dbytes=0 dios=0\n",
+    "memory_current": "502480896\n",
+    "start_ns": 18291361246454648,
+    "wall_ns": 1790284388437442792
+  },
+  "publication_driver_before": {
+    "cpu": {
+      "burst_usec": 0,
+      "core_sched.force_idle_usec": 0,
+      "nr_bursts": 0,
+      "nr_periods": 1372,
+      "nr_throttled": 847,
+      "system_usec": 25762749,
+      "throttled_usec": 99595256,
+      "usage_usec": 203942560,
+      "user_usec": 178179810
+    },
+    "cpu_pressure": "some avg10=0.50 avg60=1.43 avg300=7.34 total=53236206\nfull avg10=0.25 avg60=0.98 avg300=5.17 total=37839954\n",
+    "end_ns": 18291360244401609,
+    "io_pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=37948\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=35082\n",
+    "io_stat": "259:0 rbytes=1687552 wbytes=269627392 rios=44 wios=5911 dbytes=0 dios=0\n",
+    "memory_current": "499593216\n",
+    "start_ns": 18291360243979310,
+    "wall_ns": 1790284387434967875
+  },
+  "reconciliation_end_ns": 18291361295344602,
+  "reconciliation_start_ns": 18291361294833953,
+  "stage": "complete",
+  "start_ns": 18291360244404650,
+  "status": "complete",
+  "throughput_mps": 5127.59451092784,
+  "trace": {
+    "path": "events.csv.gz",
+    "records": 5138,
+    "sha256": "d9f6b13195786e8d85bdeb2261922d2c54a9230b795748feabcfd469f1169866"
+  },
+  "trial": {
+    "id": "F0015",
+    "campaign": "pilot01",
+    "block": 0,
+    "kind": "publication",
+    "engine": "redis",
+    "version": "7.4.2",
+    "profile": "always",
+    "host": "redis-old",
+    "publishers": 16,
+    "consumers": 0,
+    "cpus": 2,
+    "seconds": 1,
+    "count": 65536,
+    "payload": "compressible",
+    "compression": "inherited",
+    "trace": false,
+    "recovery": "",
+    "delta_ms": 250,
+    "age": 0.1,
+    "kill": true,
+    "seed": 20260939,
+    "pilot": true
+  },
+  "unknown": 0,
+  "utc_end": "2026-09-24T21:13:08.574492978Z",
+  "utc_start": "2026-09-24T21:13:05.12496514Z",
+  "warmup_end_ns": 18291360211235014,
+  "warmup_start_ns": 18291357969850263
+}
