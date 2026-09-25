@@ -14,6 +14,7 @@ The original paper and research material use CC-BY-4.0; original code and formal
 - Original results: `data/derived/statistics.json` and `aggregate.csv`.
 - Follow-up results: `followup/derived/statistics.json`, `trials.csv`, and `report.json`.
 - Publication failures, request maxima and version contrasts: `data/derived/operational-report.json`; regenerate with `make report-operational`.
+- [Sealed version 1.3.0 release](https://github.com/vicotrbb/redis-jetstream-reliability/releases/tag/v1.3.0).
 - [Artifact version map](docs/ARTIFACT_MAP.md) and [GitHub provenance](docs/GITHUB_PUBLICATION.md).
 
 The current validation record is `docs/FINAL_REVISION_VALIDATION.md`. Successful-build receipts, PDF content checks, and visual-review records under `data/derived/` bind the complete article to its exact source and rendered pages. Earlier validation records describe the historical documents identified in the artifact map.

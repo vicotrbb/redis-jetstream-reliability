@@ -72,6 +72,14 @@ python3 bench/verify_release.py --directory .
 
 Public GitHub hosting is distinct from DOI-bearing archival deposit, independent replication, external artifact evaluation, and scientific peer review. No Zenodo DOI or journal acceptance is claimed. The paper and artifact licenses are in `LICENSE.md`; third-party material retains its applicable terms. The original release's preparation-time declarations and validation receipts remain historical records and have not been rewritten to imply earlier publication.
 
-## Version 1.3.0 preparation checkpoint
+## Verified version 1.3.0 publication
 
-Version 1.3.0 integrates all former supplementary material into a single 43-page article and adds reporting of retained failures, long requests and version contrasts. No observations or proof source changed. Its distribution has five files: the named versioned archive, the complete article PDF, `RELEASE.json`, `VERIFICATION.log` and detached `SHA256SUMS`. The older version 1.2.0 article and supplement remain preserved in their original release and in the current historical document archive. This paragraph records preparation; a subsequent hosting receipt must identify actual publication and verify remote identities.
+Version 1.3.0 was published at `2026-09-25T02:33:55Z`. Its annotated tag resolves to scientific-artifact commit `4856144649df217c01e23b8f65fa5479378e1305`. The GitHub release reports its immutable flag as `true`. All five server-reported asset digests and sizes match the sealed local distribution. The prior version 1.1.0 and 1.2.0 tags and all eleven older assets also match their preserved identities.
+
+The public release is [https://github.com/vicotrbb/redis-jetstream-reliability/releases/tag/v1.3.0](https://github.com/vicotrbb/redis-jetstream-reliability/releases/tag/v1.3.0). It contains the complete 43-page article, its full evidence archive, `RELEASE.json`, `VERIFICATION.log` and detached `SHA256SUMS`. There is no separate supplementary PDF in version 1.3.0. Earlier documents remain in their historical releases and the retained document archive.
+
+Archive SHA-256: `afc9dc2be42cb15e834e45862e940fa1e485be0517ac86adcb8443f303cbb517`.
+
+Complete article SHA-256: `e97cf988ef4dde5acd4df9de0d04d8dc88f2f94c5f184f4ece48747c86246a24`.
+
+`revisions/20260925-integrated/github-publication.json` binds release and tag identities, publication timestamps, asset URLs, sizes and server-reported digests to local sealed files. This hosting receipt and documentation are recorded after the scientific tag and do not modify any sealed distribution, paper, measurement or proof. The updated checkout manifest covers that provenance-only addition. DOI-bearing deposit and peer review remain unperformed.
