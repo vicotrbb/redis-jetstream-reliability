@@ -4,10 +4,11 @@ Research by Victor Bona. This repository contains one complete article with proo
 
 **Artifact version 1.3.0.** The study compares recovery policies, consumer concurrency, and publication/acknowledgment costs. It distinguishes append synchronization from consumer-progress persistence. The extension adds current releases, fresh broker processes and stores for every trial, matched publication durations, live recovery controls, CPU sensitivity, synchronization traces, and compression-policy diagnostics. Original and follow-up evidence remain unchanged. Version 1.3.0 integrates the former supplement into the article and adds explicit reporting of retained timeouts, long requests, and version contrasts.
 
-The original paper and research material use CC-BY-4.0; original code and formalization use MIT. See [LICENSE.md](LICENSE.md), [CITATION.cff](CITATION.cff), and the [release guide](release/README.md). GitHub access is public. No Zenodo deposit, DOI assignment, external replication, journal acceptance, or implementation-verification claim is made.
+The original paper and research material use CC-BY-4.0; original code and formalization use MIT. See [LICENSE.md](LICENSE.md), [CITATION.cff](CITATION.cff), and the [release guide](release/README.md). The complete preprint is [published on Zenodo](https://zenodo.org/records/22950140), with assigned DOI `10.5281/zenodo.22950140`. The full research artifact is available in the public, immutable GitHub release linked below. [Zenodo publication provenance](docs/ZENODO_PUBLICATION.md) records the deposit scope and DOI-resolution checks. No external replication, journal acceptance, peer-review or implementation-verification claim is made.
 
 ## Read and inspect
 
+- [Published preprint on Zenodo](https://zenodo.org/records/22950140), version 1.3.0.
 - [Complete article, including appendices](output/pdf/redis-jetstream-reliability.pdf): 43 pages, with all proofs, detailed results and diagnostics.
 - [Current validation](docs/FINAL_REVISION_VALIDATION.md), [prospective follow-up protocol](docs/FOLLOWUP_PROTOCOL.md), and [development/validation record](docs/FOLLOWUP_VALIDATION.md).
 - [Pinned source and literature review](docs/FOLLOWUP_SOURCE_REVIEW.md) and [historical source corrections](docs/SOURCE_REVALIDATION.md).

@@ -70,7 +70,7 @@ cd redis-jetstream-reliability-v1.2.0
 python3 bench/verify_release.py --directory .
 ```
 
-Public GitHub hosting is distinct from DOI-bearing archival deposit, independent replication, external artifact evaluation, and scientific peer review. No Zenodo DOI or journal acceptance is claimed. The paper and artifact licenses are in `LICENSE.md`; third-party material retains its applicable terms. The original release's preparation-time declarations and validation receipts remain historical records and have not been rewritten to imply earlier publication.
+Public GitHub hosting is distinct from DOI-bearing archival deposit, independent replication, external artifact evaluation, and scientific peer review. At this historical GitHub publication checkpoint, no Zenodo DOI or journal acceptance was claimed. The later preprint deposit is recorded in [Zenodo publication provenance](ZENODO_PUBLICATION.md). The paper and artifact licenses are in `LICENSE.md`; third-party material retains its applicable terms. The original release's preparation-time declarations and validation receipts remain historical records and have not been rewritten to imply earlier publication.
 
 ## Verified version 1.3.0 publication
 
@@ -82,4 +82,4 @@ Archive SHA-256: `afc9dc2be42cb15e834e45862e940fa1e485be0517ac86adcb8443f303cbb5
 
 Complete article SHA-256: `e97cf988ef4dde5acd4df9de0d04d8dc88f2f94c5f184f4ece48747c86246a24`.
 
-`revisions/20260925-integrated/github-publication.json` binds release and tag identities, publication timestamps, asset URLs, sizes and server-reported digests to local sealed files. This hosting receipt and documentation are recorded after the scientific tag and do not modify any sealed distribution, paper, measurement or proof. The updated checkout manifest covers that provenance-only addition. DOI-bearing deposit and peer review remain unperformed.
+`revisions/20260925-integrated/github-publication.json` binds release and tag identities, publication timestamps, asset URLs, sizes and server-reported digests to local sealed files. This hosting receipt and documentation are recorded after the scientific tag and do not modify any sealed distribution, paper, measurement or proof. The updated checkout manifest covers that provenance-only addition. DOI-bearing deposit and peer review were unperformed at that GitHub-hosting checkpoint. The later Zenodo preprint deposit is recorded in [Zenodo publication provenance](ZENODO_PUBLICATION.md); scientific peer review remains unperformed.
