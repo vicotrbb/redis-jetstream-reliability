@@ -47,6 +47,14 @@ python3 bench/verify_release.py --directory .
 
 The historical and current Git checkouts intentionally retain `paper/main.log` and `paper/main.bbl`, because offline document validation reads them. Python environments, caches, temporary work, local credentials, and duplicate distribution archives are excluded. No benchmark or proof execution is required merely to clone or verify the files.
 
+## Verified version 1.2.0 publication
+
+Version 1.2.0 was published at `2026-09-25T00:44:22Z`. Its annotated tag resolves to scientific-artifact commit `10b5c96196b6e337a38d236cac0eb44a95f4f5fd`. All six GitHub asset digests and sizes match the sealed local distribution. The five historical version 1.1.0 assets and its original tag also match their preserved identities.
+
+Archive SHA-256: `199c3a01cbb13145e788b96f46a5d7480e35b227760e261b083401f4fba130eb`.
+
+`revisions/20260924-followup/github-publication.json` records the remote references, publication timestamp, asset URLs, sizes, and server-reported SHA-256 digests. This hosting receipt and documentation are a subsequent provenance-only commit. They do not modify the scientific release tag or either sealed distribution. The checkout checksum manifest consequently identifies the current repository, while the detached distribution manifests identify the original release files.
+
 ## Publication status
 
 Version 1.2.0 adds the separately collected 612-outcome extension, the 21-page main article, and the 20-page supplement. Its distribution has six files: the named versioned archive, both matching PDFs, `RELEASE.json`, `VERIFICATION.log`, and detached `SHA256SUMS`. The public release location is `https://github.com/vicotrbb/redis-jetstream-reliability/releases/tag/v1.2.0`. The sealed archive records its preparation checkpoint; subsequent repository publication receipts identify the actual tag, commit, upload time, sizes, and server-reported digests. Preparation and successful upload are separate events.
